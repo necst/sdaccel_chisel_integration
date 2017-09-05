@@ -66,7 +66,7 @@ module AdderAxi(
   input         S_AXI_BREADY,
   output        S_AXI_BVALID,
   output [1:0]  S_AXI_BRESP,
-  output        S_AXI_AREADY,
+  output        S_AXI_ARREADY,
   input         S_AXI_ARVALID,
   input  [63:0] S_AXI_ARADDR,
   input  [2:0]  S_AXI_ARPROT,
@@ -176,7 +176,7 @@ module AdderAxi(
   assign S_AXI_WREADY = _GEN_16;
   assign S_AXI_BVALID = _GEN_16;
   assign S_AXI_BRESP = 2'h0;
-  assign S_AXI_AREADY = 1'h1;
+  assign S_AXI_ARREADY = 1'h1;
   assign S_AXI_RVALID = _GEN_28;
   assign S_AXI_RDATA = {{30'd0}, _T_189};
   assign S_AXI_RRESP = 2'h0;

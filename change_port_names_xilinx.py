@@ -58,7 +58,7 @@ variables_name = {
  "io_s0_writeResp_valid" : "S_AXI_BVALID",
  "io_s0_writeResp_bits" : "S_AXI_BRESP",
 
- "io_s0_readAddr_ready" : "S_AXI_AREADY",
+ "io_s0_readAddr_ready" : "S_AXI_ARREADY",
  "io_s0_readAddr_valid" : "S_AXI_ARVALID",
  "io_s0_readAddr_bits_addr" : "S_AXI_ARADDR",
  "io_s0_readAddr_bits_prot" : "S_AXI_ARPROT",
