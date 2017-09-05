@@ -14,6 +14,10 @@
 module AdderAxi(
   input         clk,
   input         rst,
+  input		S00_AXI_ACLK,
+  input		S00_AXI_ARESETN,
+  input		M_AXI_ACLK,
+  input		M_AXI_ARESETN,
   input         M_AXI_AWREADY,
   output        M_AXI_AWVALID,
   output [63:0] M_AXI_AWADDR,
