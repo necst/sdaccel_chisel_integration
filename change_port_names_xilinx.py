@@ -44,29 +44,29 @@ variables_name = {
  "io_m0_readData_bits_last" : "M_AXI_RLAST",
  "io_m0_readData_bits_resp" : "M_AXI_RRESP",
 
- "io_s0_writeAddr_ready" : "S_AXI_AWREADY"
- "io_s0_writeAddr_valid" : "S_AXI_AWVALID"
- "io_s0_writeAddr_bits_addr" : "S_AXI_AWADDR"
- "io_s0_writeAddr_bits_prot" : "S_AXI_AWPROT"
+ "io_s0_writeAddr_ready" : "S_AXI_AWREADY",
+ "io_s0_writeAddr_valid" : "S_AXI_AWVALID",
+ "io_s0_writeAddr_bits_addr" : "S_AXI_AWADDR",
+ "io_s0_writeAddr_bits_prot" : "S_AXI_AWPROT",
 
- "io_s0_writeData_ready" : "S_AXI_WREADY"
- "io_s0_writeData_valid" : "S_AXI_WVALID"
- "io_s0_writeData_bits_data" : "S_AXI_WDATA"
- "io_s0_writeData_bits_strb" : "S_AXI_WSTRB"
+ "io_s0_writeData_ready" : "S_AXI_WREADY",
+ "io_s0_writeData_valid" : "S_AXI_WVALID",
+ "io_s0_writeData_bits_data" : "S_AXI_WDATA",
+ "io_s0_writeData_bits_strb" : "S_AXI_WSTRB",
 
- "io_s0_writeResp_ready" : "S_AXI_BREADY"
- "io_s0_writeResp_valid" : "S_AXI_BVALID"
- "io_s0_writeResp_bits" : "S_AXI_BRESP"
+ "io_s0_writeResp_ready" : "S_AXI_BREADY",
+ "io_s0_writeResp_valid" : "S_AXI_BVALID",
+ "io_s0_writeResp_bits" : "S_AXI_BRESP",
 
- "io_s0_readAddr_ready" : "S_AXI_AREADY"
- "io_s0_readAddr_valid" : "S_AXI_ARVALID"
- "io_s0_readAddr_bits_addr" : "S_AXI_ARADDR"
- "io_s0_readAddr_bits_prot" : "S_AXI_ARPROT"
+ "io_s0_readAddr_ready" : "S_AXI_AREADY",
+ "io_s0_readAddr_valid" : "S_AXI_ARVALID",
+ "io_s0_readAddr_bits_addr" : "S_AXI_ARADDR",
+ "io_s0_readAddr_bits_prot" : "S_AXI_ARPROT",
 
- "io_s0_readData_ready" : "S_AXI_RREADY"
- "io_s0_readData_valid" : "S_AXI_RVALID"
- "io_s0_readData_bits_data" : "S_AXI_RDATA"
- "io_s0_readData_bits_resp" : "S_AXI_RRESP"
+ "io_s0_readData_ready" : "S_AXI_RREADY",
+ "io_s0_readData_valid" : "S_AXI_RVALID",
+ "io_s0_readData_bits_data" : "S_AXI_RDATA",
+ "io_s0_readData_bits_resp" : "S_AXI_RRESP",
  "clock": "clk", 
  "reset": "rst"
  }
