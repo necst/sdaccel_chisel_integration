@@ -72,8 +72,8 @@ int main(int argc, char** argv)
     cl_kernel kernel;                   // compute kernel
 
     char cl_platform_vendor[1001];
-    char target_device_name[1001] = TARGET_DEVICE;
-
+    //char target_device_name[1001] = TARGET_DEVICE;
+    char target_device_name[1001] = "xilinx:adm-pcie-ku3:2ddr-xpr:4.0";
     int h_a_input[MAX_LENGTH];                    // host memory for input vector
     int h_a_output[MAX_LENGTH];                   // host memory for output vector
     cl_mem d_a;                         // device memory used for a vector
