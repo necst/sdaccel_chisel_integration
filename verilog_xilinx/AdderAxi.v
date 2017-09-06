@@ -11,9 +11,13 @@
 `define RANDOMIZE
 `endif
 
-module AdderAxi(
-  input          clk,
-  input          rst,
+module AdderAxi (
+  input          ap_clk,
+  input          ap_rst_n,
+  //input          m_axi_gmem_ACLK,
+  //input          m_axi_gmem_ARST,
+  //input          s_axi_control_ACLK,
+  //input          s_axi_control_ARST,
   input          m_axi_gmem_AWREADY,
   output         m_axi_gmem_AWVALID,
   output [63:0]  m_axi_gmem_AWADDR,
@@ -341,13 +345,13 @@ module AdderAxi(
   `endif // RANDOMIZE_REG_INIT
   end
 `endif // RANDOMIZE
-  always @(posedge clk) begin
-    if (rst) begin
+  always @(posedge ap_clk) begin
+    if (ap_rst_n) begin
       regStart <= 1'h0;
     end else begin
       regStart <= _T_175;
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       regDone <= 1'h0;
     end else begin
       if (_T_281) begin
@@ -360,7 +364,7 @@ module AdderAxi(
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       regDataReceived <= 512'h0;
     end else begin
       if (_T_106) begin
@@ -369,7 +373,7 @@ module AdderAxi(
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       stateSlaveWrite <= 3'h0;
     end else begin
       if (_T_172) begin
@@ -418,7 +422,7 @@ module AdderAxi(
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       stateSlaveRead <= 3'h0;
     end else begin
       if (_T_197) begin
@@ -443,7 +447,7 @@ module AdderAxi(
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       value <= 5'h0;
     end else begin
       if (_T_221) begin
@@ -462,21 +466,21 @@ module AdderAxi(
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       regFlagStart <= 1'h0;
     end else begin
       if (_T_209) begin
         regFlagStart <= 1'h1;
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       regStartWriting <= 1'h0;
     end else begin
       if (_T_232) begin
         regStartWriting <= 1'h1;
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       stateWriteMem <= 3'h0;
     end else begin
       if (_T_267) begin
