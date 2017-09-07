@@ -28,7 +28,7 @@ module AdderAxi #(
   output [2:0]   m_axi_gmem_AWSIZE,
   output [7:0]   m_axi_gmem_AWLEN,
   output [1:0]   m_axi_gmem_AWBURST,
-  output         m_axi_gmem_AWID,
+  output [7:0]	 m_axi_gmem_AWID,
   output         m_axi_gmem_AWLOCK,
   output [3:0]   m_axi_gmem_AWCACHE,
   output [2:0]   m_axi_gmem_AWPROT,
