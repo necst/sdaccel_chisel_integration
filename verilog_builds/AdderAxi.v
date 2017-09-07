@@ -20,7 +20,7 @@ module AdderAxi(
   output [2:0]   io_m0_writeAddr_bits_size,
   output [7:0]   io_m0_writeAddr_bits_len,
   output [1:0]   io_m0_writeAddr_bits_burst,
-  output         io_m0_writeAddr_bits_id,
+  output [7:0]   io_m0_writeAddr_bits_id,
   output         io_m0_writeAddr_bits_lock,
   output [3:0]   io_m0_writeAddr_bits_cache,
   output [2:0]   io_m0_writeAddr_bits_prot,
@@ -32,7 +32,7 @@ module AdderAxi(
   output         io_m0_writeData_bits_last,
   output         io_m0_writeResp_ready,
   input          io_m0_writeResp_valid,
-  input          io_m0_writeResp_bits_id,
+  input  [7:0]   io_m0_writeResp_bits_id,
   input  [1:0]   io_m0_writeResp_bits_resp,
   input          io_m0_readAddr_ready,
   output         io_m0_readAddr_valid,
@@ -40,7 +40,7 @@ module AdderAxi(
   output [2:0]   io_m0_readAddr_bits_size,
   output [7:0]   io_m0_readAddr_bits_len,
   output [1:0]   io_m0_readAddr_bits_burst,
-  output         io_m0_readAddr_bits_id,
+  output [7:0]   io_m0_readAddr_bits_id,
   output         io_m0_readAddr_bits_lock,
   output [3:0]   io_m0_readAddr_bits_cache,
   output [2:0]   io_m0_readAddr_bits_prot,
@@ -48,7 +48,7 @@ module AdderAxi(
   output         io_m0_readData_ready,
   input          io_m0_readData_valid,
   input  [511:0] io_m0_readData_bits_data,
-  input          io_m0_readData_bits_id,
+  input  [7:0]   io_m0_readData_bits_id,
   input          io_m0_readData_bits_last,
   input  [1:0]   io_m0_readData_bits_resp,
   output         io_s0_writeAddr_ready,
@@ -181,7 +181,7 @@ module AdderAxi(
   assign io_m0_writeAddr_bits_size = 3'h5;
   assign io_m0_writeAddr_bits_len = 8'h0;
   assign io_m0_writeAddr_bits_burst = 2'h1;
-  assign io_m0_writeAddr_bits_id = 1'h0;
+  assign io_m0_writeAddr_bits_id = 8'h0;
   assign io_m0_writeAddr_bits_lock = 1'h0;
   assign io_m0_writeAddr_bits_cache = 4'h0;
   assign io_m0_writeAddr_bits_prot = 3'h0;
@@ -196,7 +196,7 @@ module AdderAxi(
   assign io_m0_readAddr_bits_size = 3'h0;
   assign io_m0_readAddr_bits_len = 8'h0;
   assign io_m0_readAddr_bits_burst = 2'h0;
-  assign io_m0_readAddr_bits_id = 1'h0;
+  assign io_m0_readAddr_bits_id = 8'h0;
   assign io_m0_readAddr_bits_lock = 1'h0;
   assign io_m0_readAddr_bits_cache = 4'h0;
   assign io_m0_readAddr_bits_prot = 3'h0;
