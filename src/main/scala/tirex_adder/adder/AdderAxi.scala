@@ -174,7 +174,7 @@ object AdderAxi extends App {
   //  val dataWidth = if (query_size * 2 < 256){  query_size * 2} else 256
   val dataWidth = 512
   val dataWidthSlave = 32
-  val idBits = 8
+  val idBits = 1
 
 
   chisel3.Driver.execute(args, () => new AdderAxi(address,dataWidth,idBits, dataWidthSlave))

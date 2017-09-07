@@ -11,7 +11,14 @@
 `define RANDOMIZE
 `endif
 
-module AdderAxi(
+module AdderAxi #(
+    parameter integer C_S_AXI_CONTROL_DATA_WIDTH = 32,
+    parameter integer C_S_AXI_CONTROL_ADDR_WIDTH = 64,
+    
+    parameter integer C_M_AXI_GMEM_ID_WIDTH = 1,
+    parameter integer C_M_AXI_GMEM_ADDR_WIDTH = 64,
+    parameter integer C_M_AXI_GMEM_DATA_WIDTH = 512
+)(
   input          ap_clk,
   input          ap_rst_n,
   input          m_axi_gmem_AWREADY,
@@ -20,7 +27,7 @@ module AdderAxi(
   output [2:0]   m_axi_gmem_AWSIZE,
   output [7:0]   m_axi_gmem_AWLEN,
   output [1:0]   m_axi_gmem_AWBURST,
-  output [7:0]   m_axi_gmem_AWID,
+  output         m_axi_gmem_AWID,
   output         m_axi_gmem_AWLOCK,
   output [3:0]   m_axi_gmem_AWCACHE,
   output [2:0]   m_axi_gmem_AWPROT,
@@ -32,7 +39,7 @@ module AdderAxi(
   output         m_axi_gmem_WLAST,
   output         m_axi_gmem_BREADY,
   input          m_axi_gmem_BVALID,
-  input  [7:0]   m_axi_gmem_BID,
+  input          m_axi_gmem_BID,
   input  [1:0]   m_axi_gmem_BRESP,
   input          m_axi_gmem_ARREADY,
   output         m_axi_gmem_ARVALID,
@@ -40,7 +47,7 @@ module AdderAxi(
   output [2:0]   m_axi_gmem_ARSIZE,
   output [7:0]   m_axi_gmem_ARLEN,
   output [1:0]   m_axi_gmem_ARBURST,
-  output [7:0]   m_axi_gmem_ARID,
+  output         m_axi_gmem_ARID,
   output         m_axi_gmem_ARLOCK,
   output [3:0]   m_axi_gmem_ARCACHE,
   output [2:0]   m_axi_gmem_ARPROT,
@@ -48,7 +55,7 @@ module AdderAxi(
   output         m_axi_gmem_RREADY,
   input          m_axi_gmem_RVALID,
   input  [511:0] m_axi_gmem_RDATA,
-  input  [7:0]   m_axi_gmem_RID,
+  input          m_axi_gmem_RID,
   input          m_axi_gmem_RLAST,
   input  [1:0]   m_axi_gmem_RRESP,
   output         s_axi_control_AWREADY,
@@ -181,7 +188,7 @@ module AdderAxi(
   assign m_axi_gmem_AWSIZE = 3'h5;
   assign m_axi_gmem_AWLEN = 8'h0;
   assign m_axi_gmem_AWBURST = 2'h1;
-  assign m_axi_gmem_AWID = 8'h0;
+  assign m_axi_gmem_AWID = 1'h0;
   assign m_axi_gmem_AWLOCK = 1'h0;
   assign m_axi_gmem_AWCACHE = 4'h0;
   assign m_axi_gmem_AWPROT = 3'h0;
@@ -196,7 +203,7 @@ module AdderAxi(
   assign m_axi_gmem_ARSIZE = 3'h0;
   assign m_axi_gmem_ARLEN = 8'h0;
   assign m_axi_gmem_ARBURST = 2'h0;
-  assign m_axi_gmem_ARID = 8'h0;
+  assign m_axi_gmem_ARID = 1'h0;
   assign m_axi_gmem_ARLOCK = 1'h0;
   assign m_axi_gmem_ARCACHE = 4'h0;
   assign m_axi_gmem_ARPROT = 3'h0;
