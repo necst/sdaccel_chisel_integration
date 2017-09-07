@@ -171,7 +171,7 @@ circuit AdderAxi :
       regStartWriting <= UInt<1>("h01") @[AdderAxi.scala 113:21]
       skip @[AdderAxi.scala 111:36]
     reg stateWriteMem : UInt<3>, clock with : (reset => (reset, UInt<3>("h00"))) @[AdderAxi.scala 118:26]
-    reg regWriteAddr : UInt<6>, clock with : (reset => (reset, UInt<6>("h020"))) @[AdderAxi.scala 119:25]
+    reg regWriteAddr : UInt<6>, clock with : (reset => (reset, UInt<6>("h028"))) @[AdderAxi.scala 119:25]
     reg regResp : UInt<2>, clock with : (reset => (reset, UInt<2>("h00"))) @[AdderAxi.scala 120:20]
     io.m0.writeAddr.bits.size <= UInt<3>("h05") @[AdderAxi.scala 123:29]
     io.m0.writeAddr.bits.burst <= UInt<2>("h01") @[AdderAxi.scala 124:30]

@@ -116,7 +116,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   //FSM write
 
   val stateWriteMem = Reg(init = sIdle)
-  val regWriteAddr = Reg(init = "h020".asUInt)
+  val regWriteAddr = Reg(init = "h028".asUInt)
   val regResp = Reg(init = 0.U(2.W))
 
   //Default values
