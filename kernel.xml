@@ -6,9 +6,9 @@
       <port name="m_axi_gmem" mode="master" range="0xFFFFFFFF" dataWidth="512" portType="addressable" base="0x0"/>
     </ports>
     <args>
-      <arg name="a" addressQualifier="1" id="0" port="m_axi_gmem" size="0x8" offset="0x10" hostOffset="0x0" hostSize="0x8" type="int*"/>
-      <arg name="b" addressQualifier="1" id="1" port="m_axi_gmem" size="0x8" offset="0x1C" hostOffset="0x0" hostSize="0x8" type="int*"/>
-      <arg name="out" addressQualifier="1" id="2" port="m_axi_gmem" size="0x8" offset="0x28" hostOffset="0x0" hostSize="0x8" type="int*"/>
+      <arg name="a" addressQualifier="1" id="0" port="m_axi_gmem" size="0x40" offset="0x10" hostOffset="0x0" hostSize="0x40" type="int*"/>
+      <arg name="b" addressQualifier="1" id="1" port="m_axi_gmem" size="0x40" offset="0x50" hostOffset="0x0" hostSize="0x40" type="int*"/>
+      <arg name="out" addressQualifier="1" id="2" port="m_axi_gmem" size="0x40" offset="0x90" hostOffset="0x0" hostSize="0x40" type="int*"/>
     </args>
   </kernel>
 </root>
