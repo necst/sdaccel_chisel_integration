@@ -15,13 +15,17 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
   io.m0.driveDefaults()
 
+  io.s0.writeResp.bits := Axi_Defines.OKAY //resp valid
+  io.s0.readData.bits.resp := Axi_Defines.OKAY
+
+
   //FSM to handle sync with HOST
 
   val regStart = Reg(init = 0.U(1.W))
   val regDone = Reg(init = 0.U(1.W))
   val regIdle = Reg(init = 1.U(1.W))
 
-  val regCtrAddr = Reg(init = "h00000001".asUInt(addrWidth.W))
+  val regCtrAddr = Reg(init = "h0".asUInt(addrWidth.W))
   val regCtrAddrWrite = Reg(init = 0.U(addrWidth.W))
 
   val regDataReceived = Reg(init = 0.U(dataWidth.W))
@@ -44,13 +48,21 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
       stateSlaveWrite := sAddrRead
     }
   }.elsewhen(stateSlaveWrite === sAddrRead){
-    io.s0.writeData.ready := true.B
-    when(io.s0.writeData.valid){
-      regDataReceived := io.s0.writeData.bits.data
-      regDone := false.B
-      stateSlaveWrite := sReply
-//      stateSlaveWrite := sEnd
+    when(regCtrAddrWrite === regCtrAddr){
+      io.s0.writeData.ready := true.B
+      when(io.s0.writeData.valid){
+        regDataReceived := io.s0.writeData.bits.data
+        regStart := io.s0.writeData.bits.data(0)
+        regDone := io.s0.writeData.bits.data(1)
+        regIdle := io.s0.writeData.bits.data(2)
+//        regDone := false.B
+        stateSlaveWrite := sReply
+        //      stateSlaveWrite := sEnd
+      }
+    }.otherwise{
+      stateSlaveWrite := sEnd
     }
+
   }.elsewhen(stateSlaveWrite === sReply){
     io.s0.writeResp.bits := Axi_Defines.OKAY
     io.s0.writeResp.valid := true.B
@@ -65,7 +77,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
     stateSlaveWrite := sIdle
   }
 
-  regStart := regDataReceived(0)
+//  regStart := regDataReceived(0)
   //regDone := regDataReceived(1)
   //regIdle := regDataReceived(2)
 
@@ -75,7 +87,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
   //read transaction
   val stateSlaveRead = Reg(init = sIdle)
-  val regCtrAddrRead = Reg(init = 0.U(addrWidth.W))
+  val regCtrAddrRead = Reg(init = "h0".U(addrWidth.W))
 
   io.s0.readAddr.ready := true.B
   when(stateSlaveRead === sIdle){
@@ -84,13 +96,19 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
       stateSlaveRead := sPrepareData
     }
   }.elsewhen(stateSlaveRead === sPrepareData){
-    //io.s0.readData.bits.data := io.s0.readData.bits.data | (regStart << 0.U).asUInt()
-    io.s0.readData.bits.data := (regDone << 1.U).asUInt()
-    //io.s0.readData.bits.data := io.s0.readData.bits.data | (regIdle << 2.U).asUInt()
-    io.s0.readData.valid := true.B
-    when(io.s0.readData.ready){
-      stateSlaveRead := sEnd
+    when(regCtrAddrRead === regCtrAddr){
+      //io.s0.readData.bits.data := io.s0.readData.bits.data | (regStart << 0.U).asUInt()
+      io.s0.readData.bits.data := (regStart << 0.U).asUInt() | (regDone << 1.U).asUInt() | (regIdle << 2.U).asUInt()
+      //io.s0.readData.bits.data := io.s0.readData.bits.data | (regIdle << 2.U).asUInt()
+      io.s0.readData.valid := true.B
+      when(io.s0.readData.ready){
+//        stateSlaveRead := sEnd
+        stateSlaveRead := sReply
+      }
     }
+  }.elsewhen(stateSlaveRead === sReply){
+    io.s0.readData.bits.resp := Axi_Defines.OKAY
+    stateSlaveRead := sEnd
   }.elsewhen(stateSlaveRead === sEnd){
     io.s0.readData.valid := false.B
     stateSlaveRead := sIdle
