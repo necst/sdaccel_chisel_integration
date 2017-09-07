@@ -315,22 +315,9 @@ int main(int argc, char** argv)
 	fflush(stdout);
   int err;                            // error code returned from api calls
      
-  //unsigned char a[N];
-	unsigned char *a = (unsigned char *)malloc(sizeof(unsigned char) * N);                   // original data set given to device
-  //unsigned char b[M + 2*(N-1)];                   // original data set given to device
-	unsigned char *b = (unsigned char *)malloc(sizeof(unsigned char) * (M + 2*(N-1)));  
-//unsigned char database[M];
-	unsigned char * database = (unsigned char *)malloc(sizeof(unsigned char) * M);
-  //unsigned short results[N*(N+M-1)];             // results returned from device
-  //char results2[256*(N+M-1)];
-	char *results2 = (char*)malloc(sizeof(char) * (256*(N+M-1)));  
-//int sw_results[DATA_SIZE];          // results returned from device
-
-
-	unsigned int * query_param  = (unsigned int *)malloc(sizeof(unsigned int) * N/16);
-	unsigned int * database_param = (unsigned int *)malloc(sizeof(unsigned int) * (M + 2*(N))/16);
-	
-	unsigned int * out = (unsigned int *)malloc(sizeof(unsigned int) * N);
+	unsigned int * a = (unsigned int *)malloc(sizeof(unsigned int) * 16);
+	unsigned int * b = (unsigned int *)malloc(sizeof(unsigned int) * 16);
+	unsigned int * out = (unsigned int *)malloc(sizeof(unsigned int) * 16);
 
 
   unsigned int correct;               // number of correct results returned
@@ -365,10 +352,9 @@ int main(int argc, char** argv)
   // Fill our data sets with pattern
   //
   int i = 0;
-  	for(i = 0; i < 256*(N+M-1); i++) results2[i] = 0;
-	for(i = 0; i < N/16; i++) query_param[i] = 0;
-	for(i = 0; i < (M + 2*(N))/16; i++) database_param[i] = 0;
-	for(i = 0; i < N; i++) out[i] = 0;
+	for(i = 0; i < 16; i++) a[i] = 0;
+	for(i = 0; i < 16; i++) b[i] = 0;
+	for(i = 0; i < 16; i++) out[i] = 0;
 
 	
 	fflush(stdout);
@@ -501,16 +487,15 @@ int main(int argc, char** argv)
 
   //input_a = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(unsigned char) * N, NULL, NULL);
 	printf("create buffer 0 \n");
-  input_a = clCreateBuffer(context,  CL_MEM_READ_ONLY | CL_MEM_EXT_PTR_XILINX,  sizeof(unsigned int) * N/16, &input_a, NULL);
+  input_a = clCreateBuffer(context,  CL_MEM_READ_ONLY ,  sizeof(unsigned int) * 16, NULL, NULL);
   //input_b = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(unsigned char) * (M + 2*(N - 1)), NULL, NULL);
 	printf("create buffer 1 \n");
-  input_b = clCreateBuffer(context,  CL_MEM_READ_ONLY  | CL_MEM_EXT_PTR_XILINX,  sizeof(unsigned int) * (M + 2*(N - 1))/16, &input_b, NULL);
+  input_b = clCreateBuffer(context,  CL_MEM_READ_ONLY ,  sizeof(unsigned int) * 16, NULL , NULL);
   //output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(unsigned short) * N*(N+M-1), NULL, NULL);
 	printf("create buffer 2 \n");
-  output = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_EXT_PTR_XILINX, sizeof(char)* 256*(N+M-1), &output, NULL);
   out_buff = clCreateBuffer(context, CL_MEM_READ_WRITE, sizeof(unsigned int)* N, NULL, NULL);
   
-if (!input_a || !input_b || !output || !out_buff) 
+if (!input_a || !input_b || !out_buff) 
   {
     printf("Error: Failed to allocate device memory!\n");
     printf("Test failed\n");
@@ -576,7 +561,7 @@ cl_event enqueue_kernel;
   //
   cl_event readevent;
 	printf("read buffer \n");
-  err = clEnqueueReadBuffer( commands, out_buff, CL_TRUE, 0, sizeof(unsigned int) * 4, out, 0, NULL, &readevent );  
+  err = clEnqueueReadBuffer( commands, out_buff, CL_TRUE, 0, sizeof(unsigned int) * 16, out, 0, NULL, &readevent );  
   if (err != CL_SUCCESS)
   {
     printf("Error: Failed to read output array! %d\n", err);
@@ -597,7 +582,7 @@ cl_event enqueue_kernel;
 	
 	    
 	printf(" execution time is %f ms\n", executionTime);
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < 16; i++){
       printf("READ %d \n", out[i]);
     }
     
