@@ -11,9 +11,9 @@ XOCC=xocc
 CC=g++
 
 #Host code
-HOST_SRC=./main.c
+HOST_SRC=./test-cl-2ddr.cpp
 HOST_HDRS=
-HOST_CFLAGS=-D FPGA_DEVICE -g -Wall -I${XILINX_SDX}/runtime/include/1_2 -D TARGET_DEVICE="xilinx:adm-pcie-ku3:2ddr-xpr:4.0" -O3 -Wall
+HOST_CFLAGS=-D FPGA_DEVICE -g -Wall -I${XILINX_SDX}/runtime/include/1_2 -D TARGET_DEVICE="xilinx:adm-pcie-ku3:2ddr-xpr:4.0" -O3 -Wall -D C_KERNEL
 HOST_LFLAGS=-L${XILINX_SDX}/runtime/lib/x86_64 -lxilinxopencl
 
 #name of host executable
@@ -97,7 +97,7 @@ xo:	check_TARGET
 	$(XOCC) --platform $(TARGET_DEVICE) --target $(TARGET) --compile --include $(KERNEL_HDRS) --save-temps $(REPORT) --kernel $(KERNEL_NAME) $(KERNEL_SRC) $(KERNEL_LDCLFLAGS) $(KERNEL_FLAGS) $(KERNEL_ADDITIONAL_FLAGS) --output $(dest_dir)/$(KERNEL_EXE).xo
 
 xclbin:  check_TARGET
-	$(XOCC) --platform $(TARGET_DEVICE) --target $(TARGET) --link --include $(KERNEL_HDRS) --save-temps $(REPORT) --kernel $(KERNEL_NAME) $(dest_dir)/$(KERNEL_EXE).xo $(KERNEL_LDCLFLAGS) $(KERNEL_FLAGS) $(KERNEL_ADDITIONAL_FLAGS) --output $(dest_dir)/$(KERNEL_EXE).xclbin
+	$(XOCC) -g --platform $(TARGET_DEVICE) --target $(TARGET) --link --include $(KERNEL_HDRS) --save-temps $(REPORT) --kernel $(KERNEL_NAME) $(dest_dir)/$(KERNEL_EXE).xo $(KERNEL_LDCLFLAGS) $(KERNEL_FLAGS) $(KERNEL_ADDITIONAL_FLAGS) --output $(dest_dir)/$(KERNEL_EXE).xclbin
 
 emulation:  host xclbin
 	export XCL_EMULATION_MODE=$(TARGET)

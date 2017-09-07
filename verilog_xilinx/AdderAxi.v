@@ -11,69 +11,73 @@
 `define RANDOMIZE
 `endif
 
-module AdderAxi(
-  input         clk,
-  input         rst,
-  input		S00_AXI_ACLK,
-  input		S00_AXI_ARESETN,
-  input		M_AXI_ACLK,
-  input		M_AXI_ARESETN,
-  input         M_AXI_AWREADY,
-  output        M_AXI_AWVALID,
-  output [63:0] M_AXI_AWADDR,
-  output [2:0]  M_AXI_AWSIZE,
-  output [7:0]  M_AXI_AWLEN,
-  output [1:0]  M_AXI_AWBURST,
-  output [7:0]  M_AXI_AWID,
-  output        M_AXI_AWLOCK,
-  output [3:0]  M_AXI_AWCACHE,
-  output [2:0]  M_AXI_AWPROT,
-  output [3:0]  M_AXI_AWQOS,
-  input         M_AXI_WREADY,
-  output        M_AXI_WVALID,
-  output [31:0] M_AXI_WDATA,
-  output [3:0]  M_AXI_WSTRB,
-  output        M_AXI_WLAST,
-  output        M_AXI_BREADY,
-  input         M_AXI_BVALID,
-  input  [7:0]  M_AXI_BID,
-  input  [1:0]  M_AXI_BRESP,
-  input         M_AXI_ARREADY,
-  output        M_AXI_ARVALID,
-  output [63:0] M_AXI_ARADDR,
-  output [2:0]  M_AXI_ARSIZE,
-  output [7:0]  M_AXI_ARLEN,
-  output [1:0]  M_AXI_ARBURST,
-  output [7:0]  M_AXI_ARID,
-  output        M_AXI_ARLOCK,
-  output [3:0]  M_AXI_ARCACHE,
-  output [2:0]  M_AXI_ARPROT,
-  output [3:0]  M_AXI_ARQOS,
-  output        M_AXI_RREADY,
-  input         M_AXI_RVALID,
-  input  [31:0] M_AXI_RDATA,
-  input  [7:0]  M_AXI_RID,
-  input         M_AXI_RLAST,
-  input  [1:0]  M_AXI_RRESP,
-  output        S_AXI_AWREADY,
-  input         S_AXI_AWVALID,
-  input  [63:0] S_AXI_AWADDR,
-  input  [2:0]  S_AXI_AWPROT,
-  output        S_AXI_WREADY,
-  input         S_AXI_WVALID,
-  input  [31:0] S_AXI_WDATA,
-  input  [3:0]  S_AXI_WSTRB,
-  input         S_AXI_BREADY,
-  output        S_AXI_BVALID,
-  output [1:0]  S_AXI_BRESP,
-  output        S_AXI_ARREADY,
-  input         S_AXI_ARVALID,
-  input  [63:0] S_AXI_ARADDR,
-  input  [2:0]  S_AXI_ARPROT,
-  input         S_AXI_RREADY,
-  output        S_AXI_RVALID,
-  output [31:0] S_AXI_RDATA,
-  output [1:0]  S_AXI_RRESP
+module AdderAxi #(
+    parameter integer C_S_AXI_CONTROL_DATA_WIDTH = 32,
+    parameter integer C_S_AXI_CONTROL_ADDR_WIDTH = 64,
+    
+    parameter integer C_M_AXI_GMEM_ID_WIDTH = 1,
+    parameter integer C_M_AXI_GMEM_ADDR_WIDTH = 64,
+    parameter integer C_M_AXI_GMEM_DATA_WIDTH = 512
+)
+(
+  input         ap_clk,
+  input         ap_rst_n,
+  input         m_axi_gmem_AWREADY,
+  output        m_axi_gmem_AWVALID,
+  output [63:0] m_axi_gmem_AWADDR,
+  output [2:0]  m_axi_gmem_AWSIZE,
+  output [7:0]  m_axi_gmem_AWLEN,
+  output [1:0]  m_axi_gmem_AWBURST,
+  output        m_axi_gmem_AWID,
+  output        m_axi_gmem_AWLOCK,
+  output [3:0]  m_axi_gmem_AWCACHE,
+  output [2:0]  m_axi_gmem_AWPROT,
+  output [3:0]  m_axi_gmem_AWQOS,
+  input         m_axi_gmem_WREADY,
+  output        m_axi_gmem_WVALID,
+  output [31:0] m_axi_gmem_WDATA,
+  output [3:0]  m_axi_gmem_WSTRB,
+  output        m_axi_gmem_WLAST,
+  output        m_axi_gmem_BREADY,
+  input         m_axi_gmem_BVALID,
+  input         m_axi_gmem_BID,
+  input  [1:0]  m_axi_gmem_BRESP,
+  input         m_axi_gmem_ARREADY,
+  output        m_axi_gmem_ARVALID,
+  output [63:0] m_axi_gmem_ARADDR,
+  output [2:0]  m_axi_gmem_ARSIZE,
+  output [7:0]  m_axi_gmem_ARLEN,
+  output [1:0]  m_axi_gmem_ARBURST,
+  output        m_axi_gmem_ARID,
+  output        m_axi_gmem_ARLOCK,
+  output [3:0]  m_axi_gmem_ARCACHE,
+  output [2:0]  m_axi_gmem_ARPROT,
+  output [3:0]  m_axi_gmem_ARQOS,
+  output        m_axi_gmem_RREADY,
+  input         m_axi_gmem_RVALID,
+  input  [31:0] m_axi_gmem_RDATA,
+  input         m_axi_gmem_RID,
+  input         m_axi_gmem_RLAST,
+  input  [1:0]  m_axi_gmem_RRESP,
+  output        s_axi_control_AWREADY,
+  input         s_axi_control_AWVALID,
+  input  [63:0] s_axi_control_AWADDR,
+  input  [2:0]  s_axi_control_AWPROT,
+  output        s_axi_control_WREADY,
+  input         s_axi_control_WVALID,
+  input  [31:0] s_axi_control_WDATA,
+  input  [3:0]  s_axi_control_WSTRB,
+  input         s_axi_control_BREADY,
+  output        s_axi_control_BVALID,
+  output [1:0]  s_axi_control_BRESP,
+  output        s_axi_control_ARREADY,
+  input         s_axi_control_ARVALID,
+  input  [63:0] s_axi_control_ARADDR,
+  input  [2:0]  s_axi_control_ARPROT,
+  input         s_axi_control_RREADY,
+  output        s_axi_control_RVALID,
+  output [31:0] s_axi_control_RDATA,
+  output [1:0]  s_axi_control_RRESP
 );
   reg  regStart;
   reg [31:0] _RAND_0;
@@ -146,49 +150,49 @@ module AdderAxi(
   wire  _T_229;
   wire  _T_230;
   wire  _GEN_35;
-  assign M_AXI_AWVALID = 1'h0;
-  assign M_AXI_AWADDR = 64'h0;
-  assign M_AXI_AWSIZE = 3'h0;
-  assign M_AXI_AWLEN = 8'h0;
-  assign M_AXI_AWBURST = 2'h0;
-  assign M_AXI_AWID = 8'h0;
-  assign M_AXI_AWLOCK = 1'h0;
-  assign M_AXI_AWCACHE = 4'h0;
-  assign M_AXI_AWPROT = 3'h0;
-  assign M_AXI_AWQOS = 4'h0;
-  assign M_AXI_WVALID = 1'h0;
-  assign M_AXI_WDATA = 32'h0;
-  assign M_AXI_WSTRB = 4'h0;
-  assign M_AXI_WLAST = 1'h0;
-  assign M_AXI_BREADY = 1'h0;
-  assign M_AXI_ARVALID = 1'h0;
-  assign M_AXI_ARADDR = 64'h0;
-  assign M_AXI_ARSIZE = 3'h0;
-  assign M_AXI_ARLEN = 8'h0;
-  assign M_AXI_ARBURST = 2'h0;
-  assign M_AXI_ARID = 8'h0;
-  assign M_AXI_ARLOCK = 1'h0;
-  assign M_AXI_ARCACHE = 4'h0;
-  assign M_AXI_ARPROT = 3'h0;
-  assign M_AXI_ARQOS = 4'h0;
-  assign M_AXI_RREADY = 1'h0;
-  assign S_AXI_AWREADY = 1'h1;
-  assign S_AXI_WREADY = _GEN_16;
-  assign S_AXI_BVALID = _GEN_16;
-  assign S_AXI_BRESP = 2'h0;
-  assign S_AXI_ARREADY = 1'h1;
-  assign S_AXI_RVALID = _GEN_28;
-  assign S_AXI_RDATA = {{30'd0}, _T_189};
-  assign S_AXI_RRESP = 2'h0;
+  assign m_axi_gmem_AWVALID = 1'h0;
+  assign m_axi_gmem_AWADDR = 64'h0;
+  assign m_axi_gmem_AWSIZE = 3'h0;
+  assign m_axi_gmem_AWLEN = 8'h0;
+  assign m_axi_gmem_AWBURST = 2'h0;
+  assign m_axi_gmem_AWID = 1'h0;
+  assign m_axi_gmem_AWLOCK = 1'h0;
+  assign m_axi_gmem_AWCACHE = 4'h0;
+  assign m_axi_gmem_AWPROT = 3'h0;
+  assign m_axi_gmem_AWQOS = 4'h0;
+  assign m_axi_gmem_WVALID = 1'h0;
+  assign m_axi_gmem_WDATA = 32'h0;
+  assign m_axi_gmem_WSTRB = 4'h0;
+  assign m_axi_gmem_WLAST = 1'h0;
+  assign m_axi_gmem_BREADY = 1'h0;
+  assign m_axi_gmem_ARVALID = 1'h0;
+  assign m_axi_gmem_ARADDR = 64'h0;
+  assign m_axi_gmem_ARSIZE = 3'h0;
+  assign m_axi_gmem_ARLEN = 8'h0;
+  assign m_axi_gmem_ARBURST = 2'h0;
+  assign m_axi_gmem_ARID = 1'h0;
+  assign m_axi_gmem_ARLOCK = 1'h0;
+  assign m_axi_gmem_ARCACHE = 4'h0;
+  assign m_axi_gmem_ARPROT = 3'h0;
+  assign m_axi_gmem_ARQOS = 4'h0;
+  assign m_axi_gmem_RREADY = 1'h0;
+  assign s_axi_control_AWREADY = 1'h1;
+  assign s_axi_control_WREADY = _GEN_16;
+  assign s_axi_control_BVALID = _GEN_16;
+  assign s_axi_control_BRESP = 2'h0;
+  assign s_axi_control_ARREADY = 1'h1;
+  assign s_axi_control_RVALID = _GEN_28;
+  assign s_axi_control_RDATA = {{30'd0}, _T_189};
+  assign s_axi_control_RRESP = 2'h0;
   assign _T_102 = stateSlaveWrite == 3'h0;
-  assign _GEN_1 = S_AXI_AWVALID ? 3'h1 : stateSlaveWrite;
+  assign _GEN_1 = s_axi_control_AWVALID ? 3'h1 : stateSlaveWrite;
   assign _GEN_3 = _T_102 ? _GEN_1 : stateSlaveWrite;
   assign _T_103 = stateSlaveWrite == 3'h1;
   assign _T_105 = _T_102 == 1'h0;
   assign _T_106 = _T_105 & _T_103;
-  assign _GEN_4 = S_AXI_WVALID ? S_AXI_WDATA : regDataReceived;
-  assign _GEN_5 = S_AXI_WVALID ? 1'h0 : regDone;
-  assign _GEN_6 = S_AXI_WVALID ? 3'h3 : _GEN_3;
+  assign _GEN_4 = s_axi_control_WVALID ? s_axi_control_WDATA : regDataReceived;
+  assign _GEN_5 = s_axi_control_WVALID ? 1'h0 : regDone;
+  assign _GEN_6 = s_axi_control_WVALID ? 3'h3 : _GEN_3;
   assign _GEN_8 = _T_106 ? _GEN_4 : regDataReceived;
   assign _GEN_9 = _T_106 ? _GEN_5 : regDone;
   assign _GEN_10 = _T_106 ? _GEN_6 : _GEN_3;
@@ -196,7 +200,7 @@ module AdderAxi(
   assign _T_113 = _T_103 == 1'h0;
   assign _T_114 = _T_105 & _T_113;
   assign _T_115 = _T_114 & _T_109;
-  assign _GEN_11 = S_AXI_BREADY ? 3'h4 : _GEN_10;
+  assign _GEN_11 = s_axi_control_BREADY ? 3'h4 : _GEN_10;
   assign _GEN_15 = _T_115 ? _GEN_11 : _GEN_10;
   assign _T_163 = stateSlaveWrite == 3'h4;
   assign _T_170 = _T_109 == 1'h0;
@@ -206,14 +210,14 @@ module AdderAxi(
   assign _GEN_18 = _T_172 ? 3'h0 : _GEN_15;
   assign _T_175 = regDataReceived[0];
   assign _T_183 = stateSlaveRead == 3'h0;
-  assign _GEN_21 = S_AXI_ARVALID ? 3'h2 : stateSlaveRead;
+  assign _GEN_21 = s_axi_control_ARVALID ? 3'h2 : stateSlaveRead;
   assign _GEN_23 = _T_183 ? _GEN_21 : stateSlaveRead;
   assign _T_184 = stateSlaveRead == 3'h2;
   assign _T_186 = _T_183 == 1'h0;
   assign _T_187 = _T_186 & _T_184;
   assign _GEN_36 = {{1'd0}, regDone};
   assign _T_189 = _GEN_36 << 1'h1;
-  assign _GEN_24 = S_AXI_RREADY ? 3'h4 : _GEN_23;
+  assign _GEN_24 = s_axi_control_RREADY ? 3'h4 : _GEN_23;
   assign _GEN_27 = _T_187 ? _GEN_24 : _GEN_23;
   assign _T_191 = stateSlaveRead == 3'h4;
   assign _T_195 = _T_184 == 1'h0;
@@ -273,57 +277,57 @@ module AdderAxi(
   `endif // RANDOMIZE_REG_INIT
   end
 `endif // RANDOMIZE
-  always @(posedge clk) begin
-    if (rst) begin
+  always @(posedge ap_clk) begin
+    if (ap_rst_n) begin
       regStart <= 1'h0;
     end else begin
       regStart <= _T_175;
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       regDone <= 1'h0;
     end else begin
       if (_T_230) begin
         regDone <= 1'h1;
       end else begin
         if (_T_106) begin
-          if (S_AXI_WVALID) begin
+          if (s_axi_control_WVALID) begin
             regDone <= 1'h0;
           end
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       regDataReceived <= 32'h0;
     end else begin
       if (_T_106) begin
-        if (S_AXI_WVALID) begin
-          regDataReceived <= S_AXI_WDATA;
+        if (s_axi_control_WVALID) begin
+          regDataReceived <= s_axi_control_WDATA;
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       stateSlaveWrite <= 3'h0;
     end else begin
       if (_T_172) begin
         stateSlaveWrite <= 3'h0;
       end else begin
         if (_T_115) begin
-          if (S_AXI_BREADY) begin
+          if (s_axi_control_BREADY) begin
             stateSlaveWrite <= 3'h4;
           end else begin
             if (_T_106) begin
-              if (S_AXI_WVALID) begin
+              if (s_axi_control_WVALID) begin
                 stateSlaveWrite <= 3'h3;
               end else begin
                 if (_T_102) begin
-                  if (S_AXI_AWVALID) begin
+                  if (s_axi_control_AWVALID) begin
                     stateSlaveWrite <= 3'h1;
                   end
                 end
               end
             end else begin
               if (_T_102) begin
-                if (S_AXI_AWVALID) begin
+                if (s_axi_control_AWVALID) begin
                   stateSlaveWrite <= 3'h1;
                 end
               end
@@ -331,18 +335,18 @@ module AdderAxi(
           end
         end else begin
           if (_T_106) begin
-            if (S_AXI_WVALID) begin
+            if (s_axi_control_WVALID) begin
               stateSlaveWrite <= 3'h3;
             end else begin
               if (_T_102) begin
-                if (S_AXI_AWVALID) begin
+                if (s_axi_control_AWVALID) begin
                   stateSlaveWrite <= 3'h1;
                 end
               end
             end
           end else begin
             if (_T_102) begin
-              if (S_AXI_AWVALID) begin
+              if (s_axi_control_AWVALID) begin
                 stateSlaveWrite <= 3'h1;
               end
             end
@@ -350,32 +354,32 @@ module AdderAxi(
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       stateSlaveRead <= 3'h0;
     end else begin
       if (_T_197) begin
         stateSlaveRead <= 3'h0;
       end else begin
         if (_T_187) begin
-          if (S_AXI_RREADY) begin
+          if (s_axi_control_RREADY) begin
             stateSlaveRead <= 3'h4;
           end else begin
             if (_T_183) begin
-              if (S_AXI_ARVALID) begin
+              if (s_axi_control_ARVALID) begin
                 stateSlaveRead <= 3'h2;
               end
             end
           end
         end else begin
           if (_T_183) begin
-            if (S_AXI_ARVALID) begin
+            if (s_axi_control_ARVALID) begin
               stateSlaveRead <= 3'h2;
             end
           end
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       value <= 5'h0;
     end else begin
       if (_T_219) begin
@@ -394,7 +398,7 @@ module AdderAxi(
         end
       end
     end
-    if (rst) begin
+    if (ap_rst_n) begin
       regFlagStart <= 1'h0;
     end else begin
       if (_T_207) begin
