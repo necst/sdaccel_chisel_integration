@@ -18,7 +18,8 @@ module AdderAxi #(
     parameter integer C_M_AXI_GMEM_ID_WIDTH = 1,
     parameter integer C_M_AXI_GMEM_ADDR_WIDTH = 64,
     parameter integer C_M_AXI_GMEM_DATA_WIDTH = 512
-)(
+)
+(
   input          ap_clk,
   input          ap_rst_n,
   input          m_axi_gmem_AWREADY,
@@ -184,7 +185,7 @@ module AdderAxi #(
   wire  _GEN_53;
   wire  _GEN_54;
   assign m_axi_gmem_AWVALID = _GEN_53;
-  assign m_axi_gmem_AWADDR = 64'h20;
+  assign m_axi_gmem_AWADDR = 64'h28;
   assign m_axi_gmem_AWSIZE = 3'h5;
   assign m_axi_gmem_AWLEN = 8'h0;
   assign m_axi_gmem_AWBURST = 2'h1;
