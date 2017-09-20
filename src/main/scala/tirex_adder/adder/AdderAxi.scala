@@ -1,12 +1,14 @@
+/**
+  * Created by lorenzo on 05/09/17.
+  */
+
 package tirex_adder.adder
 
 import AXI.{AXILiteSlaveIF, AXIMasterIF, Axi_Defines}
 import chisel3._
 import chisel3.util.{Counter, Enum}
 
-/**
-  * Created by lorenzo on 05/09/17.
-  */
+
 class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : Int) extends Module{
   val io = IO(new Bundle{
     val m0 = new AXIMasterIF(addrWidth, dataWidth, idBits)
@@ -33,69 +35,113 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
   //FSM Schiavo di merda
 
-  val sIdle :: sAddrRead :: sPrepareData :: sReply :: sStartWrite :: sPerfWrite :: sWaitResp :: sEnd :: Nil = Enum(UInt(), 8)
+  val sIdle :: sWrdata :: sPrepareData :: sReply :: sStartWrite :: sPerfWrite :: sWaitResp :: sEnd :: Nil = Enum(UInt(), 8)
   val stateSlaveWrite = Reg(init = sIdle)
+  val addrwr_handshake = Reg(init = false.B)
+  val write_handshake = Reg(init = false.B)
 
   //always ready to receive addresses
-  io.s0.writeAddr.ready := true.B
-  when(stateSlaveWrite === sIdle){
-    when(io.s0.writeAddr.valid){
-      regCtrAddrWrite := io.s0.writeAddr.bits.addr
-      stateSlaveWrite := sAddrRead
-    }
-  }.elsewhen(stateSlaveWrite === sAddrRead){
-    io.s0.writeData.ready := true.B
-    when(io.s0.writeData.valid){
-      regDataReceived := io.s0.writeData.bits.data
-      regDone := false.B
-      stateSlaveWrite := sReply
-//      stateSlaveWrite := sEnd
-    }
-  }.elsewhen(stateSlaveWrite === sReply){
-    io.s0.writeResp.bits := Axi_Defines.OKAY
-    io.s0.writeResp.valid := true.B
-    io.s0.writeData.ready := true.B
-    when(io.s0.writeResp.ready){
-      stateSlaveWrite := sEnd
-    }
+  //io.s0.writeAddr.ready := !reset && (stateSlaveWrite === sIdle)
+  //io.s0.writeData.ready := stateSlaveWrite === sWrdata
+  //io.s0.writeResp.bits  := Axi_Defines.OKAY
+  //io.s0.writeResp.valid := stateSlaveWrite === sReply
 
-  }.elsewhen(stateSlaveWrite === sEnd){
-    io.s0.writeData.ready := false.B
-    io.s0.writeResp.valid := false.B
-    stateSlaveWrite := sIdle
+  //segnali di handshake avvenuto per scrittura address e dati
+  addrwr_handshake := io.s0.writeAddr.valid & io.s0.writeAddr.ready
+  write_handshake := io.s0.writeData.valid & io.s0.writeData.ready
+
+  //salvo l'indirizzo di scrittura
+  when(addrwr_handshake){
+    regCtrAddrWrite := io.s0.writeAddr.bits.addr
   }
 
-  regStart := regDataReceived(0)
+  when(stateSlaveWrite === sIdle){
+    io.s0.writeResp.valid := false.B
+    io.s0.writeAddr.ready := true.B
+    when(io.s0.writeAddr.valid){
+      stateSlaveWrite := sWrdata
+    }
+  }.elsewhen(stateSlaveWrite === sWrdata){
+    io.s0.writeAddr.ready := false.B
+    io.s0.writeData.ready := true.B
+    when(io.s0.writeData.valid){
+      //regDataReceived := io.s0.writeData.bits.data
+      //regDone := false.B
+      stateSlaveWrite := sReply
+    }
+  }.elsewhen(stateSlaveWrite === sReply){
+    io.s0.writeData.ready := false.B
+    io.s0.writeResp.bits := Axi_Defines.OKAY
+    io.s0.writeResp.valid := true.B
+    when(io.s0.writeResp.ready){
+      stateSlaveWrite := sIdle
+    }
+
+  }
+
+
+  /*regStart := regDataReceived(0)
   //regDone := regDataReceived(1)
   //regIdle := regDataReceived(2)
 
   when(regDone === true.B){
     regIdle := true.B
-  }
+  }*/
+
+
+
+
+
 
   //read transaction
   val stateSlaveRead = Reg(init = sIdle)
   val regCtrAddrRead = Reg(init = 0.U(addrWidth.W))
 
-  io.s0.readAddr.ready := true.B
+  val addrrd_handshake = Reg(init = false.B)
+  val rdata = Reg(init = 0.U(32.W))
+  val raddr = Reg(init = 0.U(6.W))
+  io.s0.readData.bits.data := rdata
+  raddr := io.s0.readAddr.bits.addr
+  addrrd_handshake := io.s0.readAddr.valid & io.s0.readAddr.ready
+
+  //io.s0.readAddr.ready := true.B
   when(stateSlaveRead === sIdle){
+    io.s0.readData.valid := false.B
+    io.s0.readAddr.ready := true.B
     when(io.s0.readAddr.valid){
       regCtrAddrRead := io.s0.readAddr.bits.addr
       stateSlaveRead := sPrepareData
     }
   }.elsewhen(stateSlaveRead === sPrepareData){
     //io.s0.readData.bits.data := io.s0.readData.bits.data | (regStart << 0.U).asUInt()
-    io.s0.readData.bits.data := (regDone << 1.U).asUInt()
+    /*io.s0.readData.bits.data := (regDone << 1.U).asUInt()*/
     //io.s0.readData.bits.data := io.s0.readData.bits.data | (regIdle << 2.U).asUInt()
+    io.s0.readAddr.ready := false.B
     io.s0.readData.valid := true.B
     when(io.s0.readData.ready){
       stateSlaveRead := sEnd
     }
-  }.elsewhen(stateSlaveRead === sEnd){
+  }/*.elsewhen(stateSlaveRead === sEnd){
     io.s0.readData.valid := false.B
     stateSlaveRead := sIdle
+  }*/
+
+
+  when(addrrd_handshake){
+    rdata := 0.U
+      when(raddr === 0.U){
+        rdata := 1.U
+      }
+
   }
 
+
+
+
+
+
+
+  /*
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)
 
@@ -105,6 +151,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
     counter.inc()
     regFlagStart := true.B
   }
+
 
   when(counter.value > 0.U && counter.value < 25.U){
     counter.inc
@@ -163,7 +210,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
     io.m0.writeAddr.valid := false.B
     regDone := true.B
   }
-
+*/
 }
 
 
