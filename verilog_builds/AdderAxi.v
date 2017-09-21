@@ -108,6 +108,7 @@ module AdderAxi(
   wire  _GEN_21;
   wire [2:0] _GEN_23;
   wire  _T_191;
+  wire [1:0] _GEN_24;
   wire [31:0] _GEN_25;
   assign io_m0_writeAddr_valid = 1'h0;
   assign io_m0_writeAddr_bits_addr = 64'h0;
@@ -170,7 +171,8 @@ module AdderAxi(
   assign _GEN_21 = _T_186 ? 1'h0 : 1'h1;
   assign _GEN_23 = _T_186 ? _GEN_20 : _GEN_19;
   assign _T_191 = raddr == 6'h0;
-  assign _GEN_25 = addrrd_handshake ? {{31'd0}, _T_191} : rdata;
+  assign _GEN_24 = _T_191 ? 2'h2 : 2'h0;
+  assign _GEN_25 = addrrd_handshake ? {{30'd0}, _GEN_24} : rdata;
 `ifdef RANDOMIZE
   integer initvar;
   initial begin
@@ -275,7 +277,7 @@ module AdderAxi(
       rdata <= 32'h0;
     end else begin
       if (addrrd_handshake) begin
-        rdata <= {{31'd0}, _T_191};
+        rdata <= {{30'd0}, _GEN_24};
       end
     end
     if (reset) begin

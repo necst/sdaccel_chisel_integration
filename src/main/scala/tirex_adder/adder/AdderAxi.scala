@@ -130,7 +130,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   when(addrrd_handshake){
     rdata := 0.U
       when(raddr === 0.U){
-        rdata := 1.U
+        rdata := 2.U
       }
 
   }
