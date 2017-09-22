@@ -75,6 +75,8 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
     io.s0.writeResp.valid := true.B
     when(io.s0.writeResp.ready){
       stateSlaveWrite := sIdle
+    }.otherwise{
+      stateSlaveWrite := sIdle
     }
 
   }
@@ -121,45 +123,116 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
     when(io.s0.readData.ready){
       stateSlaveRead := sEnd
     }
-  }/*.elsewhen(stateSlaveRead === sEnd){
-    io.s0.readData.valid := false.B
+  }.otherwise{
     stateSlaveRead := sIdle
-  }*/
+  }
 
 
-  when(addrrd_handshake){
-    rdata := 0.U
-      when(raddr === 0.U){
-        rdata := 2.U
-      }
 
+  //Logica start,done,idle
+
+  val areset = Reg(init = 0.U(1.W))
+  val ap_start = Reg(init = 0.U(1.W))
+  val ap_start_pulse = Reg(init = 0.U(1.W))
+  val ap_start_r = Reg(init = 0.U(1.W))
+  val ap_ready = Reg(init = 0.U(1.W))
+  val ap_done = Reg(init = 0.U(1.W))
+  val ap_idle = Reg(init = 1.U(1.W))
+  val ap_autorestart = Reg(init = 0.U(1.W))
+
+  ap_ready := ap_done
+
+  areset := ! reset
+  ap_start_r := ap_start
+  ap_start_pulse := ap_start & ! ap_start_r
+  ap_ready := ap_done
+
+  //ap_idle
+  when(areset === 1.U){
+    ap_idle <= 1.U
+  }.otherwise{
+    when(ap_done === 1.U){
+      ap_idle := 1.U
+    }.elsewhen (ap_start_pulse === 1.U){
+      ap_idle := 0.U
+    }.otherwise{
+      ap_idle := ap_idle
+    }
+  }
+
+  //ap_done
+  when(areset === 1.U){
+    ap_done := 0.U
+  }.otherwise{
+    when(addrrd_handshake && raddr === 0.U){
+      ap_done := 0.U
+    }.otherwise{
+      ap_done := 1.U
+    }
+  }
+
+  //ap_start
+  when(areset === 1.U){
+    ap_start := 0.U
+  }.otherwise{
+    when(write_handshake && regCtrAddrWrite === 0.U && io.s0.writeData.bits.strb(0) && io.s0.writeData.bits.data(0)){
+      ap_start := 1.U
+    }.elsewhen(ap_ready === 1.U){
+      ap_start := ap_autorestart
+    }
+  }
+
+  //autorestart
+  when(areset === 1.U){
+    ap_autorestart := 0.U
+  }.otherwise{
+    when(write_handshake && regCtrAddrWrite === 0.U && io.s0.writeData.bits.strb(0)) {
+      ap_autorestart := io.s0.writeData.bits.data(7)
+    }
   }
 
 
 
 
-
-
-
   /*
+  0--> ap_start
+  1--> ap_done
+  2--> ap_idle
+  3--> ap_ready
+  7--> auto_restart
+ */
+
+  when(addrrd_handshake){
+    when(raddr === 0.U){
+      rdata := 0.U(32.W) | (ap_start | (ap_done << 1.U).asUInt() | (ap_idle << 2.U).asUInt() | (ap_ready << 3.U).asUInt() | (ap_autorestart << 7.U).asUInt())
+    }.otherwise{
+      rdata := 0.U
+    }
+
+  }
+
+
+
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)
 
-  val regStartWriting = Reg(init = false.B)
+  /*val regStartWriting = Reg(init = false.B)*/
 
-  when(regStart === true.B && regFlagStart === false.B){
+  when(ap_start_pulse === true.B && regFlagStart === false.B){
     counter.inc()
     regFlagStart := true.B
+    ap_done := 1.U
   }
 
 
   when(counter.value > 0.U && counter.value < 25.U){
     counter.inc
   }.elsewhen(counter.value >= 25.U){
+      ap_done := 1.U
 //    regDone := true.B
-    regStartWriting := true.B
+/*    regStartWriting := true.B*/
   }
-
+  /*
   //FSM write
 
   val stateWriteMem = Reg(init = sIdle)
