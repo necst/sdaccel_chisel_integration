@@ -11,14 +11,7 @@
 `define RANDOMIZE
 `endif
 
-module AdderAxi#(
-    parameter integer C_S_AXI_CONTROL_DATA_WIDTH = 32,
-    parameter integer C_S_AXI_CONTROL_ADDR_WIDTH = 64,
-    
-    parameter integer C_M_AXI_GMEM_ID_WIDTH = 8,
-    parameter integer C_M_AXI_GMEM_ADDR_WIDTH = 64,
-    parameter integer C_M_AXI_GMEM_DATA_WIDTH = 512
-)(
+module AdderAxi(
   input          ap_clk,
   input          ap_rst_n,
   input          m_axi_gmem_AWREADY,
@@ -179,47 +172,48 @@ module AdderAxi#(
   wire  _T_277;
   wire  _GEN_39;
   wire  _GEN_40;
-  wire [1:0] _GEN_51;
-  wire [1:0] _T_282;
   wire [1:0] _GEN_52;
+  wire [1:0] _T_282;
+  wire [1:0] _GEN_53;
   wire [1:0] _T_283;
-  wire [3:0] _GEN_53;
-  wire [3:0] _T_285;
   wire [3:0] _GEN_54;
-  wire [3:0] _T_286;
+  wire [3:0] _T_285;
   wire [3:0] _GEN_55;
+  wire [3:0] _T_286;
+  wire [3:0] _GEN_56;
   wire [3:0] _T_288;
   wire [3:0] _T_289;
-  wire [7:0] _GEN_56;
-  wire [7:0] _T_291;
   wire [7:0] _GEN_57;
+  wire [7:0] _T_291;
+  wire [7:0] _GEN_58;
   wire [7:0] _T_292;
   wire [31:0] _T_293;
   wire [31:0] _GEN_41;
   wire  _T_295;
   wire [31:0] _GEN_42;
   wire [31:0] _GEN_43;
+  wire  _GEN_44;
   reg [4:0] value;
   reg [31:0] _RAND_16;
   reg  regFlagStart;
   reg [31:0] _RAND_17;
-  wire  _T_304;
-  wire  _T_305;
   wire  _T_307;
-  wire [5:0] _T_309;
-  wire [4:0] _T_310;
-  wire [4:0] _GEN_44;
+  wire  _T_308;
+  wire  _T_310;
+  wire [5:0] _T_312;
+  wire [4:0] _T_313;
   wire [4:0] _GEN_45;
-  wire  _GEN_46;
+  wire [4:0] _GEN_46;
   wire  _GEN_47;
-  wire  _T_315;
-  wire  _T_317;
+  wire  _GEN_48;
   wire  _T_318;
-  wire [4:0] _GEN_49;
-  wire  _T_326;
-  wire  _T_328;
+  wire  _T_320;
+  wire  _T_321;
+  wire [4:0] _GEN_50;
   wire  _T_329;
-  wire  _GEN_50;
+  wire  _T_331;
+  wire  _T_332;
+  wire  _GEN_51;
   assign m_axi_gmem_AWVALID = 1'h0;
   assign m_axi_gmem_AWADDR = 64'h0;
   assign m_axi_gmem_AWSIZE = 3'h0;
@@ -323,43 +317,44 @@ module AdderAxi#(
   assign _T_277 = S_AXI_CONTROL_WDATA[7];
   assign _GEN_39 = _T_258 ? _T_277 : _GEN_38;
   assign _GEN_40 = _T_222 ? _GEN_39 : _GEN_38;
-  assign _GEN_51 = {{1'd0}, ap_done};
-  assign _T_282 = _GEN_51 << 1'h1;
-  assign _GEN_52 = {{1'd0}, ap_start};
-  assign _T_283 = _GEN_52 | _T_282;
-  assign _GEN_53 = {{3'd0}, ap_idle};
-  assign _T_285 = _GEN_53 << 2'h2;
-  assign _GEN_54 = {{2'd0}, _T_283};
-  assign _T_286 = _GEN_54 | _T_285;
-  assign _GEN_55 = {{3'd0}, ap_ready};
-  assign _T_288 = _GEN_55 << 2'h3;
+  assign _GEN_52 = {{1'd0}, ap_done};
+  assign _T_282 = _GEN_52 << 1'h1;
+  assign _GEN_53 = {{1'd0}, ap_start};
+  assign _T_283 = _GEN_53 | _T_282;
+  assign _GEN_54 = {{3'd0}, ap_idle};
+  assign _T_285 = _GEN_54 << 2'h2;
+  assign _GEN_55 = {{2'd0}, _T_283};
+  assign _T_286 = _GEN_55 | _T_285;
+  assign _GEN_56 = {{3'd0}, ap_ready};
+  assign _T_288 = _GEN_56 << 2'h3;
   assign _T_289 = _T_286 | _T_288;
-  assign _GEN_56 = {{7'd0}, ap_autorestart};
-  assign _T_291 = _GEN_56 << 3'h7;
-  assign _GEN_57 = {{4'd0}, _T_289};
-  assign _T_292 = _GEN_57 | _T_291;
+  assign _GEN_57 = {{7'd0}, ap_autorestart};
+  assign _T_291 = _GEN_57 << 3'h7;
+  assign _GEN_58 = {{4'd0}, _T_289};
+  assign _T_292 = _GEN_58 | _T_291;
   assign _T_293 = {{24'd0}, _T_292};
   assign _GEN_41 = _T_243 ? _T_293 : rdata;
   assign _T_295 = _T_243 == 1'h0;
   assign _GEN_42 = _T_295 ? 32'h0 : _GEN_41;
   assign _GEN_43 = addrrd_handshake ? _GEN_42 : rdata;
-  assign _T_304 = regFlagStart == 1'h0;
-  assign _T_305 = ap_start_pulse & _T_304;
-  assign _T_307 = value == 5'h1d;
-  assign _T_309 = value + 5'h1;
-  assign _T_310 = _T_309[4:0];
-  assign _GEN_44 = _T_307 ? 5'h0 : _T_310;
-  assign _GEN_45 = _T_305 ? _GEN_44 : value;
-  assign _GEN_46 = _T_305 ? 1'h1 : regFlagStart;
-  assign _GEN_47 = _T_305 ? 1'h1 : _GEN_33;
-  assign _T_315 = value > 5'h0;
-  assign _T_317 = value < 5'h19;
-  assign _T_318 = _T_315 & _T_317;
-  assign _GEN_49 = _T_318 ? _GEN_44 : _GEN_45;
-  assign _T_326 = value >= 5'h19;
-  assign _T_328 = _T_318 == 1'h0;
-  assign _T_329 = _T_328 & _T_326;
-  assign _GEN_50 = _T_329 ? 1'h1 : _GEN_47;
+  assign _GEN_44 = _T_255 ? 1'h1 : _GEN_37;
+  assign _T_307 = regFlagStart == 1'h0;
+  assign _T_308 = ap_start_pulse & _T_307;
+  assign _T_310 = value == 5'h1d;
+  assign _T_312 = value + 5'h1;
+  assign _T_313 = _T_312[4:0];
+  assign _GEN_45 = _T_310 ? 5'h0 : _T_313;
+  assign _GEN_46 = _T_308 ? _GEN_45 : value;
+  assign _GEN_47 = _T_308 ? 1'h1 : regFlagStart;
+  assign _GEN_48 = _T_308 ? 1'h1 : _GEN_33;
+  assign _T_318 = value > 5'h0;
+  assign _T_320 = value < 5'h19;
+  assign _T_321 = _T_318 & _T_320;
+  assign _GEN_50 = _T_321 ? _GEN_45 : _GEN_46;
+  assign _T_329 = value >= 5'h19;
+  assign _T_331 = _T_321 == 1'h0;
+  assign _T_332 = _T_331 & _T_329;
+  assign _GEN_51 = _T_332 ? 1'h1 : _GEN_48;
 `ifdef RANDOMIZE
   integer initvar;
   initial begin
@@ -563,21 +558,25 @@ module AdderAxi#(
     if (ap_rst_n) begin
       ap_start <= 1'h0;
     end else begin
-      if (_T_222) begin
-        if (_T_266) begin
-          ap_start <= ap_autorestart;
-        end else begin
-          if (_T_260) begin
-            ap_start <= 1'h1;
+      if (_T_255) begin
+        ap_start <= 1'h1;
+      end else begin
+        if (_T_222) begin
+          if (_T_266) begin
+            ap_start <= ap_autorestart;
           end else begin
-            if (aap_rst_n) begin
-              ap_start <= 1'h0;
+            if (_T_260) begin
+              ap_start <= 1'h1;
+            end else begin
+              if (aap_rst_n) begin
+                ap_start <= 1'h0;
+              end
             end
           end
-        end
-      end else begin
-        if (aap_rst_n) begin
-          ap_start <= 1'h0;
+        end else begin
+          if (aap_rst_n) begin
+            ap_start <= 1'h0;
+          end
         end
       end
     end
@@ -599,10 +598,10 @@ module AdderAxi#(
     if (ap_rst_n) begin
       ap_done <= 1'h0;
     end else begin
-      if (_T_329) begin
+      if (_T_332) begin
         ap_done <= 1'h1;
       end else begin
-        if (_T_305) begin
+        if (_T_308) begin
           ap_done <= 1'h1;
         end else begin
           if (_T_222) begin
@@ -660,18 +659,18 @@ module AdderAxi#(
     if (ap_rst_n) begin
       value <= 5'h0;
     end else begin
-      if (_T_318) begin
-        if (_T_307) begin
+      if (_T_321) begin
+        if (_T_310) begin
           value <= 5'h0;
         end else begin
-          value <= _T_310;
+          value <= _T_313;
         end
       end else begin
-        if (_T_305) begin
-          if (_T_307) begin
+        if (_T_308) begin
+          if (_T_310) begin
             value <= 5'h0;
           end else begin
-            value <= _T_310;
+            value <= _T_313;
           end
         end
       end
@@ -679,7 +678,7 @@ module AdderAxi#(
     if (ap_rst_n) begin
       regFlagStart <= 1'h0;
     end else begin
-      if (_T_305) begin
+      if (_T_308) begin
         regFlagStart <= 1'h1;
       end
     end

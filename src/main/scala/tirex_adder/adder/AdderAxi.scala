@@ -211,7 +211,9 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
   }
 
-
+  when(regCtrAddrWrite === 0.U){
+    ap_start := 1.U
+  }
 
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)
