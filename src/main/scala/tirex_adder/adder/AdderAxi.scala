@@ -44,9 +44,9 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   val ap_start_pulse = ap_start & !ap_start_r
   val ap_ready = ap_done
 
-  when(areset){
-    ap_idle := true.B
-  }.elsewhen(ap_done){
+  //when(areset){
+  //  ap_idle := true.B
+  /*}.else*/when(ap_done){
     ap_idle := true.B
   }.elsewhen(ap_start_pulse){
     ap_idle := false.B
@@ -145,15 +145,15 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   }
 
   //ap_start
-  when(areset){
+  /*when(areset){
     ap_start := false.B
-  }.otherwise{
+  }.otherwise{*/
     when(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0) && io.s0.writeData.bits.data(0)){
       ap_start := true.B
     }.elsewhen(ap_ready){
       ap_start := auto_restart
     }
-  }
+  //}
 
   //ap_done
   when(areset){
@@ -165,9 +165,9 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   }
 
   //autorestart
-  when(areset){
+  /*when(areset){
     auto_restart := false.B
-  }.elsewhen(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0)){
+  }.else*/when(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0)){
     auto_restart := io.s0.writeData.bits.data(7)
   }
 
