@@ -72,7 +72,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
 
 
-  io.s0.writeAddr.ready := !areset & (stateSlaveWrite === sIdle)
+  io.s0.writeAddr.ready := /*!areset*/ reset & (stateSlaveWrite === sIdle)
   io.s0.writeData.ready := (stateSlaveWrite === sWrdata)
   io.s0.writeResp.bits := Axi_Defines.OKAY
   io.s0.writeResp.valid := (stateSlaveWrite === sReply)
@@ -110,16 +110,16 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   }
 
 
-  io.s0.readAddr.ready := !areset && (stateSlaveRead === sIdle)
+  io.s0.readAddr.ready := /*!areset*/ reset && (stateSlaveRead === sIdle)
   io.s0.readData.bits.data := readData
   io.s0.readData.bits.resp := Axi_Defines.OKAY
   io.s0.readData.valid := (stateSlaveRead === sReadData)
   val addrrd_handshake = io.s0.readAddr.valid & io.s0.readAddr.ready
   val raddr = io.s0.readAddr.bits.addr
 
-  when(areset) {
+  /*when(areset) {
     stateSlaveRead := sIdle
-  }
+  }*/
 
   when(stateSlaveRead === sIdle){
     when(io.s0.readAddr.valid){
@@ -156,13 +156,13 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   //}
 
   //ap_done
-  when(areset){
+  /*when(areset){
     ap_done := false.B
   }.otherwise{
-    when(addrrd_handshake && raddr === "h00".U){
+    */when(addrrd_handshake && raddr === "h00".U){
       ap_done := false.B
     }
-  }
+  //}
 
   //autorestart
   /*when(areset){
