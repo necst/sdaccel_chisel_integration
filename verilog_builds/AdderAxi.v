@@ -319,7 +319,7 @@ module AdderAxi(
   assign _GEN_27 = _T_253 ? 5'h0 : _T_256;
   assign _GEN_28 = _T_251 ? _GEN_27 : value;
   assign _GEN_29 = _T_251 ? 1'h1 : regFlagStart;
-  assign _T_260 = value == 5'h19;
+  assign _T_260 = value > 5'h0;
   assign _GEN_30 = _T_260 ? 1'h1 : _GEN_25;
 `ifdef RANDOMIZE
   integer initvar;

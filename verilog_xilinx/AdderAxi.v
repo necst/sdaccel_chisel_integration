@@ -11,7 +11,14 @@
 `define RANDOMIZE
 `endif
 
-module AdderAxi(
+module AdderAxi#(
+    parameter integer C_S_AXI_CONTROL_DATA_WIDTH = 32,
+    parameter integer C_S_AXI_CONTROL_ADDR_WIDTH = 64,
+    
+    parameter integer C_M_AXI_GMEM_ID_WIDTH = 8,
+    parameter integer C_M_AXI_GMEM_ADDR_WIDTH = 64,
+    parameter integer C_M_AXI_GMEM_DATA_WIDTH = 512
+)(
   input          ap_clk,
   input          ap_rst_n,
   input          m_axi_gmem_AWREADY,
@@ -319,7 +326,7 @@ module AdderAxi(
   assign _GEN_27 = _T_253 ? 5'h0 : _T_256;
   assign _GEN_28 = _T_251 ? _GEN_27 : value;
   assign _GEN_29 = _T_251 ? 1'h1 : regFlagStart;
-  assign _T_260 = value == 5'h19;
+  assign _T_260 = value > 5'h0;
   assign _GEN_30 = _T_260 ? 1'h1 : _GEN_25;
 `ifdef RANDOMIZE
   integer initvar;

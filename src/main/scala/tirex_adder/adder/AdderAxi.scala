@@ -163,7 +163,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
     regFlagStart := true.B
   }
 
-  when(counter.value === 25.U){
+  when(counter.value > 0.U){
     ap_done := true.B
   }
 /*
