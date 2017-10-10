@@ -19,20 +19,8 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
   //FSM to handle sync with HOST
 
-  val regStart = Reg(init = 0.U(1.W))
-  val regDone = Reg(init = 0.U(1.W))
-  val regIdle = Reg(init = 1.U(1.W))
-
-  val regCtrAddr = Reg(init = "h00000001".asUInt(addrWidth.W))
-  val regCtrAddrWrite = Reg(init = 0.U(addrWidth.W))
-
-  val regDataReceived = Reg(init = 0.U(dataWidth.W))
-
 
   val adder = Module(new Adder)
-
-
-
 
 
   val ap_start = Reg(init = false.B)
@@ -44,9 +32,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   val ap_start_pulse = ap_start & !ap_start_r
   val ap_ready = ap_done
 
-  //when(areset){
-  //  ap_idle := true.B
-  /*}.else*/when(ap_done){
+  when(ap_done){
     ap_idle := true.B
   }.elsewhen(ap_start_pulse){
     ap_idle := false.B
@@ -72,7 +58,7 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
 
 
-  io.s0.writeAddr.ready := /*!areset*/ reset & (stateSlaveWrite === sIdle)
+  io.s0.writeAddr.ready := reset & (stateSlaveWrite === sIdle)
   io.s0.writeData.ready := (stateSlaveWrite === sWrdata)
   io.s0.writeResp.bits := Axi_Defines.OKAY
   io.s0.writeResp.valid := (stateSlaveWrite === sReply)
@@ -110,16 +96,13 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   }
 
 
-  io.s0.readAddr.ready := /*!areset*/ reset && (stateSlaveRead === sIdle)
+  io.s0.readAddr.ready := reset && (stateSlaveRead === sIdle)
   io.s0.readData.bits.data := readData
   io.s0.readData.bits.resp := Axi_Defines.OKAY
   io.s0.readData.valid := (stateSlaveRead === sReadData)
   val addrrd_handshake = io.s0.readAddr.valid & io.s0.readAddr.ready
   val raddr = io.s0.readAddr.bits.addr
 
-  /*when(areset) {
-    stateSlaveRead := sIdle
-  }*/
 
   when(stateSlaveRead === sIdle){
     when(io.s0.readAddr.valid){
@@ -145,48 +128,45 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   }
 
   //ap_start
-  /*when(areset){
-    ap_start := false.B
-  }.otherwise{*/
     when(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0) && io.s0.writeData.bits.data(0)){
       ap_start := true.B
     }.elsewhen(ap_ready){
       ap_start := auto_restart
     }
-  //}
 
   //ap_done
-  /*when(areset){
-    ap_done := false.B
-  }.otherwise{
-    */when(addrrd_handshake && raddr === "h00".U){
+  when(addrrd_handshake && raddr === "h00".U){
       ap_done := false.B
     }
-  //}
+
 
   //autorestart
-  /*when(areset){
-    auto_restart := false.B
-  }.else*/when(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0)){
+  when(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0)){
     auto_restart := io.s0.writeData.bits.data(7)
   }
 
-  when(ap_start){
+
+  val counter = Counter(30)
+  val regFlagStart = Reg(init = false.B)
+/*  when(ap_start){
+
     ap_done := true.B
-  }
+  }*/
 /*
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)
 
   /*val regStartWriting = Reg(init = false.B)*/
-
-  when(ap_start_pulse === true.B && regFlagStart === false.B){
+*/
+  when(ap_start === true.B && regFlagStart === false.B){
     counter.inc()
     regFlagStart := true.B
-    ap_done := 1.U
   }
 
-
+  when(counter.value === 25.U){
+    ap_done := true.B
+  }
+/*
   when(counter.value > 0.U && counter.value < 25.U){
     counter.inc
   }.elsewhen(counter.value >= 25.U){
