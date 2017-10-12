@@ -553,7 +553,7 @@ cl_event enqueue_kernel;
   }
 	printf("enqueued, waiting to end computation\n");
 	fflush(stdout);
-   clWaitForEvents(1, &enqueue_kernel);
+  clWaitForEvents(1, &enqueue_kernel);
 	printf("computation ended\n");
 	fflush(stdout);
 

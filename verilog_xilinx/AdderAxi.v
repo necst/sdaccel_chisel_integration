@@ -11,14 +11,7 @@
 `define RANDOMIZE
 `endif
 
-module AdderAxi#(
-    parameter integer C_S_AXI_CONTROL_DATA_WIDTH = 32,
-    parameter integer C_S_AXI_CONTROL_ADDR_WIDTH = 64,
-    
-    parameter integer C_M_AXI_GMEM_ID_WIDTH = 8,
-    parameter integer C_M_AXI_GMEM_ADDR_WIDTH = 64,
-    parameter integer C_M_AXI_GMEM_DATA_WIDTH = 512
-)(
+module AdderAxi(
   input          ap_clk,
   input          ap_rst_n,
   input          m_axi_gmem_AWREADY,
