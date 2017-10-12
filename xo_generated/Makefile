@@ -101,9 +101,7 @@ xclbin:  check_TARGET
 	$(XOCC) -g --platform $(TARGET_DEVICE) --target $(TARGET) --link --include $(KERNEL_HDRS) --save-temps $(REPORT) --kernel $(KERNEL_NAME) $(dest_dir)/$(KERNEL_EXE).xo $(KERNEL_LDCLFLAGS) $(KERNEL_FLAGS) $(KERNEL_ADDITIONAL_FLAGS) --output $(dest_dir)/$(KERNEL_EXE).xclbin
 
 emulation:  host xclbin
-	export XCL_EMULATION_MODE=$(TARGET)
-	emconfigutil --xdevice $(TARGET_DEVICE) --nd 1
-	./$(dest_dir)/$(HOST_EXE) $(dest_dir)/$(KERNEL_EXE).xclbin
+	export XCL_EMULATION_MODE=$(TARGET) && emconfigutil --xdevice $(TARGET_DEVICE) --nd 1 && ./$(dest_dir)/$(HOST_EXE) $(dest_dir)/$(KERNEL_EXE).xclbin
 	$(info Remeber to export XCL_EMULATION_MODE=$(TARGET) and run emcondigutil for emulation purposes)
 
 #sw_emu: host xclbin
@@ -119,6 +117,4 @@ build:  host xclbin
 
 run_system:  build
 	./$(dest_dir)/$(HOST_EXE) $(dest_dir)/$(KERNEL_EXE)
-
-
 
