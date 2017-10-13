@@ -74,12 +74,12 @@ make emulation TARGET=hw_emu
 We can now change the 'main.cpp' host code in order to verify correctly the succesful execution of our core. 
 If it is needed the there is also a 'sdacel.ini' file in order to see the waveform graph. Copy it in the "hw_emu/<target_platform>" folder and then run:
 ```
-./host_sw <core_name>.xclbin
+./host <core_name>.xclbin
 ```
 
 For example we run:
 ```
-./host_sw AdderAxi.xclbin
+./host AdderAxi.xclbin
 ```
 
 [SDAccel User Guide]: https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_1/ug1023-sdaccel-user-guide.pdf 

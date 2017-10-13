@@ -17,7 +17,7 @@ HOST_CFLAGS=-D FPGA_DEVICE -g -Wall -I${XILINX_SDX}/runtime/include/1_2 -D TARGE
 HOST_LFLAGS=-L${XILINX_SDX}/runtime/lib/x86_64 -lxilinxopencl
 
 #name of host executable
-HOST_EXE=host_sw
+HOST_EXE=host
 
 #kernel
 KERNEL_SRC=
