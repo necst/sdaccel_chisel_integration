@@ -22,6 +22,11 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   val adder = Module(new Adder)
 
 
+  slave_fsm.io.s0.writeData <> io.s0.writeData
+  io.s0.writeResp <> slave_fsm.io.s0.writeResp
+  slave_fsm.io.s0.writeAddr <> io.s0.writeAddr
+  io.s0.readData <> slave_fsm.io.s0.readData
+  slave_fsm.io.s0.readAddr <> io.s0.readAddr
 
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)
