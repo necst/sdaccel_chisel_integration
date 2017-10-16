@@ -2,12 +2,11 @@
   * Created by lorenzo on 05/09/17.
   */
 
-package tirex_adder.adder
+package sdaccel_utils
 
-import AXI.{AXILiteSlaveIF, AXIMasterIF, Axi_Defines}
+import AXI.{AXILiteSlaveIF, AXIMasterIF}
 import chisel3._
-import chisel3.util.{Counter, Enum}
-import sdaccel_utils._
+import chisel3.util.Counter
 
 
 class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : Int) extends Module{

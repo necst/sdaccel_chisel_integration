@@ -1,4 +1,4 @@
-package tirex_adder.adder
+package sdaccel_utils
 
 import chisel3._
 

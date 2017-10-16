@@ -25,7 +25,7 @@ sbt "runMain <package>.<mainclass> --target-dir <path_to_target_dir> --top-name 
 ```
 For example we run:
 ```
-sbt "runMain tirex_adder.adder.AdderAxi --target-dir verilog_builds --top-name AdderAxi"
+sbt "runMain sdaccel_utils.AdderAxi --target-dir verilog_builds --top-name AdderAxi"
 ```
 
 ## 3. NAMING CONVENTION

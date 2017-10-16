@@ -14,6 +14,7 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
     val ap_done = Input(UInt(1.W))
   })
 
+  val ADDR_AP_CTRL = "h00".U
   val ap_start = Reg(init = false.B)
   val auto_restart = Reg(init = false.B)
   val ap_idle = Reg(init = true.B)
@@ -108,26 +109,26 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
 
 
   when(addrrd_handshake){
-    when(raddr === "h00".U){
+    when(raddr === ADDR_AP_CTRL){
       readData := (ap_start).asUInt() | (ap_done << 1).asUInt() | (ap_idle << 2).asUInt() | (ap_ready << 3).asUInt() | (auto_restart << 7).asUInt()
     }
   }
 
   //ap_start
-  when(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0) && io.s0.writeData.bits.data(0)){
+  when(write_handshake && writeAddr === ADDR_AP_CTRL && io.s0.writeData.bits.strb(0) && io.s0.writeData.bits.data(0)){
     ap_start := true.B
   }.elsewhen(ap_ready){
     ap_start := auto_restart
   }
 
   //ap_done
-  when(addrrd_handshake && raddr === "h00".U){
+  when(addrrd_handshake && raddr === ADDR_AP_CTRL){
     ap_done := false.B
   }
 
 
   //autorestart
-  when(write_handshake && writeAddr === "h00".U && io.s0.writeData.bits.strb(0)){
+  when(write_handshake && writeAddr === ADDR_AP_CTRL && io.s0.writeData.bits.strb(0)){
     auto_restart := io.s0.writeData.bits.data(7)
   }
 }
