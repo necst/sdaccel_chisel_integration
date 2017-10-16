@@ -22,11 +22,31 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   val adder = Module(new Adder)
 
 
-  slave_fsm.io.s0.writeData <> io.s0.writeData
-  io.s0.writeResp <> slave_fsm.io.s0.writeResp
-  slave_fsm.io.s0.writeAddr <> io.s0.writeAddr
-  io.s0.readData <> slave_fsm.io.s0.readData
-  slave_fsm.io.s0.readAddr <> io.s0.readAddr
+  slave_fsm.io.s0.writeAddr.bits.prot := io.s0.writeAddr.bits.prot
+  slave_fsm.io.s0.writeAddr.bits.addr := io.s0.writeAddr.bits.addr
+  slave_fsm.io.s0.writeAddr.valid := io.s0.writeAddr.valid
+  io.s0.writeAddr.ready := slave_fsm.io.s0.writeAddr.ready
+
+  slave_fsm.io.s0.writeData.bits.strb := io.s0.writeData.bits.strb
+  slave_fsm.io.s0.writeData.bits.data := io.s0.writeData.bits.data
+  slave_fsm.io.s0.writeData.valid := io.s0.writeData.valid
+  io.s0.writeData.ready := slave_fsm.io.s0.writeData.ready
+
+  io.s0.writeResp.valid := slave_fsm.io.s0.writeResp.valid
+  io.s0.writeResp.bits := slave_fsm.io.s0.writeResp.bits
+  slave_fsm.io.s0.writeResp.ready := io.s0.writeResp.ready
+
+  slave_fsm.io.s0.readAddr.bits.prot := io.s0.readAddr.bits.prot
+  slave_fsm.io.s0.readAddr.bits.addr := io.s0.readAddr.bits.addr
+  slave_fsm.io.s0.readAddr.valid := io.s0.readAddr.valid
+  io.s0.readAddr.ready := slave_fsm.io.s0.readAddr.ready
+
+  io.s0.readData.valid := slave_fsm.io.s0.readData.valid
+  slave_fsm.io.s0.readData.ready := slave_fsm.io.s0.readData.ready
+
+  io.s0.readData.bits.resp := slave_fsm.io.s0.readData.bits.resp
+  io.s0.readData.bits.data := slave_fsm.io.s0.readData.bits.data
+
 
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)

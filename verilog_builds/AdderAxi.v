@@ -588,5 +588,5 @@ module AdderAxi(
   assign slave_fsm_io_s0_writeResp_ready = io_s0_writeResp_ready;
   assign slave_fsm_io_s0_readAddr_valid = io_s0_readAddr_valid;
   assign slave_fsm_io_s0_readAddr_bits_addr = io_s0_readAddr_bits_addr;
-  assign slave_fsm_io_s0_readData_ready = io_s0_readData_ready;
+  assign slave_fsm_io_s0_readData_ready = slave_fsm_io_s0_readData_ready;
 endmodule

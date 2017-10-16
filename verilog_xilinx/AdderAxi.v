@@ -588,5 +588,5 @@ module AdderAxi(
   assign slave_fsm_S_AXI_CONTROL_BREADY = S_AXI_CONTROL_BREADY;
   assign slave_fsm_S_AXI_CONTROL_ARVALID = S_AXI_CONTROL_ARVALID;
   assign slave_fsm_S_AXI_CONTROL_ARADDR = S_AXI_CONTROL_ARADDR;
-  assign slave_fsm_S_AXI_CONTROL_RREADY = S_AXI_CONTROL_RREADY;
+  assign slave_fsm_S_AXI_CONTROL_RREADY = slave_fsm_S_AXI_CONTROL_RREADY;
 endmodule
