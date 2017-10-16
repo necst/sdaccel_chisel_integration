@@ -14,21 +14,21 @@
 module AXILiteControl(
   input         ap_clk,
   input         ap_rst_n,
-  output        S_AXI_CONTROL_AWREADY,
-  input         S_AXI_CONTROL_AWVALID,
-  input  [63:0] S_AXI_CONTROL_AWADDR,
-  output        S_AXI_CONTROL_WREADY,
-  input         S_AXI_CONTROL_WVALID,
-  input  [31:0] S_AXI_CONTROL_WDATA,
-  input  [3:0]  S_AXI_CONTROL_WSTRB,
-  input         S_AXI_CONTROL_BREADY,
-  output        S_AXI_CONTROL_BVALID,
-  output        S_AXI_CONTROL_ARREADY,
-  input         S_AXI_CONTROL_ARVALID,
-  input  [63:0] S_AXI_CONTROL_ARADDR,
-  input         S_AXI_CONTROL_RREADY,
-  output        S_AXI_CONTROL_RVALID,
-  output [31:0] S_AXI_CONTROL_RDATA
+  output        io_sl_writeAddr_ready,
+  input         io_sl_writeAddr_valid,
+  input  [63:0] io_sl_writeAddr_bits_addr,
+  output        io_sl_writeData_ready,
+  input         io_sl_writeData_valid,
+  input  [31:0] io_sl_writeData_bits_data,
+  input  [3:0]  io_sl_writeData_bits_strb,
+  input         io_sl_writeResp_ready,
+  output        io_sl_writeResp_valid,
+  output        io_sl_readAddr_ready,
+  input         io_sl_readAddr_valid,
+  input  [63:0] io_sl_readAddr_bits_addr,
+  input         io_sl_readData_ready,
+  output        io_sl_readData_valid,
+  output [31:0] io_sl_readData_bits_data
 );
   reg  ap_start;
   reg [31:0] _RAND_0;
@@ -135,12 +135,12 @@ module AXILiteControl(
   wire  _GEN_25;
   wire  _T_188;
   wire  _GEN_26;
-  assign S_AXI_CONTROL_AWREADY = _T_70;
-  assign S_AXI_CONTROL_WREADY = _T_71;
-  assign S_AXI_CONTROL_BVALID = _T_117;
-  assign S_AXI_CONTROL_ARREADY = _T_145;
-  assign S_AXI_CONTROL_RVALID = _T_146;
-  assign S_AXI_CONTROL_RDATA = readData;
+  assign io_sl_writeAddr_ready = _T_70;
+  assign io_sl_writeData_ready = _T_71;
+  assign io_sl_writeResp_valid = _T_117;
+  assign io_sl_readAddr_ready = _T_145;
+  assign io_sl_readData_valid = _T_146;
+  assign io_sl_readData_bits_data = readData;
   assign _T_51 = ap_start_r == 1'h0;
   assign ap_start_pulse = ap_start & _T_51;
   assign _GEN_0 = ap_done ? 1'h1 : ap_idle;
@@ -154,24 +154,24 @@ module AXILiteControl(
   assign _T_70 = ap_rst_n & _T_69;
   assign _T_71 = stateSlaveWrite == 3'h1;
   assign _T_117 = stateSlaveWrite == 3'h2;
-  assign addrwr_handshake = S_AXI_CONTROL_AWVALID & S_AXI_CONTROL_AWREADY;
-  assign write_handshake = S_AXI_CONTROL_WVALID & S_AXI_CONTROL_WREADY;
-  assign _GEN_3 = addrwr_handshake ? S_AXI_CONTROL_AWADDR : {{58'd0}, writeAddr};
-  assign _GEN_4 = S_AXI_CONTROL_AWVALID ? 3'h1 : stateSlaveWrite;
-  assign _T_120 = S_AXI_CONTROL_AWVALID == 1'h0;
+  assign addrwr_handshake = io_sl_writeAddr_valid & io_sl_writeAddr_ready;
+  assign write_handshake = io_sl_writeData_valid & io_sl_writeData_ready;
+  assign _GEN_3 = addrwr_handshake ? io_sl_writeAddr_bits_addr : {{58'd0}, writeAddr};
+  assign _GEN_4 = io_sl_writeAddr_valid ? 3'h1 : stateSlaveWrite;
+  assign _T_120 = io_sl_writeAddr_valid == 1'h0;
   assign _GEN_5 = _T_120 ? 3'h0 : _GEN_4;
   assign _GEN_6 = _T_69 ? _GEN_5 : stateSlaveWrite;
   assign _T_123 = _T_69 == 1'h0;
   assign _T_124 = _T_123 & _T_71;
-  assign _GEN_7 = S_AXI_CONTROL_WVALID ? 3'h2 : _GEN_6;
-  assign _T_126 = S_AXI_CONTROL_WVALID == 1'h0;
+  assign _GEN_7 = io_sl_writeData_valid ? 3'h2 : _GEN_6;
+  assign _T_126 = io_sl_writeData_valid == 1'h0;
   assign _GEN_8 = _T_126 ? 3'h1 : _GEN_7;
   assign _GEN_9 = _T_124 ? _GEN_8 : _GEN_6;
   assign _T_131 = _T_71 == 1'h0;
   assign _T_132 = _T_123 & _T_131;
   assign _T_133 = _T_132 & _T_117;
-  assign _GEN_10 = S_AXI_CONTROL_BREADY ? 3'h0 : _GEN_9;
-  assign _T_135 = S_AXI_CONTROL_BREADY == 1'h0;
+  assign _GEN_10 = io_sl_writeResp_ready ? 3'h0 : _GEN_9;
+  assign _T_135 = io_sl_writeResp_ready == 1'h0;
   assign _GEN_11 = _T_135 ? 3'h2 : _GEN_10;
   assign _GEN_12 = _T_133 ? _GEN_11 : _GEN_9;
   assign _T_142 = _T_117 == 1'h0;
@@ -180,14 +180,14 @@ module AXILiteControl(
   assign _T_144 = stateSlaveRead == 3'h0;
   assign _T_145 = ap_rst_n & _T_144;
   assign _T_146 = stateSlaveRead == 3'h3;
-  assign addrrd_handshake = S_AXI_CONTROL_ARVALID & S_AXI_CONTROL_ARREADY;
-  assign _GEN_14 = S_AXI_CONTROL_ARVALID ? 3'h3 : stateSlaveRead;
-  assign _T_149 = S_AXI_CONTROL_ARVALID == 1'h0;
+  assign addrrd_handshake = io_sl_readAddr_valid & io_sl_readAddr_ready;
+  assign _GEN_14 = io_sl_readAddr_valid ? 3'h3 : stateSlaveRead;
+  assign _T_149 = io_sl_readAddr_valid == 1'h0;
   assign _GEN_15 = _T_149 ? 3'h0 : _GEN_14;
   assign _GEN_16 = _T_144 ? _GEN_15 : stateSlaveRead;
   assign _T_152 = _T_144 == 1'h0;
   assign _T_153 = _T_152 & _T_146;
-  assign _T_154 = S_AXI_CONTROL_RVALID & S_AXI_CONTROL_RREADY;
+  assign _T_154 = io_sl_readData_valid & io_sl_readData_ready;
   assign _GEN_17 = _T_154 ? 3'h0 : _GEN_16;
   assign _T_156 = _T_154 == 1'h0;
   assign _GEN_18 = _T_156 ? 3'h3 : _GEN_17;
@@ -195,7 +195,7 @@ module AXILiteControl(
   assign _T_160 = _T_146 == 1'h0;
   assign _T_161 = _T_152 & _T_160;
   assign _GEN_20 = _T_161 ? 3'h0 : _GEN_19;
-  assign _T_162 = S_AXI_CONTROL_ARADDR == 64'h0;
+  assign _T_162 = io_sl_readAddr_bits_addr == 64'h0;
   assign _GEN_27 = {{1'd0}, ap_done};
   assign _T_163 = _GEN_27 << 1;
   assign _GEN_28 = {{1'd0}, ap_start};
@@ -216,9 +216,9 @@ module AXILiteControl(
   assign _GEN_22 = addrrd_handshake ? _GEN_21 : readData;
   assign _T_171 = writeAddr == 6'h0;
   assign _T_172 = write_handshake & _T_171;
-  assign _T_173 = S_AXI_CONTROL_WSTRB[0];
+  assign _T_173 = io_sl_writeData_bits_strb[0];
   assign _T_174 = _T_172 & _T_173;
-  assign _T_175 = S_AXI_CONTROL_WDATA[0];
+  assign _T_175 = io_sl_writeData_bits_data[0];
   assign _T_176 = _T_174 & _T_175;
   assign _GEN_23 = _T_176 ? 1'h1 : ap_start;
   assign _T_179 = _T_176 == 1'h0;
@@ -226,7 +226,7 @@ module AXILiteControl(
   assign _GEN_24 = _T_180 ? auto_restart : _GEN_23;
   assign _T_182 = addrrd_handshake & _T_162;
   assign _GEN_25 = _T_182 ? 1'h0 : 1'h1;
-  assign _T_188 = S_AXI_CONTROL_WDATA[7];
+  assign _T_188 = io_sl_writeData_bits_data[7];
   assign _GEN_26 = _T_174 ? _T_188 : auto_restart;
 `ifdef RANDOMIZE
   integer initvar;
@@ -328,21 +328,21 @@ module AXILiteControl(
           if (_T_135) begin
             stateSlaveWrite <= 3'h2;
           end else begin
-            if (S_AXI_CONTROL_BREADY) begin
+            if (io_sl_writeResp_ready) begin
               stateSlaveWrite <= 3'h0;
             end else begin
               if (_T_124) begin
                 if (_T_126) begin
                   stateSlaveWrite <= 3'h1;
                 end else begin
-                  if (S_AXI_CONTROL_WVALID) begin
+                  if (io_sl_writeData_valid) begin
                     stateSlaveWrite <= 3'h2;
                   end else begin
                     if (_T_69) begin
                       if (_T_120) begin
                         stateSlaveWrite <= 3'h0;
                       end else begin
-                        if (S_AXI_CONTROL_AWVALID) begin
+                        if (io_sl_writeAddr_valid) begin
                           stateSlaveWrite <= 3'h1;
                         end
                       end
@@ -354,7 +354,7 @@ module AXILiteControl(
                   if (_T_120) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
-                    if (S_AXI_CONTROL_AWVALID) begin
+                    if (io_sl_writeAddr_valid) begin
                       stateSlaveWrite <= 3'h1;
                     end
                   end
@@ -367,14 +367,14 @@ module AXILiteControl(
             if (_T_126) begin
               stateSlaveWrite <= 3'h1;
             end else begin
-              if (S_AXI_CONTROL_WVALID) begin
+              if (io_sl_writeData_valid) begin
                 stateSlaveWrite <= 3'h2;
               end else begin
                 if (_T_69) begin
                   if (_T_120) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
-                    if (S_AXI_CONTROL_AWVALID) begin
+                    if (io_sl_writeAddr_valid) begin
                       stateSlaveWrite <= 3'h1;
                     end
                   end
@@ -386,7 +386,7 @@ module AXILiteControl(
               if (_T_120) begin
                 stateSlaveWrite <= 3'h0;
               end else begin
-                if (S_AXI_CONTROL_AWVALID) begin
+                if (io_sl_writeAddr_valid) begin
                   stateSlaveWrite <= 3'h1;
                 end
               end
@@ -417,7 +417,7 @@ module AXILiteControl(
                 if (_T_149) begin
                   stateSlaveRead <= 3'h0;
                 end else begin
-                  if (S_AXI_CONTROL_ARVALID) begin
+                  if (io_sl_readAddr_valid) begin
                     stateSlaveRead <= 3'h3;
                   end
                 end
@@ -429,7 +429,7 @@ module AXILiteControl(
             if (_T_149) begin
               stateSlaveRead <= 3'h0;
             end else begin
-              if (S_AXI_CONTROL_ARVALID) begin
+              if (io_sl_readAddr_valid) begin
                 stateSlaveRead <= 3'h3;
               end
             end
@@ -510,39 +510,39 @@ module AdderAxi(
 );
   wire  slave_fsm_ap_clk;
   wire  slave_fsm_reset;
-  wire  slave_fsm_S_AXI_CONTROL_AWREADY;
-  wire  slave_fsm_S_AXI_CONTROL_AWVALID;
-  wire [63:0] slave_fsm_S_AXI_CONTROL_AWADDR;
-  wire  slave_fsm_S_AXI_CONTROL_WREADY;
-  wire  slave_fsm_S_AXI_CONTROL_WVALID;
-  wire [31:0] slave_fsm_S_AXI_CONTROL_WDATA;
-  wire [3:0] slave_fsm_S_AXI_CONTROL_WSTRB;
-  wire  slave_fsm_S_AXI_CONTROL_BREADY;
-  wire  slave_fsm_S_AXI_CONTROL_BVALID;
-  wire  slave_fsm_S_AXI_CONTROL_ARREADY;
-  wire  slave_fsm_S_AXI_CONTROL_ARVALID;
-  wire [63:0] slave_fsm_S_AXI_CONTROL_ARADDR;
-  wire  slave_fsm_S_AXI_CONTROL_RREADY;
-  wire  slave_fsm_S_AXI_CONTROL_RVALID;
-  wire [31:0] slave_fsm_S_AXI_CONTROL_RDATA;
+  wire  slave_fsm_io_sl_writeAddr_ready;
+  wire  slave_fsm_io_sl_writeAddr_valid;
+  wire [63:0] slave_fsm_io_sl_writeAddr_bits_addr;
+  wire  slave_fsm_io_sl_writeData_ready;
+  wire  slave_fsm_io_sl_writeData_valid;
+  wire [31:0] slave_fsm_io_sl_writeData_bits_data;
+  wire [3:0] slave_fsm_io_sl_writeData_bits_strb;
+  wire  slave_fsm_io_sl_writeResp_ready;
+  wire  slave_fsm_io_sl_writeResp_valid;
+  wire  slave_fsm_io_sl_readAddr_ready;
+  wire  slave_fsm_io_sl_readAddr_valid;
+  wire [63:0] slave_fsm_io_sl_readAddr_bits_addr;
+  wire  slave_fsm_io_sl_readData_ready;
+  wire  slave_fsm_io_sl_readData_valid;
+  wire [31:0] slave_fsm_io_sl_readData_bits_data;
   AXILiteControl slave_fsm (
     .ap_clk(slave_fsm_ap_clk),
     .reset(slave_fsm_reset),
-    .S_AXI_CONTROL_AWREADY(slave_fsm_S_AXI_CONTROL_AWREADY),
-    .S_AXI_CONTROL_AWVALID(slave_fsm_S_AXI_CONTROL_AWVALID),
-    .S_AXI_CONTROL_AWADDR(slave_fsm_S_AXI_CONTROL_AWADDR),
-    .S_AXI_CONTROL_WREADY(slave_fsm_S_AXI_CONTROL_WREADY),
-    .S_AXI_CONTROL_WVALID(slave_fsm_S_AXI_CONTROL_WVALID),
-    .S_AXI_CONTROL_WDATA(slave_fsm_S_AXI_CONTROL_WDATA),
-    .S_AXI_CONTROL_WSTRB(slave_fsm_S_AXI_CONTROL_WSTRB),
-    .S_AXI_CONTROL_BREADY(slave_fsm_S_AXI_CONTROL_BREADY),
-    .S_AXI_CONTROL_BVALID(slave_fsm_S_AXI_CONTROL_BVALID),
-    .S_AXI_CONTROL_ARREADY(slave_fsm_S_AXI_CONTROL_ARREADY),
-    .S_AXI_CONTROL_ARVALID(slave_fsm_S_AXI_CONTROL_ARVALID),
-    .S_AXI_CONTROL_ARADDR(slave_fsm_S_AXI_CONTROL_ARADDR),
-    .S_AXI_CONTROL_RREADY(slave_fsm_S_AXI_CONTROL_RREADY),
-    .S_AXI_CONTROL_RVALID(slave_fsm_S_AXI_CONTROL_RVALID),
-    .S_AXI_CONTROL_RDATA(slave_fsm_S_AXI_CONTROL_RDATA)
+    .io_sl_writeAddr_ready(slave_fsm_io_sl_writeAddr_ready),
+    .io_sl_writeAddr_valid(slave_fsm_io_sl_writeAddr_valid),
+    .io_sl_writeAddr_bits_addr(slave_fsm_io_sl_writeAddr_bits_addr),
+    .io_sl_writeData_ready(slave_fsm_io_sl_writeData_ready),
+    .io_sl_writeData_valid(slave_fsm_io_sl_writeData_valid),
+    .io_sl_writeData_bits_data(slave_fsm_io_sl_writeData_bits_data),
+    .io_sl_writeData_bits_strb(slave_fsm_io_sl_writeData_bits_strb),
+    .io_sl_writeResp_ready(slave_fsm_io_sl_writeResp_ready),
+    .io_sl_writeResp_valid(slave_fsm_io_sl_writeResp_valid),
+    .io_sl_readAddr_ready(slave_fsm_io_sl_readAddr_ready),
+    .io_sl_readAddr_valid(slave_fsm_io_sl_readAddr_valid),
+    .io_sl_readAddr_bits_addr(slave_fsm_io_sl_readAddr_bits_addr),
+    .io_sl_readData_ready(slave_fsm_io_sl_readData_ready),
+    .io_sl_readData_valid(slave_fsm_io_sl_readData_valid),
+    .io_sl_readData_bits_data(slave_fsm_io_sl_readData_bits_data)
   );
   assign m_axi_gmem_AWVALID = 1'h0;
   assign m_axi_gmem_AWADDR = 64'h0;
@@ -570,23 +570,23 @@ module AdderAxi(
   assign m_axi_gmem_ARPROT = 3'h0;
   assign m_axi_gmem_ARQOS = 4'h0;
   assign m_axi_gmem_RREADY = 1'h0;
-  assign S_AXI_CONTROL_AWREADY = slave_fsm_S_AXI_CONTROL_AWREADY;
-  assign S_AXI_CONTROL_WREADY = slave_fsm_S_AXI_CONTROL_WREADY;
-  assign S_AXI_CONTROL_BVALID = slave_fsm_S_AXI_CONTROL_BVALID;
+  assign S_AXI_CONTROL_AWREADY = slave_fsm_io_sl_writeAddr_ready;
+  assign S_AXI_CONTROL_WREADY = slave_fsm_io_sl_writeData_ready;
+  assign S_AXI_CONTROL_BVALID = slave_fsm_io_sl_writeResp_valid;
   assign S_AXI_CONTROL_BRESP = 2'h0;
-  assign S_AXI_CONTROL_ARREADY = slave_fsm_S_AXI_CONTROL_ARREADY;
-  assign S_AXI_CONTROL_RVALID = slave_fsm_S_AXI_CONTROL_RVALID;
-  assign S_AXI_CONTROL_RDATA = slave_fsm_S_AXI_CONTROL_RDATA;
+  assign S_AXI_CONTROL_ARREADY = slave_fsm_io_sl_readAddr_ready;
+  assign S_AXI_CONTROL_RVALID = slave_fsm_io_sl_readData_valid;
+  assign S_AXI_CONTROL_RDATA = slave_fsm_io_sl_readData_bits_data;
   assign S_AXI_CONTROL_RRESP = 2'h0;
   assign slave_fsm_ap_clk = ap_clk;
   assign slave_fsm_reset = ap_rst_n;
-  assign slave_fsm_S_AXI_CONTROL_AWVALID = S_AXI_CONTROL_AWVALID;
-  assign slave_fsm_S_AXI_CONTROL_AWADDR = S_AXI_CONTROL_AWADDR;
-  assign slave_fsm_S_AXI_CONTROL_WVALID = S_AXI_CONTROL_WVALID;
-  assign slave_fsm_S_AXI_CONTROL_WDATA = S_AXI_CONTROL_WDATA;
-  assign slave_fsm_S_AXI_CONTROL_WSTRB = S_AXI_CONTROL_WSTRB;
-  assign slave_fsm_S_AXI_CONTROL_BREADY = S_AXI_CONTROL_BREADY;
-  assign slave_fsm_S_AXI_CONTROL_ARVALID = S_AXI_CONTROL_ARVALID;
-  assign slave_fsm_S_AXI_CONTROL_ARADDR = S_AXI_CONTROL_ARADDR;
-  assign slave_fsm_S_AXI_CONTROL_RREADY = slave_fsm_S_AXI_CONTROL_RREADY;
+  assign slave_fsm_io_sl_writeAddr_valid = S_AXI_CONTROL_AWVALID;
+  assign slave_fsm_io_sl_writeAddr_bits_addr = S_AXI_CONTROL_AWADDR;
+  assign slave_fsm_io_sl_writeData_valid = S_AXI_CONTROL_WVALID;
+  assign slave_fsm_io_sl_writeData_bits_data = S_AXI_CONTROL_WDATA;
+  assign slave_fsm_io_sl_writeData_bits_strb = S_AXI_CONTROL_WSTRB;
+  assign slave_fsm_io_sl_writeResp_ready = S_AXI_CONTROL_BREADY;
+  assign slave_fsm_io_sl_readAddr_valid = S_AXI_CONTROL_ARVALID;
+  assign slave_fsm_io_sl_readAddr_bits_addr = S_AXI_CONTROL_ARADDR;
+  assign slave_fsm_io_sl_readData_ready = slave_fsm_io_sl_readData_ready;
 endmodule
