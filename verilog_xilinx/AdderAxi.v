@@ -527,7 +527,7 @@ module AdderAxi(
   wire [31:0] slave_fsm_io_sl_readData_bits_data;
   AXILiteControl slave_fsm (
     .ap_clk(slave_fsm_ap_clk),
-    .reset(slave_fsm_reset),
+    .ap_rst_n(slave_fsm_reset),
     .io_sl_writeAddr_ready(slave_fsm_io_sl_writeAddr_ready),
     .io_sl_writeAddr_valid(slave_fsm_io_sl_writeAddr_valid),
     .io_sl_writeAddr_bits_addr(slave_fsm_io_sl_writeAddr_bits_addr),
