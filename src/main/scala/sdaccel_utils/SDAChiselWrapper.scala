@@ -38,27 +38,6 @@ class SDAChiselWrapper(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidth
 
   slave_fsm.reset := !reset
   RTLKernel.reset := !reset
-/*
-  val counter = Counter(30)
-  val regFlagStart = Reg(init = false.B)
-  val doneReg = Reg(init = false.B)
-  val startReg = Reg(init = false.B)
-  val idleReg = Reg(init = true.B)
-
-  idleReg := slave_fsm.io.ap_idle
-  startReg := slave_fsm.io.ap_start
-  slave_fsm.io.ap_done := doneReg
-
-
-
-  when(slave_fsm.io.ap_start === true.B && regFlagStart === false.B){
-    counter.inc()
-    regFlagStart := true.B
-  }
-
-  when(counter.value > 0.U){
-    doneReg := true.B
-  }*/
 
   slave_fsm.io.slave.writeAddr.bits.prot := io.s0.writeAddr.bits.prot
   slave_fsm.io.slave.writeAddr.bits.addr := io.s0.writeAddr.bits.addr

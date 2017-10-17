@@ -29,8 +29,8 @@ sbt "runMain sdaccel_utils.SDAChiselWrapper --target-dir verilog_builds --top-na
 ```
 
 ## 3. NAMING CONVENTION
-In order to be compliant with SDAccel requirements you have to change the port name automatically generated from Chisel. Since the reset works with negative logic we have also to change how we reset our registers. 
-This can be done all automatically through our python script 'change_port_names_xilinx.py':
+In order to be compliant with SDAccel requirements you have to change the port name automatically generated from Chisel.
+This can be done automatically through our python script 'change_port_names_xilinx.py':
 ```
 python change_port_names_xilinx.py <verilog_file_path_from_chisel> <target_file_with_conventions>
 ```
