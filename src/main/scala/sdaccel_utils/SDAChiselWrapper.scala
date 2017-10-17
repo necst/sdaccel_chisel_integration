@@ -9,7 +9,7 @@ import chisel3._
 import chisel3.util.Counter
 
 
-class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : Int) extends Module{
+class SDAChiselWrapper(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : Int) extends Module{
   val io = IO(new Bundle{
     val m0 = new AXIMasterIF(addrWidth, dataWidth, idBits)
     val s0 = new AXILiteSlaveIF(addrWidth, dataWidthSlave) //SLAVE control interface
@@ -19,9 +19,10 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
   val slave_fsm = Module(new AXILiteControl(addrWidth, dataWidthSlave))
 
 
-  val adder = Module(new Adder)
+  val kernel = Module(new MyKernel)
 
 
+  /*
   slave_fsm.io.sl.writeAddr.bits.prot := io.s0.writeAddr.bits.prot
   slave_fsm.io.sl.writeAddr.bits.addr := io.s0.writeAddr.bits.addr
   slave_fsm.io.sl.writeAddr.valid := io.s0.writeAddr.valid
@@ -46,23 +47,27 @@ class AdderAxi(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidthSlave : 
 
   io.s0.readData.bits.resp := slave_fsm.io.sl.readData.bits.resp
   io.s0.readData.bits.data := slave_fsm.io.sl.readData.bits.data
+*/
+  io.s0 <> slave_fsm.io.s0
 
 
-  val counter = Counter(30)
-  val regFlagStart = Reg(init = false.B)
 
-  when(slave_fsm.io.ap_start === true.B && regFlagStart === false.B){
-    counter.inc()
-    regFlagStart := true.B
-  }
+  kernel.io.start := slave_fsm.io.ap_start
+  slave_fsm.io.ap_done := kernel.io.done
 
-  when(counter.value > 0.U){
-    slave_fsm.io.ap_done := true.B
-  }
+  //**********************************************************************************
+  // ATTENTION! The submodule reset must have the negate of the reset in input
+  //**********************************************************************************
+
+  slave_fsm.reset := !reset
+  kernel.reset := !reset
+
+
+
 }
 
 
-object AdderAxi extends App {
+object SDAChiselWrapper extends App {
 
   val address = 64
   val dataWidth = 512
@@ -70,6 +75,6 @@ object AdderAxi extends App {
   val idBits = 1
 
 
-  chisel3.Driver.execute(args, () => new AdderAxi(address,dataWidth,idBits, dataWidthSlave))
+  chisel3.Driver.execute(args, () => new SDAChiselWrapper(address,dataWidth,idBits, dataWidthSlave))
 
 }

@@ -11,7 +11,7 @@ import chisel3.{Reg, UInt, when}
 
 class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
   val io =  IO(new Bundle{
-    val sl = new AXILiteSlaveIF(addrWidth, dataWidthSlave)
+    val s0 = new AXILiteSlaveIF(addrWidth, dataWidthSlave)
     val ap_idle = Output(UInt(1.W))
     val ap_start = Output(UInt(1.W))
     val ap_done = Input(UInt(1.W))
@@ -48,33 +48,33 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
 
 
 
-  io.sl.writeAddr.ready := reset & (stateSlaveWrite === sIdle)
-  io.sl.writeData.ready := (stateSlaveWrite === sWrdata)
-  io.sl.writeResp.bits := Axi_Defines.OKAY
-  io.sl.writeResp.valid := (stateSlaveWrite === sReply)
+  io.s0.writeAddr.ready := reset & (stateSlaveWrite === sIdle)
+  io.s0.writeData.ready := (stateSlaveWrite === sWrdata)
+  io.s0.writeResp.bits := Axi_Defines.OKAY
+  io.s0.writeResp.valid := (stateSlaveWrite === sReply)
 
-  val addrwr_handshake = io.sl.writeAddr.valid & io.sl.writeAddr.ready
-  val write_handshake = io.sl.writeData.valid & io.sl.writeData.ready
+  val addrwr_handshake = io.s0.writeAddr.valid & io.s0.writeAddr.ready
+  val write_handshake = io.s0.writeData.valid & io.s0.writeData.ready
 
   when(addrwr_handshake){
-    writeAddr := io.sl.writeAddr.bits.addr
+    writeAddr := io.s0.writeAddr.bits.addr
   }
 
   //FSM AXI-Lite Write
   when(stateSlaveWrite === sIdle){
-    when(io.sl.writeAddr.valid){
+    when(io.s0.writeAddr.valid){
       stateSlaveWrite := sWrdata
     }.otherwise{
       stateSlaveWrite := sIdle
     }
   }.elsewhen(stateSlaveWrite === sWrdata){
-    when(io.sl.writeData.valid){
+    when(io.s0.writeData.valid){
       stateSlaveWrite := sReply
     }.otherwise{
       stateSlaveWrite := sWrdata
     }
   }.elsewhen(stateSlaveWrite === sReply){
-    when(io.sl.writeResp.ready){
+    when(io.s0.writeResp.ready){
       stateSlaveWrite := sIdle
     }.otherwise{
       stateSlaveWrite := sReply
@@ -85,23 +85,23 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
   }
 
 
-  io.sl.readAddr.ready := reset && (stateSlaveRead === sIdle)
-  io.sl.readData.bits.data := readData
-  io.sl.readData.bits.resp := Axi_Defines.OKAY
-  io.sl.readData.valid := (stateSlaveRead === sReadData)
+  io.s0.readAddr.ready := reset && (stateSlaveRead === sIdle)
+  io.s0.readData.bits.data := readData
+  io.s0.readData.bits.resp := Axi_Defines.OKAY
+  io.s0.readData.valid := (stateSlaveRead === sReadData)
 
-  val addrrd_handshake = io.sl.readAddr.valid & io.sl.readAddr.ready
-  val raddr = io.sl.readAddr.bits.addr
+  val addrrd_handshake = io.s0.readAddr.valid & io.s0.readAddr.ready
+  val raddr = io.s0.readAddr.bits.addr
 
   //FSM AXI-Lite READ
   when(stateSlaveRead === sIdle){
-    when(io.sl.readAddr.valid){
+    when(io.s0.readAddr.valid){
       stateSlaveRead := sReadData
     }.otherwise{
       stateSlaveRead := sIdle
     }
   }.elsewhen(stateSlaveRead === sReadData){
-    when(io.sl.readData.valid & io.sl.readData.ready){
+    when(io.s0.readData.valid & io.s0.readData.ready){
       stateSlaveRead := sIdle
     }.otherwise{
       stateSlaveRead := sReadData
@@ -118,7 +118,7 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
   }
 
   //ap_start
-  when(write_handshake && writeAddr === ADDR_AP_CTRL && io.sl.writeData.bits.strb(0) && io.sl.writeData.bits.data(0)){
+  when(write_handshake && writeAddr === ADDR_AP_CTRL && io.s0.writeData.bits.strb(0) && io.s0.writeData.bits.data(0)){
     ap_start := true.B
   }.elsewhen(ap_ready){
     ap_start := auto_restart
@@ -131,7 +131,7 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
 
 
   //autorestart
-  when(write_handshake && writeAddr === ADDR_AP_CTRL && io.sl.writeData.bits.strb(0)){
-    auto_restart := io.sl.writeData.bits.data(7)
+  when(write_handshake && writeAddr === ADDR_AP_CTRL && io.s0.writeData.bits.strb(0)){
+    auto_restart := io.s0.writeData.bits.data(7)
   }
 }

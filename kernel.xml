@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root versionMajor="1" versionMinor="5">
-  <kernel name="AdderAxi" language="ip" vlnv="user.org:user:AdderAxi:1.0" attributes="" preferredWorkGroupSizeMultiple="0" workGroupSize="1" debug="true" compileOptions=" -g" profileType="none">
+  <kernel name="SDAChiselWrapper" language="ip" vlnv="user.org:user:SDAChiselWrapper:1.0" attributes="" preferredWorkGroupSizeMultiple="0" workGroupSize="1" debug="true" compileOptions=" -g" profileType="none">
     <ports>
       <port name="S_AXI_CONTROL" mode="slave" range="0x1000" dataWidth="32" portType="addressable" base="0x0"/>
       <port name="m_axi_gmem" mode="master" range="0xFFFFFFFF" dataWidth="32" portType="addressable" base="0x0"/>

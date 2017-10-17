@@ -25,7 +25,7 @@ sbt "runMain <package>.<mainclass> --target-dir <path_to_target_dir> --top-name 
 ```
 For example we run:
 ```
-sbt "runMain sdaccel_utils.AdderAxi --target-dir verilog_builds --top-name AdderAxi"
+sbt "runMain sdaccel_utils.SDAChiselWrapper --target-dir verilog_builds --top-name SDAChiselWrapper"
 ```
 
 ## 3. NAMING CONVENTION
@@ -37,7 +37,7 @@ python change_port_names_xilinx.py <verilog_file_path_from_chisel> <target_file_
 
 For example we run:
 ```
-python change_port_names_xilinx.py ./verilog_builds/AdderAxi.v ./verilog_xilinx/AdderAxi.v
+python change_port_names_xilinx.py ./verilog_builds/SDAChiselWrapper.v ./verilog_xilinx/SDAChiselWrapper.v
 ```
 
 ## 4. IP, XML GENERATION
@@ -62,7 +62,7 @@ package_xo -xo_path <.xo_file> -kernel_name <kernel_name> -kernel_xml <xml_file_
 
 For example we run:
 ```
-package_xo -xo_path AdderAxi.xo -kernel_name AdderAxi -kernel_xml kernel.xml -ip_directory ./ip_dir
+package_xo -xo_path SDAChiselWrapper.xo -kernel_name SDAChiselWrapper -kernel_xml kernel.xml -ip_directory ./ip_dir
 ```
 
 ## 6. HARDWARE EMULATION
@@ -79,7 +79,7 @@ If it is needed the there is also a 'sdacel.ini' file in order to see the wavefo
 
 For example we run:
 ```
-./host AdderAxi.xclbin
+./host SDAChiselWrapper.xclbin
 ```
 
 [SDAccel User Guide]: https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_1/ug1023-sdaccel-user-guide.pdf 

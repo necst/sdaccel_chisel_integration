@@ -67,10 +67,8 @@ variables_name = {
  "io_s0_readData_valid" : "S_AXI_CONTROL_RVALID",
  "io_s0_readData_bits_data" : "S_AXI_CONTROL_RDATA",
  "io_s0_readData_bits_resp" : "S_AXI_CONTROL_RRESP",
- "clock": "ap_clk",
- "(reset)": "(!ap_rst_n)", 
- " reset": " ap_rst_n",
- ".reset" : ".ap_rst_n"
+ "clock": "ap_clk", 
+ "reset": " ap_rst_n"
  
  }
 
