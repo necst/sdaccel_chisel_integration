@@ -451,87 +451,6 @@ module AXILiteControl(
     end
   end
 endmodule
-module MyKernel(
-  input   ap_clk,
-  input   ap_rst_n,
-  input   io_ap_start,
-  output  io_ap_done
-);
-  reg [4:0] value;
-  reg [31:0] _RAND_0;
-  reg  regFlagStart;
-  reg [31:0] _RAND_1;
-  reg  doneReg;
-  reg [31:0] _RAND_2;
-  wire  _T_18;
-  wire  _T_19;
-  wire  _T_21;
-  wire [5:0] _T_23;
-  wire [4:0] _T_24;
-  wire [4:0] _GEN_0;
-  wire [4:0] _GEN_1;
-  wire  _GEN_2;
-  wire  _T_28;
-  wire  _GEN_3;
-  assign io_ap_done = doneReg;
-  assign _T_18 = regFlagStart == 1'h0;
-  assign _T_19 = io_ap_start & _T_18;
-  assign _T_21 = value == 5'h1d;
-  assign _T_23 = value + 5'h1;
-  assign _T_24 = _T_23[4:0];
-  assign _GEN_0 = _T_21 ? 5'h0 : _T_24;
-  assign _GEN_1 = _T_19 ? _GEN_0 : value;
-  assign _GEN_2 = _T_19 ? 1'h1 : regFlagStart;
-  assign _T_28 = value > 5'h0;
-  assign _GEN_3 = _T_28 ? 1'h1 : doneReg;
-`ifdef RANDOMIZE
-  integer initvar;
-  initial begin
-    `ifndef verilator
-      #0.002 begin end
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{$random}};
-  value = _RAND_0[4:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{$random}};
-  regFlagStart = _RAND_1[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{$random}};
-  doneReg = _RAND_2[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  end
-`endif // RANDOMIZE
-  always @(posedge ap_clk) begin
-    if (ap_rst_n) begin
-      value <= 5'h0;
-    end else begin
-      if (_T_19) begin
-        if (_T_21) begin
-          value <= 5'h0;
-        end else begin
-          value <= _T_24;
-        end
-      end
-    end
-    if (ap_rst_n) begin
-      regFlagStart <= 1'h0;
-    end else begin
-      if (_T_19) begin
-        regFlagStart <= 1'h1;
-      end
-    end
-    if (ap_rst_n) begin
-      doneReg <= 1'h0;
-    end else begin
-      if (_T_28) begin
-        doneReg <= 1'h1;
-      end
-    end
-  end
-endmodule
 module SDAChiselWrapper(
   input          ap_clk,
   input          ap_rst_n,
@@ -611,11 +530,24 @@ module SDAChiselWrapper(
   wire [31:0] slave_fsm_io_slave_readData_bits_data;
   wire  slave_fsm_io_ap_start;
   wire  slave_fsm_io_ap_done;
-  wire  RTLKernel_ap_clk;
-  wire  RTLKernel_ap_rst_n;
-  wire  RTLKernel_io_ap_start;
-  wire  RTLKernel_io_ap_done;
   wire  _T_88;
+  reg [4:0] value;
+  reg [31:0] _RAND_0;
+  reg  regFlagStart;
+  reg [31:0] _RAND_1;
+  reg  doneReg;
+  reg [31:0] _RAND_2;
+  wire  _T_100;
+  wire  _T_102;
+  wire  _T_103;
+  wire  _T_105;
+  wire [5:0] _T_107;
+  wire [4:0] _T_108;
+  wire [4:0] _GEN_0;
+  wire [4:0] _GEN_1;
+  wire  _GEN_2;
+  wire  _T_112;
+  wire  _GEN_3;
   AXILiteControl slave_fsm (
     .ap_clk(slave_fsm_ap_clk),
     .ap_rst_n(slave_fsm_ap_rst_n),
@@ -636,12 +568,6 @@ module SDAChiselWrapper(
     .io_slave_readData_bits_data(slave_fsm_io_slave_readData_bits_data),
     .io_ap_start(slave_fsm_io_ap_start),
     .io_ap_done(slave_fsm_io_ap_done)
-  );
-  MyKernel RTLKernel (
-    .ap_clk(RTLKernel_ap_clk),
-    .ap_rst_n(RTLKernel_ap_rst_n),
-    .io_ap_start(RTLKernel_io_ap_start),
-    .io_ap_done(RTLKernel_io_ap_done)
   );
   assign m_axi_gmem_AWVALID = 1'h0;
   assign m_axi_gmem_AWADDR = 64'h0;
@@ -688,9 +614,64 @@ module SDAChiselWrapper(
   assign slave_fsm_io_slave_readAddr_valid = S_AXI_CONTROL_ARVALID;
   assign slave_fsm_io_slave_readAddr_bits_addr = S_AXI_CONTROL_ARADDR;
   assign slave_fsm_io_slave_readData_ready = slave_fsm_io_slave_readData_ready;
-  assign slave_fsm_io_ap_done = RTLKernel_io_ap_done;
-  assign RTLKernel_ap_clk = ap_clk;
-  assign RTLKernel_ap_rst_n = _T_88;
-  assign RTLKernel_io_ap_start = slave_fsm_io_ap_start;
-  assign _T_88 = !ap_rst_n;
+  assign slave_fsm_io_ap_done = doneReg;
+  assign _T_88 = ap_rst_n == 1'h0;
+  assign _T_100 = slave_fsm_io_ap_start;
+  assign _T_102 = regFlagStart == 1'h0;
+  assign _T_103 = _T_100 & _T_102;
+  assign _T_105 = value == 5'h1d;
+  assign _T_107 = value + 5'h1;
+  assign _T_108 = _T_107[4:0];
+  assign _GEN_0 = _T_105 ? 5'h0 : _T_108;
+  assign _GEN_1 = _T_103 ? _GEN_0 : value;
+  assign _GEN_2 = _T_103 ? 1'h1 : regFlagStart;
+  assign _T_112 = value > 5'h0;
+  assign _GEN_3 = _T_112 ? 1'h1 : doneReg;
+`ifdef RANDOMIZE
+  integer initvar;
+  initial begin
+    `ifndef verilator
+      #0.002 begin end
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{$random}};
+  value = _RAND_0[4:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{$random}};
+  regFlagStart = _RAND_1[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{$random}};
+  doneReg = _RAND_2[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  end
+`endif // RANDOMIZE
+  always @(posedge ap_clk) begin
+    if (ap_rst_n) begin
+      value <= 5'h0;
+    end else begin
+      if (_T_103) begin
+        if (_T_105) begin
+          value <= 5'h0;
+        end else begin
+          value <= _T_108;
+        end
+      end
+    end
+    if (ap_rst_n) begin
+      regFlagStart <= 1'h0;
+    end else begin
+      if (_T_103) begin
+        regFlagStart <= 1'h1;
+      end
+    end
+    if (ap_rst_n) begin
+      doneReg <= 1'h0;
+    end else begin
+      if (_T_112) begin
+        doneReg <= 1'h1;
+      end
+    end
+  end
 endmodule
