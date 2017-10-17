@@ -59,89 +59,90 @@ module AXILiteControl(
   reg [31:0] _RAND_7;
   reg [31:0] readData;
   reg [31:0] _RAND_8;
-  wire  _T_66;
   wire  _T_67;
   wire  _T_68;
-  wire  _T_114;
+  wire  _T_69;
+  wire  _T_70;
+  wire  _T_116;
   wire  addrwr_handshake;
   wire  write_handshake;
   wire [63:0] _GEN_3;
   wire [2:0] _GEN_4;
-  wire  _T_117;
+  wire  _T_119;
   wire [2:0] _GEN_5;
   wire [2:0] _GEN_6;
-  wire  _T_120;
-  wire  _T_121;
-  wire [2:0] _GEN_7;
+  wire  _T_122;
   wire  _T_123;
+  wire [2:0] _GEN_7;
+  wire  _T_125;
   wire [2:0] _GEN_8;
   wire [2:0] _GEN_9;
-  wire  _T_128;
-  wire  _T_129;
   wire  _T_130;
-  wire [2:0] _GEN_10;
+  wire  _T_131;
   wire  _T_132;
+  wire [2:0] _GEN_10;
+  wire  _T_134;
   wire [2:0] _GEN_11;
   wire [2:0] _GEN_12;
-  wire  _T_139;
-  wire  _T_140;
-  wire [2:0] _GEN_13;
   wire  _T_141;
   wire  _T_142;
-  wire  _T_143;
+  wire [2:0] _GEN_13;
+  wire  _T_145;
+  wire  _T_146;
+  wire  _T_147;
   wire  addrrd_handshake;
   wire [2:0] _GEN_14;
-  wire  _T_146;
+  wire  _T_150;
   wire [2:0] _GEN_15;
   wire [2:0] _GEN_16;
-  wire  _T_149;
-  wire  _T_150;
-  wire  _T_151;
-  wire [2:0] _GEN_17;
   wire  _T_153;
+  wire  _T_154;
+  wire  _T_155;
+  wire [2:0] _GEN_17;
+  wire  _T_157;
   wire [2:0] _GEN_18;
   wire [2:0] _GEN_19;
-  wire  _T_157;
-  wire  _T_158;
+  wire  _T_161;
+  wire  _T_162;
   wire [2:0] _GEN_20;
-  wire  _T_160;
+  wire  _T_164;
   wire [1:0] _GEN_27;
-  wire [1:0] _T_161;
+  wire [1:0] _T_165;
   wire [1:0] _GEN_28;
-  wire [1:0] _T_162;
+  wire [1:0] _T_166;
   wire [2:0] _GEN_29;
-  wire [2:0] _T_163;
+  wire [2:0] _T_167;
   wire [2:0] _GEN_30;
-  wire [2:0] _T_164;
+  wire [2:0] _T_168;
   wire [3:0] _GEN_31;
-  wire [3:0] _T_165;
+  wire [3:0] _T_169;
   wire [3:0] _GEN_32;
-  wire [3:0] _T_166;
+  wire [3:0] _T_170;
   wire [7:0] _GEN_33;
-  wire [7:0] _T_167;
+  wire [7:0] _T_171;
   wire [7:0] _GEN_34;
-  wire [7:0] _T_168;
+  wire [7:0] _T_172;
   wire [31:0] _GEN_21;
   wire [31:0] _GEN_22;
-  wire  _T_170;
-  wire  _T_171;
-  wire  _T_172;
-  wire  _T_173;
   wire  _T_174;
   wire  _T_175;
-  wire  _GEN_23;
+  wire  _T_176;
+  wire  _T_177;
   wire  _T_178;
   wire  _T_179;
-  wire  _GEN_24;
+  wire  _GEN_23;
   wire  _T_182;
+  wire  _T_183;
+  wire  _GEN_24;
+  wire  _T_186;
   wire  _GEN_25;
-  wire  _T_189;
+  wire  _T_193;
   wire  _GEN_26;
-  assign io_slave_writeAddr_ready = _T_67;
-  assign io_slave_writeData_ready = _T_68;
-  assign io_slave_writeResp_valid = _T_114;
-  assign io_slave_readAddr_ready = _T_142;
-  assign io_slave_readData_valid = _T_143;
+  assign io_slave_writeAddr_ready = _T_69;
+  assign io_slave_writeData_ready = _T_70;
+  assign io_slave_writeResp_valid = _T_116;
+  assign io_slave_readAddr_ready = _T_146;
+  assign io_slave_readData_valid = _T_147;
   assign io_slave_readData_bits_data = readData;
   assign io_ap_start = ap_start;
   assign _T_48 = ap_start_r == 1'h0;
@@ -153,84 +154,85 @@ module AXILiteControl(
   assign _T_57 = ap_start_pulse == 1'h0;
   assign _T_58 = _T_51 & _T_57;
   assign _GEN_2 = _T_58 ? ap_idle : _GEN_1;
-  assign _T_66 = stateSlaveWrite == 3'h0;
-  assign _T_67 = ap_rst_n & _T_66;
-  assign _T_68 = stateSlaveWrite == 3'h1;
-  assign _T_114 = stateSlaveWrite == 3'h2;
+  assign _T_67 = ap_rst_n == 1'h0;
+  assign _T_68 = stateSlaveWrite == 3'h0;
+  assign _T_69 = _T_67 & _T_68;
+  assign _T_70 = stateSlaveWrite == 3'h1;
+  assign _T_116 = stateSlaveWrite == 3'h2;
   assign addrwr_handshake = io_slave_writeAddr_valid & io_slave_writeAddr_ready;
   assign write_handshake = io_slave_writeData_valid & io_slave_writeData_ready;
   assign _GEN_3 = addrwr_handshake ? io_slave_writeAddr_bits_addr : {{58'd0}, writeAddr};
   assign _GEN_4 = io_slave_writeAddr_valid ? 3'h1 : stateSlaveWrite;
-  assign _T_117 = io_slave_writeAddr_valid == 1'h0;
-  assign _GEN_5 = _T_117 ? 3'h0 : _GEN_4;
-  assign _GEN_6 = _T_66 ? _GEN_5 : stateSlaveWrite;
-  assign _T_120 = _T_66 == 1'h0;
-  assign _T_121 = _T_120 & _T_68;
+  assign _T_119 = io_slave_writeAddr_valid == 1'h0;
+  assign _GEN_5 = _T_119 ? 3'h0 : _GEN_4;
+  assign _GEN_6 = _T_68 ? _GEN_5 : stateSlaveWrite;
+  assign _T_122 = _T_68 == 1'h0;
+  assign _T_123 = _T_122 & _T_70;
   assign _GEN_7 = io_slave_writeData_valid ? 3'h2 : _GEN_6;
-  assign _T_123 = io_slave_writeData_valid == 1'h0;
-  assign _GEN_8 = _T_123 ? 3'h1 : _GEN_7;
-  assign _GEN_9 = _T_121 ? _GEN_8 : _GEN_6;
-  assign _T_128 = _T_68 == 1'h0;
-  assign _T_129 = _T_120 & _T_128;
-  assign _T_130 = _T_129 & _T_114;
+  assign _T_125 = io_slave_writeData_valid == 1'h0;
+  assign _GEN_8 = _T_125 ? 3'h1 : _GEN_7;
+  assign _GEN_9 = _T_123 ? _GEN_8 : _GEN_6;
+  assign _T_130 = _T_70 == 1'h0;
+  assign _T_131 = _T_122 & _T_130;
+  assign _T_132 = _T_131 & _T_116;
   assign _GEN_10 = io_slave_writeResp_ready ? 3'h0 : _GEN_9;
-  assign _T_132 = io_slave_writeResp_ready == 1'h0;
-  assign _GEN_11 = _T_132 ? 3'h2 : _GEN_10;
-  assign _GEN_12 = _T_130 ? _GEN_11 : _GEN_9;
-  assign _T_139 = _T_114 == 1'h0;
-  assign _T_140 = _T_129 & _T_139;
-  assign _GEN_13 = _T_140 ? 3'h0 : _GEN_12;
-  assign _T_141 = stateSlaveRead == 3'h0;
-  assign _T_142 = ap_rst_n & _T_141;
-  assign _T_143 = stateSlaveRead == 3'h3;
+  assign _T_134 = io_slave_writeResp_ready == 1'h0;
+  assign _GEN_11 = _T_134 ? 3'h2 : _GEN_10;
+  assign _GEN_12 = _T_132 ? _GEN_11 : _GEN_9;
+  assign _T_141 = _T_116 == 1'h0;
+  assign _T_142 = _T_131 & _T_141;
+  assign _GEN_13 = _T_142 ? 3'h0 : _GEN_12;
+  assign _T_145 = stateSlaveRead == 3'h0;
+  assign _T_146 = _T_67 & _T_145;
+  assign _T_147 = stateSlaveRead == 3'h3;
   assign addrrd_handshake = io_slave_readAddr_valid & io_slave_readAddr_ready;
   assign _GEN_14 = io_slave_readAddr_valid ? 3'h3 : stateSlaveRead;
-  assign _T_146 = io_slave_readAddr_valid == 1'h0;
-  assign _GEN_15 = _T_146 ? 3'h0 : _GEN_14;
-  assign _GEN_16 = _T_141 ? _GEN_15 : stateSlaveRead;
-  assign _T_149 = _T_141 == 1'h0;
-  assign _T_150 = _T_149 & _T_143;
-  assign _T_151 = io_slave_readData_valid & io_slave_readData_ready;
-  assign _GEN_17 = _T_151 ? 3'h0 : _GEN_16;
-  assign _T_153 = _T_151 == 1'h0;
-  assign _GEN_18 = _T_153 ? 3'h3 : _GEN_17;
-  assign _GEN_19 = _T_150 ? _GEN_18 : _GEN_16;
-  assign _T_157 = _T_143 == 1'h0;
-  assign _T_158 = _T_149 & _T_157;
-  assign _GEN_20 = _T_158 ? 3'h0 : _GEN_19;
-  assign _T_160 = io_slave_readAddr_bits_addr == 64'h0;
+  assign _T_150 = io_slave_readAddr_valid == 1'h0;
+  assign _GEN_15 = _T_150 ? 3'h0 : _GEN_14;
+  assign _GEN_16 = _T_145 ? _GEN_15 : stateSlaveRead;
+  assign _T_153 = _T_145 == 1'h0;
+  assign _T_154 = _T_153 & _T_147;
+  assign _T_155 = io_slave_readData_valid & io_slave_readData_ready;
+  assign _GEN_17 = _T_155 ? 3'h0 : _GEN_16;
+  assign _T_157 = _T_155 == 1'h0;
+  assign _GEN_18 = _T_157 ? 3'h3 : _GEN_17;
+  assign _GEN_19 = _T_154 ? _GEN_18 : _GEN_16;
+  assign _T_161 = _T_147 == 1'h0;
+  assign _T_162 = _T_153 & _T_161;
+  assign _GEN_20 = _T_162 ? 3'h0 : _GEN_19;
+  assign _T_164 = io_slave_readAddr_bits_addr == 64'h0;
   assign _GEN_27 = {{1'd0}, ap_done};
-  assign _T_161 = _GEN_27 << 1;
+  assign _T_165 = _GEN_27 << 1;
   assign _GEN_28 = {{1'd0}, ap_start};
-  assign _T_162 = _GEN_28 | _T_161;
+  assign _T_166 = _GEN_28 | _T_165;
   assign _GEN_29 = {{2'd0}, ap_idle};
-  assign _T_163 = _GEN_29 << 2;
-  assign _GEN_30 = {{1'd0}, _T_162};
-  assign _T_164 = _GEN_30 | _T_163;
+  assign _T_167 = _GEN_29 << 2;
+  assign _GEN_30 = {{1'd0}, _T_166};
+  assign _T_168 = _GEN_30 | _T_167;
   assign _GEN_31 = {{3'd0}, ap_done};
-  assign _T_165 = _GEN_31 << 3;
-  assign _GEN_32 = {{1'd0}, _T_164};
-  assign _T_166 = _GEN_32 | _T_165;
+  assign _T_169 = _GEN_31 << 3;
+  assign _GEN_32 = {{1'd0}, _T_168};
+  assign _T_170 = _GEN_32 | _T_169;
   assign _GEN_33 = {{7'd0}, auto_restart};
-  assign _T_167 = _GEN_33 << 7;
-  assign _GEN_34 = {{4'd0}, _T_166};
-  assign _T_168 = _GEN_34 | _T_167;
-  assign _GEN_21 = _T_160 ? {{24'd0}, _T_168} : readData;
+  assign _T_171 = _GEN_33 << 7;
+  assign _GEN_34 = {{4'd0}, _T_170};
+  assign _T_172 = _GEN_34 | _T_171;
+  assign _GEN_21 = _T_164 ? {{24'd0}, _T_172} : readData;
   assign _GEN_22 = addrrd_handshake ? _GEN_21 : readData;
-  assign _T_170 = writeAddr == 6'h0;
-  assign _T_171 = write_handshake & _T_170;
-  assign _T_172 = io_slave_writeData_bits_strb[0];
-  assign _T_173 = _T_171 & _T_172;
-  assign _T_174 = io_slave_writeData_bits_data[0];
-  assign _T_175 = _T_173 & _T_174;
-  assign _GEN_23 = _T_175 ? 1'h1 : ap_start;
-  assign _T_178 = _T_175 == 1'h0;
-  assign _T_179 = _T_178 & ap_done;
-  assign _GEN_24 = _T_179 ? auto_restart : _GEN_23;
-  assign _T_182 = addrrd_handshake & _T_160;
-  assign _GEN_25 = _T_182 ? 1'h0 : io_ap_done;
-  assign _T_189 = io_slave_writeData_bits_data[7];
-  assign _GEN_26 = _T_173 ? _T_189 : auto_restart;
+  assign _T_174 = writeAddr == 6'h0;
+  assign _T_175 = write_handshake & _T_174;
+  assign _T_176 = io_slave_writeData_bits_strb[0];
+  assign _T_177 = _T_175 & _T_176;
+  assign _T_178 = io_slave_writeData_bits_data[0];
+  assign _T_179 = _T_177 & _T_178;
+  assign _GEN_23 = _T_179 ? 1'h1 : ap_start;
+  assign _T_182 = _T_179 == 1'h0;
+  assign _T_183 = _T_182 & ap_done;
+  assign _GEN_24 = _T_183 ? auto_restart : _GEN_23;
+  assign _T_186 = addrrd_handshake & _T_164;
+  assign _GEN_25 = _T_186 ? 1'h0 : io_ap_done;
+  assign _T_193 = io_slave_writeData_bits_data[7];
+  assign _GEN_26 = _T_177 ? _T_193 : auto_restart;
 `ifdef RANDOMIZE
   integer initvar;
   initial begin
@@ -279,10 +281,10 @@ module AXILiteControl(
     if (ap_rst_n) begin
       ap_start <= 1'h0;
     end else begin
-      if (_T_179) begin
+      if (_T_183) begin
         ap_start <= auto_restart;
       end else begin
-        if (_T_175) begin
+        if (_T_179) begin
           ap_start <= 1'h1;
         end
       end
@@ -290,8 +292,8 @@ module AXILiteControl(
     if (ap_rst_n) begin
       auto_restart <= 1'h0;
     end else begin
-      if (_T_173) begin
-        auto_restart <= _T_189;
+      if (_T_177) begin
+        auto_restart <= _T_193;
       end
     end
     if (ap_rst_n) begin
@@ -310,7 +312,7 @@ module AXILiteControl(
     if (ap_rst_n) begin
       ap_done <= 1'h0;
     end else begin
-      if (_T_182) begin
+      if (_T_186) begin
         ap_done <= 1'h0;
       end else begin
         ap_done <= io_ap_done;
@@ -324,25 +326,25 @@ module AXILiteControl(
     if (ap_rst_n) begin
       stateSlaveWrite <= 3'h0;
     end else begin
-      if (_T_140) begin
+      if (_T_142) begin
         stateSlaveWrite <= 3'h0;
       end else begin
-        if (_T_130) begin
-          if (_T_132) begin
+        if (_T_132) begin
+          if (_T_134) begin
             stateSlaveWrite <= 3'h2;
           end else begin
             if (io_slave_writeResp_ready) begin
               stateSlaveWrite <= 3'h0;
             end else begin
-              if (_T_121) begin
-                if (_T_123) begin
+              if (_T_123) begin
+                if (_T_125) begin
                   stateSlaveWrite <= 3'h1;
                 end else begin
                   if (io_slave_writeData_valid) begin
                     stateSlaveWrite <= 3'h2;
                   end else begin
-                    if (_T_66) begin
-                      if (_T_117) begin
+                    if (_T_68) begin
+                      if (_T_119) begin
                         stateSlaveWrite <= 3'h0;
                       end else begin
                         if (io_slave_writeAddr_valid) begin
@@ -353,8 +355,8 @@ module AXILiteControl(
                   end
                 end
               end else begin
-                if (_T_66) begin
-                  if (_T_117) begin
+                if (_T_68) begin
+                  if (_T_119) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
                     if (io_slave_writeAddr_valid) begin
@@ -366,15 +368,15 @@ module AXILiteControl(
             end
           end
         end else begin
-          if (_T_121) begin
-            if (_T_123) begin
+          if (_T_123) begin
+            if (_T_125) begin
               stateSlaveWrite <= 3'h1;
             end else begin
               if (io_slave_writeData_valid) begin
                 stateSlaveWrite <= 3'h2;
               end else begin
-                if (_T_66) begin
-                  if (_T_117) begin
+                if (_T_68) begin
+                  if (_T_119) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
                     if (io_slave_writeAddr_valid) begin
@@ -385,8 +387,8 @@ module AXILiteControl(
               end
             end
           end else begin
-            if (_T_66) begin
-              if (_T_117) begin
+            if (_T_68) begin
+              if (_T_119) begin
                 stateSlaveWrite <= 3'h0;
               end else begin
                 if (io_slave_writeAddr_valid) begin
@@ -406,18 +408,18 @@ module AXILiteControl(
     if (ap_rst_n) begin
       stateSlaveRead <= 3'h0;
     end else begin
-      if (_T_158) begin
+      if (_T_162) begin
         stateSlaveRead <= 3'h0;
       end else begin
-        if (_T_150) begin
-          if (_T_153) begin
+        if (_T_154) begin
+          if (_T_157) begin
             stateSlaveRead <= 3'h3;
           end else begin
-            if (_T_151) begin
+            if (_T_155) begin
               stateSlaveRead <= 3'h0;
             end else begin
-              if (_T_141) begin
-                if (_T_146) begin
+              if (_T_145) begin
+                if (_T_150) begin
                   stateSlaveRead <= 3'h0;
                 end else begin
                   if (io_slave_readAddr_valid) begin
@@ -428,8 +430,8 @@ module AXILiteControl(
             end
           end
         end else begin
-          if (_T_141) begin
-            if (_T_146) begin
+          if (_T_145) begin
+            if (_T_150) begin
               stateSlaveRead <= 3'h0;
             end else begin
               if (io_slave_readAddr_valid) begin
@@ -444,9 +446,90 @@ module AXILiteControl(
       readData <= 32'h0;
     end else begin
       if (addrrd_handshake) begin
-        if (_T_160) begin
-          readData <= {{24'd0}, _T_168};
+        if (_T_164) begin
+          readData <= {{24'd0}, _T_172};
         end
+      end
+    end
+  end
+endmodule
+module MyKernel(
+  input   ap_clk,
+  input   ap_rst_n,
+  input   io_ap_start,
+  output  io_ap_done
+);
+  reg [4:0] value;
+  reg [31:0] _RAND_0;
+  reg  regFlagStart;
+  reg [31:0] _RAND_1;
+  reg  doneReg;
+  reg [31:0] _RAND_2;
+  wire  _T_18;
+  wire  _T_19;
+  wire  _T_21;
+  wire [5:0] _T_23;
+  wire [4:0] _T_24;
+  wire [4:0] _GEN_0;
+  wire [4:0] _GEN_1;
+  wire  _GEN_2;
+  wire  _T_28;
+  wire  _GEN_3;
+  assign io_ap_done = doneReg;
+  assign _T_18 = regFlagStart == 1'h0;
+  assign _T_19 = io_ap_start & _T_18;
+  assign _T_21 = value == 5'h1d;
+  assign _T_23 = value + 5'h1;
+  assign _T_24 = _T_23[4:0];
+  assign _GEN_0 = _T_21 ? 5'h0 : _T_24;
+  assign _GEN_1 = _T_19 ? _GEN_0 : value;
+  assign _GEN_2 = _T_19 ? 1'h1 : regFlagStart;
+  assign _T_28 = value > 5'h0;
+  assign _GEN_3 = _T_28 ? 1'h1 : doneReg;
+`ifdef RANDOMIZE
+  integer initvar;
+  initial begin
+    `ifndef verilator
+      #0.002 begin end
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{$random}};
+  value = _RAND_0[4:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{$random}};
+  regFlagStart = _RAND_1[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{$random}};
+  doneReg = _RAND_2[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  end
+`endif // RANDOMIZE
+  always @(posedge ap_clk) begin
+    if (ap_rst_n) begin
+      value <= 5'h0;
+    end else begin
+      if (_T_19) begin
+        if (_T_21) begin
+          value <= 5'h0;
+        end else begin
+          value <= _T_24;
+        end
+      end
+    end
+    if (ap_rst_n) begin
+      regFlagStart <= 1'h0;
+    end else begin
+      if (_T_19) begin
+        regFlagStart <= 1'h1;
+      end
+    end
+    if (ap_rst_n) begin
+      doneReg <= 1'h0;
+    end else begin
+      if (_T_28) begin
+        doneReg <= 1'h1;
       end
     end
   end
@@ -530,24 +613,11 @@ module SDAChiselWrapper(
   wire [31:0] slave_fsm_io_slave_readData_bits_data;
   wire  slave_fsm_io_ap_start;
   wire  slave_fsm_io_ap_done;
+  wire  RTLKernel_ap_clk;
+  wire  RTLKernel_ap_rst_n;
+  wire  RTLKernel_io_ap_start;
+  wire  RTLKernel_io_ap_done;
   wire  _T_88;
-  reg [4:0] value;
-  reg [31:0] _RAND_0;
-  reg  regFlagStart;
-  reg [31:0] _RAND_1;
-  reg  doneReg;
-  reg [31:0] _RAND_2;
-  wire  _T_100;
-  wire  _T_102;
-  wire  _T_103;
-  wire  _T_105;
-  wire [5:0] _T_107;
-  wire [4:0] _T_108;
-  wire [4:0] _GEN_0;
-  wire [4:0] _GEN_1;
-  wire  _GEN_2;
-  wire  _T_112;
-  wire  _GEN_3;
   AXILiteControl slave_fsm (
     .ap_clk(slave_fsm_ap_clk),
     .ap_rst_n(slave_fsm_ap_rst_n),
@@ -568,6 +638,12 @@ module SDAChiselWrapper(
     .io_slave_readData_bits_data(slave_fsm_io_slave_readData_bits_data),
     .io_ap_start(slave_fsm_io_ap_start),
     .io_ap_done(slave_fsm_io_ap_done)
+  );
+  MyKernel RTLKernel (
+    .ap_clk(RTLKernel_ap_clk),
+    .ap_rst_n(RTLKernel_ap_rst_n),
+    .io_ap_start(RTLKernel_io_ap_start),
+    .io_ap_done(RTLKernel_io_ap_done)
   );
   assign m_axi_gmem_AWVALID = 1'h0;
   assign m_axi_gmem_AWADDR = 64'h0;
@@ -614,64 +690,9 @@ module SDAChiselWrapper(
   assign slave_fsm_io_slave_readAddr_valid = S_AXI_CONTROL_ARVALID;
   assign slave_fsm_io_slave_readAddr_bits_addr = S_AXI_CONTROL_ARADDR;
   assign slave_fsm_io_slave_readData_ready = slave_fsm_io_slave_readData_ready;
-  assign slave_fsm_io_ap_done = doneReg;
+  assign slave_fsm_io_ap_done = RTLKernel_io_ap_done;
+  assign RTLKernel_ap_clk = ap_clk;
+  assign RTLKernel_ap_rst_n = _T_88;
+  assign RTLKernel_io_ap_start = slave_fsm_io_ap_start;
   assign _T_88 = ap_rst_n == 1'h0;
-  assign _T_100 = slave_fsm_io_ap_start;
-  assign _T_102 = regFlagStart == 1'h0;
-  assign _T_103 = _T_100 & _T_102;
-  assign _T_105 = value == 5'h1d;
-  assign _T_107 = value + 5'h1;
-  assign _T_108 = _T_107[4:0];
-  assign _GEN_0 = _T_105 ? 5'h0 : _T_108;
-  assign _GEN_1 = _T_103 ? _GEN_0 : value;
-  assign _GEN_2 = _T_103 ? 1'h1 : regFlagStart;
-  assign _T_112 = value > 5'h0;
-  assign _GEN_3 = _T_112 ? 1'h1 : doneReg;
-`ifdef RANDOMIZE
-  integer initvar;
-  initial begin
-    `ifndef verilator
-      #0.002 begin end
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{$random}};
-  value = _RAND_0[4:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{$random}};
-  regFlagStart = _RAND_1[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{$random}};
-  doneReg = _RAND_2[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  end
-`endif // RANDOMIZE
-  always @(posedge ap_clk) begin
-    if (ap_rst_n) begin
-      value <= 5'h0;
-    end else begin
-      if (_T_103) begin
-        if (_T_105) begin
-          value <= 5'h0;
-        end else begin
-          value <= _T_108;
-        end
-      end
-    end
-    if (ap_rst_n) begin
-      regFlagStart <= 1'h0;
-    end else begin
-      if (_T_103) begin
-        regFlagStart <= 1'h1;
-      end
-    end
-    if (ap_rst_n) begin
-      doneReg <= 1'h0;
-    end else begin
-      if (_T_112) begin
-        doneReg <= 1'h1;
-      end
-    end
-  end
 endmodule

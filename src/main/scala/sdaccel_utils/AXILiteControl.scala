@@ -47,7 +47,7 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
 
 
 
-  io.slave.writeAddr.ready := reset & (stateSlaveWrite === sIdle)
+  io.slave.writeAddr.ready := !reset & (stateSlaveWrite === sIdle)
   io.slave.writeData.ready := (stateSlaveWrite === sWrdata)
   io.slave.writeResp.bits := Axi_Defines.OKAY
   io.slave.writeResp.valid := (stateSlaveWrite === sReply)
@@ -84,7 +84,7 @@ class AXILiteControl(addrWidth: Int, dataWidthSlave : Int) extends Module{
   }
 
 
-  io.slave.readAddr.ready := reset && (stateSlaveRead === sIdle)
+  io.slave.readAddr.ready := !reset && (stateSlaveRead === sIdle)
   io.slave.readData.bits.data := readData
   io.slave.readData.bits.resp := Axi_Defines.OKAY
   io.slave.readData.valid := (stateSlaveRead === sReadData)

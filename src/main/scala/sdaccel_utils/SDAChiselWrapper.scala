@@ -19,17 +19,17 @@ class SDAChiselWrapper(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidth
   val slave_fsm = Module(new AXILiteControl(addrWidth, dataWidthSlave))
 
 
-  //val RTLKernel = Module(new MyKernel())
+  val RTLKernel = Module(new MyKernel())
 
-  //val ap_start = slave_fsm.io.ap_start
-  //val ap_done = RTLKernel.io.ap_done
-  //val ap_idle = slave_fsm.io.ap_idle
+  val ap_start = slave_fsm.io.ap_start
+  val ap_done = RTLKernel.io.ap_done
+  val ap_idle = slave_fsm.io.ap_idle
 
-  //RTLKernel.io.ap_idle := ap_done
+  RTLKernel.io.ap_idle := ap_done
 
 
-  //RTLKernel.io.ap_start := ap_start
-  //slave_fsm.io.ap_done := ap_done
+  RTLKernel.io.ap_start := ap_start
+  slave_fsm.io.ap_done := ap_done
 
   //
   //ATTENTION! The submodule reset must have the negate of the reset in input
@@ -37,8 +37,8 @@ class SDAChiselWrapper(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidth
 
 
   slave_fsm.reset := !reset
-  //RTLKernel.reset := !reset
-
+  RTLKernel.reset := !reset
+/*
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)
   val doneReg = Reg(init = false.B)
@@ -58,7 +58,7 @@ class SDAChiselWrapper(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidth
 
   when(counter.value > 0.U){
     doneReg := true.B
-  }
+  }*/
 
   slave_fsm.io.slave.writeAddr.bits.prot := io.s0.writeAddr.bits.prot
   slave_fsm.io.slave.writeAddr.bits.addr := io.s0.writeAddr.bits.addr
