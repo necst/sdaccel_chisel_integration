@@ -14,21 +14,21 @@
 module AXILiteControl(
   input         clock,
   input         reset,
-  output        io_s0_writeAddr_ready,
-  input         io_s0_writeAddr_valid,
-  input  [63:0] io_s0_writeAddr_bits_addr,
-  output        io_s0_writeData_ready,
-  input         io_s0_writeData_valid,
-  input  [31:0] io_s0_writeData_bits_data,
-  input  [3:0]  io_s0_writeData_bits_strb,
-  input         io_s0_writeResp_ready,
-  output        io_s0_writeResp_valid,
-  output        io_s0_readAddr_ready,
-  input         io_s0_readAddr_valid,
-  input  [63:0] io_s0_readAddr_bits_addr,
-  input         io_s0_readData_ready,
-  output        io_s0_readData_valid,
-  output [31:0] io_s0_readData_bits_data,
+  output        io_slave_writeAddr_ready,
+  input         io_slave_writeAddr_valid,
+  input  [63:0] io_slave_writeAddr_bits_addr,
+  output        io_slave_writeData_ready,
+  input         io_slave_writeData_valid,
+  input  [31:0] io_slave_writeData_bits_data,
+  input  [3:0]  io_slave_writeData_bits_strb,
+  input         io_slave_writeResp_ready,
+  output        io_slave_writeResp_valid,
+  output        io_slave_readAddr_ready,
+  input         io_slave_readAddr_valid,
+  input  [63:0] io_slave_readAddr_bits_addr,
+  input         io_slave_readData_ready,
+  output        io_slave_readData_valid,
+  output [31:0] io_slave_readData_bits_data,
   output        io_ap_start,
   input         io_ap_done
 );
@@ -137,12 +137,12 @@ module AXILiteControl(
   wire  _GEN_25;
   wire  _T_188;
   wire  _GEN_26;
-  assign io_s0_writeAddr_ready = _T_70;
-  assign io_s0_writeData_ready = _T_71;
-  assign io_s0_writeResp_valid = _T_117;
-  assign io_s0_readAddr_ready = _T_145;
-  assign io_s0_readData_valid = _T_146;
-  assign io_s0_readData_bits_data = readData;
+  assign io_slave_writeAddr_ready = _T_70;
+  assign io_slave_writeData_ready = _T_71;
+  assign io_slave_writeResp_valid = _T_117;
+  assign io_slave_readAddr_ready = _T_145;
+  assign io_slave_readData_valid = _T_146;
+  assign io_slave_readData_bits_data = readData;
   assign io_ap_start = ap_start;
   assign _T_51 = ap_start_r == 1'h0;
   assign ap_start_pulse = ap_start & _T_51;
@@ -157,24 +157,24 @@ module AXILiteControl(
   assign _T_70 = reset & _T_69;
   assign _T_71 = stateSlaveWrite == 3'h1;
   assign _T_117 = stateSlaveWrite == 3'h2;
-  assign addrwr_handshake = io_s0_writeAddr_valid & io_s0_writeAddr_ready;
-  assign write_handshake = io_s0_writeData_valid & io_s0_writeData_ready;
-  assign _GEN_3 = addrwr_handshake ? io_s0_writeAddr_bits_addr : {{58'd0}, writeAddr};
-  assign _GEN_4 = io_s0_writeAddr_valid ? 3'h1 : stateSlaveWrite;
-  assign _T_120 = io_s0_writeAddr_valid == 1'h0;
+  assign addrwr_handshake = io_slave_writeAddr_valid & io_slave_writeAddr_ready;
+  assign write_handshake = io_slave_writeData_valid & io_slave_writeData_ready;
+  assign _GEN_3 = addrwr_handshake ? io_slave_writeAddr_bits_addr : {{58'd0}, writeAddr};
+  assign _GEN_4 = io_slave_writeAddr_valid ? 3'h1 : stateSlaveWrite;
+  assign _T_120 = io_slave_writeAddr_valid == 1'h0;
   assign _GEN_5 = _T_120 ? 3'h0 : _GEN_4;
   assign _GEN_6 = _T_69 ? _GEN_5 : stateSlaveWrite;
   assign _T_123 = _T_69 == 1'h0;
   assign _T_124 = _T_123 & _T_71;
-  assign _GEN_7 = io_s0_writeData_valid ? 3'h2 : _GEN_6;
-  assign _T_126 = io_s0_writeData_valid == 1'h0;
+  assign _GEN_7 = io_slave_writeData_valid ? 3'h2 : _GEN_6;
+  assign _T_126 = io_slave_writeData_valid == 1'h0;
   assign _GEN_8 = _T_126 ? 3'h1 : _GEN_7;
   assign _GEN_9 = _T_124 ? _GEN_8 : _GEN_6;
   assign _T_131 = _T_71 == 1'h0;
   assign _T_132 = _T_123 & _T_131;
   assign _T_133 = _T_132 & _T_117;
-  assign _GEN_10 = io_s0_writeResp_ready ? 3'h0 : _GEN_9;
-  assign _T_135 = io_s0_writeResp_ready == 1'h0;
+  assign _GEN_10 = io_slave_writeResp_ready ? 3'h0 : _GEN_9;
+  assign _T_135 = io_slave_writeResp_ready == 1'h0;
   assign _GEN_11 = _T_135 ? 3'h2 : _GEN_10;
   assign _GEN_12 = _T_133 ? _GEN_11 : _GEN_9;
   assign _T_142 = _T_117 == 1'h0;
@@ -183,14 +183,14 @@ module AXILiteControl(
   assign _T_144 = stateSlaveRead == 3'h0;
   assign _T_145 = reset & _T_144;
   assign _T_146 = stateSlaveRead == 3'h3;
-  assign addrrd_handshake = io_s0_readAddr_valid & io_s0_readAddr_ready;
-  assign _GEN_14 = io_s0_readAddr_valid ? 3'h3 : stateSlaveRead;
-  assign _T_149 = io_s0_readAddr_valid == 1'h0;
+  assign addrrd_handshake = io_slave_readAddr_valid & io_slave_readAddr_ready;
+  assign _GEN_14 = io_slave_readAddr_valid ? 3'h3 : stateSlaveRead;
+  assign _T_149 = io_slave_readAddr_valid == 1'h0;
   assign _GEN_15 = _T_149 ? 3'h0 : _GEN_14;
   assign _GEN_16 = _T_144 ? _GEN_15 : stateSlaveRead;
   assign _T_152 = _T_144 == 1'h0;
   assign _T_153 = _T_152 & _T_146;
-  assign _T_154 = io_s0_readData_valid & io_s0_readData_ready;
+  assign _T_154 = io_slave_readData_valid & io_slave_readData_ready;
   assign _GEN_17 = _T_154 ? 3'h0 : _GEN_16;
   assign _T_156 = _T_154 == 1'h0;
   assign _GEN_18 = _T_156 ? 3'h3 : _GEN_17;
@@ -198,7 +198,7 @@ module AXILiteControl(
   assign _T_160 = _T_146 == 1'h0;
   assign _T_161 = _T_152 & _T_160;
   assign _GEN_20 = _T_161 ? 3'h0 : _GEN_19;
-  assign _T_162 = io_s0_readAddr_bits_addr == 64'h0;
+  assign _T_162 = io_slave_readAddr_bits_addr == 64'h0;
   assign _GEN_27 = {{1'd0}, ap_done};
   assign _T_163 = _GEN_27 << 1;
   assign _GEN_28 = {{1'd0}, ap_start};
@@ -219,9 +219,9 @@ module AXILiteControl(
   assign _GEN_22 = addrrd_handshake ? _GEN_21 : readData;
   assign _T_171 = writeAddr == 6'h0;
   assign _T_172 = write_handshake & _T_171;
-  assign _T_173 = io_s0_writeData_bits_strb[0];
+  assign _T_173 = io_slave_writeData_bits_strb[0];
   assign _T_174 = _T_172 & _T_173;
-  assign _T_175 = io_s0_writeData_bits_data[0];
+  assign _T_175 = io_slave_writeData_bits_data[0];
   assign _T_176 = _T_174 & _T_175;
   assign _GEN_23 = _T_176 ? 1'h1 : ap_start;
   assign _T_179 = _T_176 == 1'h0;
@@ -229,7 +229,7 @@ module AXILiteControl(
   assign _GEN_24 = _T_180 ? auto_restart : _GEN_23;
   assign _T_182 = addrrd_handshake & _T_162;
   assign _GEN_25 = _T_182 ? 1'h0 : io_ap_done;
-  assign _T_188 = io_s0_writeData_bits_data[7];
+  assign _T_188 = io_slave_writeData_bits_data[7];
   assign _GEN_26 = _T_174 ? _T_188 : auto_restart;
 `ifdef RANDOMIZE
   integer initvar;
@@ -331,21 +331,21 @@ module AXILiteControl(
           if (_T_135) begin
             stateSlaveWrite <= 3'h2;
           end else begin
-            if (io_s0_writeResp_ready) begin
+            if (io_slave_writeResp_ready) begin
               stateSlaveWrite <= 3'h0;
             end else begin
               if (_T_124) begin
                 if (_T_126) begin
                   stateSlaveWrite <= 3'h1;
                 end else begin
-                  if (io_s0_writeData_valid) begin
+                  if (io_slave_writeData_valid) begin
                     stateSlaveWrite <= 3'h2;
                   end else begin
                     if (_T_69) begin
                       if (_T_120) begin
                         stateSlaveWrite <= 3'h0;
                       end else begin
-                        if (io_s0_writeAddr_valid) begin
+                        if (io_slave_writeAddr_valid) begin
                           stateSlaveWrite <= 3'h1;
                         end
                       end
@@ -357,7 +357,7 @@ module AXILiteControl(
                   if (_T_120) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
-                    if (io_s0_writeAddr_valid) begin
+                    if (io_slave_writeAddr_valid) begin
                       stateSlaveWrite <= 3'h1;
                     end
                   end
@@ -370,14 +370,14 @@ module AXILiteControl(
             if (_T_126) begin
               stateSlaveWrite <= 3'h1;
             end else begin
-              if (io_s0_writeData_valid) begin
+              if (io_slave_writeData_valid) begin
                 stateSlaveWrite <= 3'h2;
               end else begin
                 if (_T_69) begin
                   if (_T_120) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
-                    if (io_s0_writeAddr_valid) begin
+                    if (io_slave_writeAddr_valid) begin
                       stateSlaveWrite <= 3'h1;
                     end
                   end
@@ -389,7 +389,7 @@ module AXILiteControl(
               if (_T_120) begin
                 stateSlaveWrite <= 3'h0;
               end else begin
-                if (io_s0_writeAddr_valid) begin
+                if (io_slave_writeAddr_valid) begin
                   stateSlaveWrite <= 3'h1;
                 end
               end
@@ -420,7 +420,7 @@ module AXILiteControl(
                 if (_T_149) begin
                   stateSlaveRead <= 3'h0;
                 end else begin
-                  if (io_s0_readAddr_valid) begin
+                  if (io_slave_readAddr_valid) begin
                     stateSlaveRead <= 3'h3;
                   end
                 end
@@ -432,7 +432,7 @@ module AXILiteControl(
             if (_T_149) begin
               stateSlaveRead <= 3'h0;
             end else begin
-              if (io_s0_readAddr_valid) begin
+              if (io_slave_readAddr_valid) begin
                 stateSlaveRead <= 3'h3;
               end
             end
@@ -463,27 +463,27 @@ module MyKernel(
   reg [31:0] _RAND_1;
   reg  doneReg;
   reg [31:0] _RAND_2;
-  wire  _T_13;
-  wire  _T_14;
-  wire  _T_16;
-  wire [5:0] _T_18;
-  wire [4:0] _T_19;
+  wire  _T_18;
+  wire  _T_19;
+  wire  _T_21;
+  wire [5:0] _T_23;
+  wire [4:0] _T_24;
   wire [4:0] _GEN_0;
   wire [4:0] _GEN_1;
   wire  _GEN_2;
-  wire  _T_23;
+  wire  _T_28;
   wire  _GEN_3;
   assign io_ap_done = doneReg;
-  assign _T_13 = regFlagStart == 1'h0;
-  assign _T_14 = io_ap_start & _T_13;
-  assign _T_16 = value == 5'h1d;
-  assign _T_18 = value + 5'h1;
-  assign _T_19 = _T_18[4:0];
-  assign _GEN_0 = _T_16 ? 5'h0 : _T_19;
-  assign _GEN_1 = _T_14 ? _GEN_0 : value;
-  assign _GEN_2 = _T_14 ? 1'h1 : regFlagStart;
-  assign _T_23 = value > 5'h0;
-  assign _GEN_3 = _T_23 ? 1'h1 : doneReg;
+  assign _T_18 = regFlagStart == 1'h0;
+  assign _T_19 = io_ap_start & _T_18;
+  assign _T_21 = value == 5'h1d;
+  assign _T_23 = value + 5'h1;
+  assign _T_24 = _T_23[4:0];
+  assign _GEN_0 = _T_21 ? 5'h0 : _T_24;
+  assign _GEN_1 = _T_19 ? _GEN_0 : value;
+  assign _GEN_2 = _T_19 ? 1'h1 : regFlagStart;
+  assign _T_28 = value > 5'h0;
+  assign _GEN_3 = _T_28 ? 1'h1 : doneReg;
 `ifdef RANDOMIZE
   integer initvar;
   initial begin
@@ -508,25 +508,25 @@ module MyKernel(
     if (reset) begin
       value <= 5'h0;
     end else begin
-      if (_T_14) begin
-        if (_T_16) begin
+      if (_T_19) begin
+        if (_T_21) begin
           value <= 5'h0;
         end else begin
-          value <= _T_19;
+          value <= _T_24;
         end
       end
     end
     if (reset) begin
       regFlagStart <= 1'h0;
     end else begin
-      if (_T_14) begin
+      if (_T_19) begin
         regFlagStart <= 1'h1;
       end
     end
     if (reset) begin
       doneReg <= 1'h0;
     end else begin
-      if (_T_23) begin
+      if (_T_28) begin
         doneReg <= 1'h1;
       end
     end
@@ -594,21 +594,21 @@ module SDAChiselWrapper(
 );
   wire  slave_fsm_clock;
   wire  slave_fsm_reset;
-  wire  slave_fsm_io_s0_writeAddr_ready;
-  wire  slave_fsm_io_s0_writeAddr_valid;
-  wire [63:0] slave_fsm_io_s0_writeAddr_bits_addr;
-  wire  slave_fsm_io_s0_writeData_ready;
-  wire  slave_fsm_io_s0_writeData_valid;
-  wire [31:0] slave_fsm_io_s0_writeData_bits_data;
-  wire [3:0] slave_fsm_io_s0_writeData_bits_strb;
-  wire  slave_fsm_io_s0_writeResp_ready;
-  wire  slave_fsm_io_s0_writeResp_valid;
-  wire  slave_fsm_io_s0_readAddr_ready;
-  wire  slave_fsm_io_s0_readAddr_valid;
-  wire [63:0] slave_fsm_io_s0_readAddr_bits_addr;
-  wire  slave_fsm_io_s0_readData_ready;
-  wire  slave_fsm_io_s0_readData_valid;
-  wire [31:0] slave_fsm_io_s0_readData_bits_data;
+  wire  slave_fsm_io_slave_writeAddr_ready;
+  wire  slave_fsm_io_slave_writeAddr_valid;
+  wire [63:0] slave_fsm_io_slave_writeAddr_bits_addr;
+  wire  slave_fsm_io_slave_writeData_ready;
+  wire  slave_fsm_io_slave_writeData_valid;
+  wire [31:0] slave_fsm_io_slave_writeData_bits_data;
+  wire [3:0] slave_fsm_io_slave_writeData_bits_strb;
+  wire  slave_fsm_io_slave_writeResp_ready;
+  wire  slave_fsm_io_slave_writeResp_valid;
+  wire  slave_fsm_io_slave_readAddr_ready;
+  wire  slave_fsm_io_slave_readAddr_valid;
+  wire [63:0] slave_fsm_io_slave_readAddr_bits_addr;
+  wire  slave_fsm_io_slave_readData_ready;
+  wire  slave_fsm_io_slave_readData_valid;
+  wire [31:0] slave_fsm_io_slave_readData_bits_data;
   wire  slave_fsm_io_ap_start;
   wire  slave_fsm_io_ap_done;
   wire  RTLKernel_clock;
@@ -619,21 +619,21 @@ module SDAChiselWrapper(
   AXILiteControl slave_fsm (
     .clock(slave_fsm_clock),
     .reset(slave_fsm_reset),
-    .io_s0_writeAddr_ready(slave_fsm_io_s0_writeAddr_ready),
-    .io_s0_writeAddr_valid(slave_fsm_io_s0_writeAddr_valid),
-    .io_s0_writeAddr_bits_addr(slave_fsm_io_s0_writeAddr_bits_addr),
-    .io_s0_writeData_ready(slave_fsm_io_s0_writeData_ready),
-    .io_s0_writeData_valid(slave_fsm_io_s0_writeData_valid),
-    .io_s0_writeData_bits_data(slave_fsm_io_s0_writeData_bits_data),
-    .io_s0_writeData_bits_strb(slave_fsm_io_s0_writeData_bits_strb),
-    .io_s0_writeResp_ready(slave_fsm_io_s0_writeResp_ready),
-    .io_s0_writeResp_valid(slave_fsm_io_s0_writeResp_valid),
-    .io_s0_readAddr_ready(slave_fsm_io_s0_readAddr_ready),
-    .io_s0_readAddr_valid(slave_fsm_io_s0_readAddr_valid),
-    .io_s0_readAddr_bits_addr(slave_fsm_io_s0_readAddr_bits_addr),
-    .io_s0_readData_ready(slave_fsm_io_s0_readData_ready),
-    .io_s0_readData_valid(slave_fsm_io_s0_readData_valid),
-    .io_s0_readData_bits_data(slave_fsm_io_s0_readData_bits_data),
+    .io_slave_writeAddr_ready(slave_fsm_io_slave_writeAddr_ready),
+    .io_slave_writeAddr_valid(slave_fsm_io_slave_writeAddr_valid),
+    .io_slave_writeAddr_bits_addr(slave_fsm_io_slave_writeAddr_bits_addr),
+    .io_slave_writeData_ready(slave_fsm_io_slave_writeData_ready),
+    .io_slave_writeData_valid(slave_fsm_io_slave_writeData_valid),
+    .io_slave_writeData_bits_data(slave_fsm_io_slave_writeData_bits_data),
+    .io_slave_writeData_bits_strb(slave_fsm_io_slave_writeData_bits_strb),
+    .io_slave_writeResp_ready(slave_fsm_io_slave_writeResp_ready),
+    .io_slave_writeResp_valid(slave_fsm_io_slave_writeResp_valid),
+    .io_slave_readAddr_ready(slave_fsm_io_slave_readAddr_ready),
+    .io_slave_readAddr_valid(slave_fsm_io_slave_readAddr_valid),
+    .io_slave_readAddr_bits_addr(slave_fsm_io_slave_readAddr_bits_addr),
+    .io_slave_readData_ready(slave_fsm_io_slave_readData_ready),
+    .io_slave_readData_valid(slave_fsm_io_slave_readData_valid),
+    .io_slave_readData_bits_data(slave_fsm_io_slave_readData_bits_data),
     .io_ap_start(slave_fsm_io_ap_start),
     .io_ap_done(slave_fsm_io_ap_done)
   );
@@ -669,25 +669,25 @@ module SDAChiselWrapper(
   assign io_m0_readAddr_bits_prot = 3'h0;
   assign io_m0_readAddr_bits_qos = 4'h0;
   assign io_m0_readData_ready = 1'h0;
-  assign io_s0_writeAddr_ready = slave_fsm_io_s0_writeAddr_ready;
-  assign io_s0_writeData_ready = slave_fsm_io_s0_writeData_ready;
-  assign io_s0_writeResp_valid = slave_fsm_io_s0_writeResp_valid;
+  assign io_s0_writeAddr_ready = slave_fsm_io_slave_writeAddr_ready;
+  assign io_s0_writeData_ready = slave_fsm_io_slave_writeData_ready;
+  assign io_s0_writeResp_valid = slave_fsm_io_slave_writeResp_valid;
   assign io_s0_writeResp_bits = 2'h0;
-  assign io_s0_readAddr_ready = slave_fsm_io_s0_readAddr_ready;
-  assign io_s0_readData_valid = slave_fsm_io_s0_readData_valid;
-  assign io_s0_readData_bits_data = slave_fsm_io_s0_readData_bits_data;
+  assign io_s0_readAddr_ready = slave_fsm_io_slave_readAddr_ready;
+  assign io_s0_readData_valid = slave_fsm_io_slave_readData_valid;
+  assign io_s0_readData_bits_data = slave_fsm_io_slave_readData_bits_data;
   assign io_s0_readData_bits_resp = 2'h0;
   assign slave_fsm_clock = clock;
   assign slave_fsm_reset = _T_88;
-  assign slave_fsm_io_s0_writeAddr_valid = io_s0_writeAddr_valid;
-  assign slave_fsm_io_s0_writeAddr_bits_addr = io_s0_writeAddr_bits_addr;
-  assign slave_fsm_io_s0_writeData_valid = io_s0_writeData_valid;
-  assign slave_fsm_io_s0_writeData_bits_data = io_s0_writeData_bits_data;
-  assign slave_fsm_io_s0_writeData_bits_strb = io_s0_writeData_bits_strb;
-  assign slave_fsm_io_s0_writeResp_ready = io_s0_writeResp_ready;
-  assign slave_fsm_io_s0_readAddr_valid = io_s0_readAddr_valid;
-  assign slave_fsm_io_s0_readAddr_bits_addr = io_s0_readAddr_bits_addr;
-  assign slave_fsm_io_s0_readData_ready = slave_fsm_io_s0_readData_ready;
+  assign slave_fsm_io_slave_writeAddr_valid = io_s0_writeAddr_valid;
+  assign slave_fsm_io_slave_writeAddr_bits_addr = io_s0_writeAddr_bits_addr;
+  assign slave_fsm_io_slave_writeData_valid = io_s0_writeData_valid;
+  assign slave_fsm_io_slave_writeData_bits_data = io_s0_writeData_bits_data;
+  assign slave_fsm_io_slave_writeData_bits_strb = io_s0_writeData_bits_strb;
+  assign slave_fsm_io_slave_writeResp_ready = io_s0_writeResp_ready;
+  assign slave_fsm_io_slave_readAddr_valid = io_s0_readAddr_valid;
+  assign slave_fsm_io_slave_readAddr_bits_addr = io_s0_readAddr_bits_addr;
+  assign slave_fsm_io_slave_readData_ready = slave_fsm_io_slave_readData_ready;
   assign slave_fsm_io_ap_done = RTLKernel_io_ap_done;
   assign RTLKernel_clock = clock;
   assign RTLKernel_reset = _T_88;
