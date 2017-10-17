@@ -179,30 +179,32 @@ circuit SDAChiselWrapper :
   module MyKernel : 
     input clock : Clock
     input reset : UInt<1>
-    output io : {flip start : UInt<1>, done : UInt<1>}
+    output io : {flip ap_start : UInt<1>, ap_done : UInt<1>}
     
     clock is invalid
     reset is invalid
     io is invalid
     reg value : UInt<5>, clock with : (reset => (reset, UInt<5>("h00"))) @[Counter.scala 17:33]
     reg regFlagStart : UInt<1>, clock with : (reset => (reset, UInt<1>("h00"))) @[MyKernel.scala 17:25]
-    node _T_9 = eq(io.start, UInt<1>("h01")) @[MyKernel.scala 19:17]
-    node _T_11 = eq(regFlagStart, UInt<1>("h00")) @[MyKernel.scala 19:44]
-    node _T_12 = and(_T_9, _T_11) @[MyKernel.scala 19:28]
-    when _T_12 : @[MyKernel.scala 19:56]
-      node _T_14 = eq(value, UInt<5>("h01d")) @[Counter.scala 25:24]
-      node _T_16 = add(value, UInt<1>("h01")) @[Counter.scala 26:22]
-      node _T_17 = tail(_T_16, 1) @[Counter.scala 26:22]
-      value <= _T_17 @[Counter.scala 26:13]
-      when _T_14 : @[Counter.scala 28:21]
+    reg doneReg : UInt<1>, clock with : (reset => (reset, UInt<1>("h00"))) @[MyKernel.scala 18:20]
+    io.ap_done <= doneReg @[MyKernel.scala 19:14]
+    node _T_11 = eq(io.ap_start, UInt<1>("h01")) @[MyKernel.scala 21:20]
+    node _T_13 = eq(regFlagStart, UInt<1>("h00")) @[MyKernel.scala 21:47]
+    node _T_14 = and(_T_11, _T_13) @[MyKernel.scala 21:31]
+    when _T_14 : @[MyKernel.scala 21:59]
+      node _T_16 = eq(value, UInt<5>("h01d")) @[Counter.scala 25:24]
+      node _T_18 = add(value, UInt<1>("h01")) @[Counter.scala 26:22]
+      node _T_19 = tail(_T_18, 1) @[Counter.scala 26:22]
+      value <= _T_19 @[Counter.scala 26:13]
+      when _T_16 : @[Counter.scala 28:21]
         value <= UInt<1>("h00") @[Counter.scala 28:29]
         skip @[Counter.scala 28:21]
-      regFlagStart <= UInt<1>("h01") @[MyKernel.scala 21:18]
-      skip @[MyKernel.scala 19:56]
-    node _T_21 = gt(value, UInt<1>("h00")) @[MyKernel.scala 24:22]
-    when _T_21 : @[MyKernel.scala 24:28]
-      io.done <= UInt<1>("h01") @[MyKernel.scala 25:13]
-      skip @[MyKernel.scala 24:28]
+      regFlagStart <= UInt<1>("h01") @[MyKernel.scala 23:18]
+      skip @[MyKernel.scala 21:59]
+    node _T_23 = gt(value, UInt<1>("h00")) @[MyKernel.scala 26:22]
+    when _T_23 : @[MyKernel.scala 26:28]
+      doneReg <= UInt<1>("h01") @[MyKernel.scala 27:13]
+      skip @[MyKernel.scala 26:28]
     
   module SDAChiselWrapper : 
     input clock : Clock
@@ -241,15 +243,33 @@ circuit SDAChiselWrapper :
     slave_fsm.io is invalid
     slave_fsm.clock <= clock
     slave_fsm.reset <= reset
-    inst kernel of MyKernel @[SDAChiselWrapper.scala 22:22]
-    kernel.io is invalid
-    kernel.clock <= clock
-    kernel.reset <= reset
-    io.s0 <- slave_fsm.io.s0 @[SDAChiselWrapper.scala 51:9]
-    kernel.io.start <= slave_fsm.io.ap_start @[SDAChiselWrapper.scala 55:19]
-    slave_fsm.io.ap_done <= kernel.io.done @[SDAChiselWrapper.scala 56:24]
-    node _T_88 = eq(reset, UInt<1>("h00")) @[SDAChiselWrapper.scala 60:22]
-    slave_fsm.reset <= _T_88 @[SDAChiselWrapper.scala 60:19]
-    node _T_90 = eq(reset, UInt<1>("h00")) @[SDAChiselWrapper.scala 61:19]
-    kernel.reset <= _T_90 @[SDAChiselWrapper.scala 61:16]
+    inst RTLKernel of MyKernel @[SDAChiselWrapper.scala 22:25]
+    RTLKernel.io is invalid
+    RTLKernel.clock <= clock
+    RTLKernel.reset <= reset
+    RTLKernel.io.ap_start <= slave_fsm.io.ap_start @[SDAChiselWrapper.scala 28:25]
+    slave_fsm.io.ap_done <= RTLKernel.io.ap_done @[SDAChiselWrapper.scala 29:24]
+    node _T_88 = eq(reset, UInt<1>("h00")) @[SDAChiselWrapper.scala 36:22]
+    slave_fsm.reset <= _T_88 @[SDAChiselWrapper.scala 36:19]
+    node _T_90 = eq(reset, UInt<1>("h00")) @[SDAChiselWrapper.scala 37:22]
+    RTLKernel.reset <= _T_90 @[SDAChiselWrapper.scala 37:19]
+    slave_fsm.io.s0.writeAddr.bits.prot <= io.s0.writeAddr.bits.prot @[SDAChiselWrapper.scala 40:39]
+    slave_fsm.io.s0.writeAddr.bits.addr <= io.s0.writeAddr.bits.addr @[SDAChiselWrapper.scala 41:39]
+    slave_fsm.io.s0.writeAddr.valid <= io.s0.writeAddr.valid @[SDAChiselWrapper.scala 42:35]
+    io.s0.writeAddr.ready <= slave_fsm.io.s0.writeAddr.ready @[SDAChiselWrapper.scala 43:25]
+    slave_fsm.io.s0.writeData.bits.strb <= io.s0.writeData.bits.strb @[SDAChiselWrapper.scala 45:39]
+    slave_fsm.io.s0.writeData.bits.data <= io.s0.writeData.bits.data @[SDAChiselWrapper.scala 46:39]
+    slave_fsm.io.s0.writeData.valid <= io.s0.writeData.valid @[SDAChiselWrapper.scala 47:35]
+    io.s0.writeData.ready <= slave_fsm.io.s0.writeData.ready @[SDAChiselWrapper.scala 48:25]
+    io.s0.writeResp.valid <= slave_fsm.io.s0.writeResp.valid @[SDAChiselWrapper.scala 50:25]
+    io.s0.writeResp.bits <= slave_fsm.io.s0.writeResp.bits @[SDAChiselWrapper.scala 51:24]
+    slave_fsm.io.s0.writeResp.ready <= io.s0.writeResp.ready @[SDAChiselWrapper.scala 52:35]
+    slave_fsm.io.s0.readAddr.bits.prot <= io.s0.readAddr.bits.prot @[SDAChiselWrapper.scala 54:38]
+    slave_fsm.io.s0.readAddr.bits.addr <= io.s0.readAddr.bits.addr @[SDAChiselWrapper.scala 55:38]
+    slave_fsm.io.s0.readAddr.valid <= io.s0.readAddr.valid @[SDAChiselWrapper.scala 56:34]
+    io.s0.readAddr.ready <= slave_fsm.io.s0.readAddr.ready @[SDAChiselWrapper.scala 57:24]
+    io.s0.readData.valid <= slave_fsm.io.s0.readData.valid @[SDAChiselWrapper.scala 59:24]
+    slave_fsm.io.s0.readData.ready <= slave_fsm.io.s0.readData.ready @[SDAChiselWrapper.scala 60:34]
+    io.s0.readData.bits.resp <= slave_fsm.io.s0.readData.bits.resp @[SDAChiselWrapper.scala 62:28]
+    io.s0.readData.bits.data <= slave_fsm.io.s0.readData.bits.data @[SDAChiselWrapper.scala 63:28]
     

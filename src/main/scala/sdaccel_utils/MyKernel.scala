@@ -8,21 +8,23 @@ import chisel3.util.Counter
   */
 class MyKernel extends Module{
   val io = IO(new Bundle{
-    val start = Input(UInt(1.W))
-    val done = Output(UInt(1.W))
+    val ap_start = Input(UInt(1.W))
+    val ap_done = Output(UInt(1.W))
 
   })
 
   val counter = Counter(30)
   val regFlagStart = Reg(init = false.B)
+  val doneReg = Reg(init = false.B)
+  io.ap_done := doneReg
 
-  when(io.start === true.B && regFlagStart === false.B){
+  when(io.ap_start === true.B && regFlagStart === false.B){
     counter.inc()
     regFlagStart := true.B
   }
 
   when(counter.value > 0.U){
-    io.done := true.B
+    doneReg := true.B
   }
 
 }

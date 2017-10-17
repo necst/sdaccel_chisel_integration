@@ -28,7 +28,9 @@ module AXILiteControl(
   input  [63:0] S_AXI_CONTROL_ARADDR,
   input         S_AXI_CONTROL_RREADY,
   output        S_AXI_CONTROL_RVALID,
-  output [31:0] S_AXI_CONTROL_RDATA
+  output [31:0] S_AXI_CONTROL_RDATA,
+  output        io_ap_start,
+  input         io_ap_done
 );
   reg  ap_start;
   reg [31:0] _RAND_0;
@@ -141,6 +143,7 @@ module AXILiteControl(
   assign S_AXI_CONTROL_ARREADY = _T_145;
   assign S_AXI_CONTROL_RVALID = _T_146;
   assign S_AXI_CONTROL_RDATA = readData;
+  assign io_ap_start = ap_start;
   assign _T_51 = ap_start_r == 1'h0;
   assign ap_start_pulse = ap_start & _T_51;
   assign _GEN_0 = ap_done ? 1'h1 : ap_idle;
@@ -225,7 +228,7 @@ module AXILiteControl(
   assign _T_180 = _T_179 & ap_done;
   assign _GEN_24 = _T_180 ? auto_restart : _GEN_23;
   assign _T_182 = addrrd_handshake & _T_162;
-  assign _GEN_25 = _T_182 ? 1'h0 : 1'h1;
+  assign _GEN_25 = _T_182 ? 1'h0 : io_ap_done;
   assign _T_188 = S_AXI_CONTROL_WDATA[7];
   assign _GEN_26 = _T_174 ? _T_188 : auto_restart;
 `ifdef RANDOMIZE
@@ -310,7 +313,7 @@ module AXILiteControl(
       if (_T_182) begin
         ap_done <= 1'h0;
       end else begin
-        ap_done <= 1'h1;
+        ap_done <= io_ap_done;
       end
     end
     if (ap_rst_n) begin
@@ -448,6 +451,87 @@ module AXILiteControl(
     end
   end
 endmodule
+module MyKernel(
+  input   ap_clk,
+  input   ap_rst_n,
+  input   io_ap_start,
+  output  io_ap_done
+);
+  reg [4:0] value;
+  reg [31:0] _RAND_0;
+  reg  regFlagStart;
+  reg [31:0] _RAND_1;
+  reg  doneReg;
+  reg [31:0] _RAND_2;
+  wire  _T_13;
+  wire  _T_14;
+  wire  _T_16;
+  wire [5:0] _T_18;
+  wire [4:0] _T_19;
+  wire [4:0] _GEN_0;
+  wire [4:0] _GEN_1;
+  wire  _GEN_2;
+  wire  _T_23;
+  wire  _GEN_3;
+  assign io_ap_done = doneReg;
+  assign _T_13 = regFlagStart == 1'h0;
+  assign _T_14 = io_ap_start & _T_13;
+  assign _T_16 = value == 5'h1d;
+  assign _T_18 = value + 5'h1;
+  assign _T_19 = _T_18[4:0];
+  assign _GEN_0 = _T_16 ? 5'h0 : _T_19;
+  assign _GEN_1 = _T_14 ? _GEN_0 : value;
+  assign _GEN_2 = _T_14 ? 1'h1 : regFlagStart;
+  assign _T_23 = value > 5'h0;
+  assign _GEN_3 = _T_23 ? 1'h1 : doneReg;
+`ifdef RANDOMIZE
+  integer initvar;
+  initial begin
+    `ifndef verilator
+      #0.002 begin end
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{$random}};
+  value = _RAND_0[4:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{$random}};
+  regFlagStart = _RAND_1[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{$random}};
+  doneReg = _RAND_2[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  end
+`endif // RANDOMIZE
+  always @(posedge ap_clk) begin
+    if (ap_rst_n) begin
+      value <= 5'h0;
+    end else begin
+      if (_T_14) begin
+        if (_T_16) begin
+          value <= 5'h0;
+        end else begin
+          value <= _T_19;
+        end
+      end
+    end
+    if (ap_rst_n) begin
+      regFlagStart <= 1'h0;
+    end else begin
+      if (_T_14) begin
+        regFlagStart <= 1'h1;
+      end
+    end
+    if (ap_rst_n) begin
+      doneReg <= 1'h0;
+    end else begin
+      if (_T_23) begin
+        doneReg <= 1'h1;
+      end
+    end
+  end
+endmodule
 module SDAChiselWrapper(
   input          ap_clk,
   input          ap_rst_n,
@@ -525,6 +609,12 @@ module SDAChiselWrapper(
   wire  slave_fsm_S_AXI_CONTROL_RREADY;
   wire  slave_fsm_S_AXI_CONTROL_RVALID;
   wire [31:0] slave_fsm_S_AXI_CONTROL_RDATA;
+  wire  slave_fsm_io_ap_start;
+  wire  slave_fsm_io_ap_done;
+  wire  RTLKernel_ap_clk;
+  wire  RTLKernel_ap_rst_n;
+  wire  RTLKernel_io_ap_start;
+  wire  RTLKernel_io_ap_done;
   wire  _T_88;
   AXILiteControl slave_fsm (
     .ap_clk(slave_fsm_ap_clk),
@@ -543,7 +633,15 @@ module SDAChiselWrapper(
     .S_AXI_CONTROL_ARADDR(slave_fsm_S_AXI_CONTROL_ARADDR),
     .S_AXI_CONTROL_RREADY(slave_fsm_S_AXI_CONTROL_RREADY),
     .S_AXI_CONTROL_RVALID(slave_fsm_S_AXI_CONTROL_RVALID),
-    .S_AXI_CONTROL_RDATA(slave_fsm_S_AXI_CONTROL_RDATA)
+    .S_AXI_CONTROL_RDATA(slave_fsm_S_AXI_CONTROL_RDATA),
+    .io_ap_start(slave_fsm_io_ap_start),
+    .io_ap_done(slave_fsm_io_ap_done)
+  );
+  MyKernel RTLKernel (
+    .ap_clk(RTLKernel_ap_clk),
+    .ap_rst_n(RTLKernel_ap_rst_n),
+    .io_ap_start(RTLKernel_io_ap_start),
+    .io_ap_done(RTLKernel_io_ap_done)
   );
   assign m_axi_gmem_AWVALID = 1'h0;
   assign m_axi_gmem_AWADDR = 64'h0;
@@ -589,6 +687,10 @@ module SDAChiselWrapper(
   assign slave_fsm_S_AXI_CONTROL_BREADY = S_AXI_CONTROL_BREADY;
   assign slave_fsm_S_AXI_CONTROL_ARVALID = S_AXI_CONTROL_ARVALID;
   assign slave_fsm_S_AXI_CONTROL_ARADDR = S_AXI_CONTROL_ARADDR;
-  assign slave_fsm_S_AXI_CONTROL_RREADY = S_AXI_CONTROL_RREADY;
+  assign slave_fsm_S_AXI_CONTROL_RREADY = slave_fsm_S_AXI_CONTROL_RREADY;
+  assign slave_fsm_io_ap_done = RTLKernel_io_ap_done;
+  assign RTLKernel_ap_clk = ap_clk;
+  assign RTLKernel_ap_rst_n = _T_88;
+  assign RTLKernel_io_ap_start = slave_fsm_io_ap_start;
   assign _T_88 = ap_rst_n == 1'h0;
 endmodule
