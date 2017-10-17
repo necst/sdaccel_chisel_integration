@@ -13,7 +13,7 @@
 
 module AXILiteControl(
   input         ap_clk,
-  input          ap_rst_n,
+  input         ap_rst_n,
   output        S_AXI_CONTROL_AWREADY,
   input         S_AXI_CONTROL_AWVALID,
   input  [63:0] S_AXI_CONTROL_AWADDR,
@@ -151,7 +151,7 @@ module AXILiteControl(
   assign _T_61 = _T_54 & _T_60;
   assign _GEN_2 = _T_61 ? ap_idle : _GEN_1;
   assign _T_69 = stateSlaveWrite == 3'h0;
-  assign _T_70 =  ap_rst_n & _T_69;
+  assign _T_70 = ap_rst_n & _T_69;
   assign _T_71 = stateSlaveWrite == 3'h1;
   assign _T_117 = stateSlaveWrite == 3'h2;
   assign addrwr_handshake = S_AXI_CONTROL_AWVALID & S_AXI_CONTROL_AWREADY;
@@ -178,7 +178,7 @@ module AXILiteControl(
   assign _T_143 = _T_132 & _T_142;
   assign _GEN_13 = _T_143 ? 3'h0 : _GEN_12;
   assign _T_144 = stateSlaveRead == 3'h0;
-  assign _T_145 =  ap_rst_n & _T_144;
+  assign _T_145 = ap_rst_n & _T_144;
   assign _T_146 = stateSlaveRead == 3'h3;
   assign addrrd_handshake = S_AXI_CONTROL_ARVALID & S_AXI_CONTROL_ARREADY;
   assign _GEN_14 = S_AXI_CONTROL_ARVALID ? 3'h3 : stateSlaveRead;
@@ -273,7 +273,7 @@ module AXILiteControl(
   end
 `endif // RANDOMIZE
   always @(posedge ap_clk) begin
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       ap_start <= 1'h0;
     end else begin
       if (_T_180) begin
@@ -284,14 +284,14 @@ module AXILiteControl(
         end
       end
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       auto_restart <= 1'h0;
     end else begin
       if (_T_174) begin
         auto_restart <= _T_188;
       end
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       ap_idle <= 1'h1;
     end else begin
       if (!(_T_61)) begin
@@ -304,7 +304,7 @@ module AXILiteControl(
         end
       end
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       ap_done <= 1'h0;
     end else begin
       if (_T_182) begin
@@ -313,12 +313,12 @@ module AXILiteControl(
         ap_done <= 1'h1;
       end
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       ap_start_r <= 1'h0;
     end else begin
       ap_start_r <= ap_start;
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       stateSlaveWrite <= 3'h0;
     end else begin
       if (_T_143) begin
@@ -395,12 +395,12 @@ module AXILiteControl(
         end
       end
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       writeAddr <= 6'h0;
     end else begin
       writeAddr <= _GEN_3[5:0];
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       stateSlaveRead <= 3'h0;
     end else begin
       if (_T_161) begin
@@ -437,7 +437,7 @@ module AXILiteControl(
         end
       end
     end
-    if ( ap_rst_n) begin
+    if (ap_rst_n) begin
       readData <= 32'h0;
     end else begin
       if (addrrd_handshake) begin
@@ -450,7 +450,7 @@ module AXILiteControl(
 endmodule
 module SDAChiselWrapper(
   input          ap_clk,
-  input           ap_rst_n,
+  input          ap_rst_n,
   input          m_axi_gmem_AWREADY,
   output         m_axi_gmem_AWVALID,
   output [63:0]  m_axi_gmem_AWADDR,
@@ -509,7 +509,7 @@ module SDAChiselWrapper(
   output [1:0]   S_AXI_CONTROL_RRESP
 );
   wire  slave_fsm_ap_clk;
-  wire  slave_fsm_ ap_rst_n;
+  wire  slave_fsm_ap_rst_n;
   wire  slave_fsm_S_AXI_CONTROL_AWREADY;
   wire  slave_fsm_S_AXI_CONTROL_AWVALID;
   wire [63:0] slave_fsm_S_AXI_CONTROL_AWADDR;
@@ -528,7 +528,7 @@ module SDAChiselWrapper(
   wire  _T_88;
   AXILiteControl slave_fsm (
     .ap_clk(slave_fsm_ap_clk),
-    . ap_rst_n(slave_fsm_ ap_rst_n),
+    .ap_rst_n(slave_fsm_ap_rst_n),
     .S_AXI_CONTROL_AWREADY(slave_fsm_S_AXI_CONTROL_AWREADY),
     .S_AXI_CONTROL_AWVALID(slave_fsm_S_AXI_CONTROL_AWVALID),
     .S_AXI_CONTROL_AWADDR(slave_fsm_S_AXI_CONTROL_AWADDR),
@@ -580,7 +580,7 @@ module SDAChiselWrapper(
   assign S_AXI_CONTROL_RDATA = slave_fsm_S_AXI_CONTROL_RDATA;
   assign S_AXI_CONTROL_RRESP = 2'h0;
   assign slave_fsm_ap_clk = ap_clk;
-  assign slave_fsm_ ap_rst_n = _T_88;
+  assign slave_fsm_ap_rst_n = _T_88;
   assign slave_fsm_S_AXI_CONTROL_AWVALID = S_AXI_CONTROL_AWVALID;
   assign slave_fsm_S_AXI_CONTROL_AWADDR = S_AXI_CONTROL_AWADDR;
   assign slave_fsm_S_AXI_CONTROL_WVALID = S_AXI_CONTROL_WVALID;
@@ -590,5 +590,5 @@ module SDAChiselWrapper(
   assign slave_fsm_S_AXI_CONTROL_ARVALID = S_AXI_CONTROL_ARVALID;
   assign slave_fsm_S_AXI_CONTROL_ARADDR = S_AXI_CONTROL_ARADDR;
   assign slave_fsm_S_AXI_CONTROL_RREADY = S_AXI_CONTROL_RREADY;
-  assign _T_88 =  ap_rst_n == 1'h0;
+  assign _T_88 = ap_rst_n == 1'h0;
 endmodule

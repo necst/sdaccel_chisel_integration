@@ -23,8 +23,8 @@ HOST_EXE=host
 KERNEL_SRC=
 KERNEL_HDRS=
 KERNEL_FLAGS=
-KERNEL_EXE=AdderAxi
-KERNEL_NAME=AdderAxi
+KERNEL_EXE=SDAChiselWrapper
+KERNEL_NAME=SDAChiselWrapper
 
 #custom flag to give to xocc
 KERNEL_LDCLFLAGS=--nk $(KERNEL_NAME):1 \

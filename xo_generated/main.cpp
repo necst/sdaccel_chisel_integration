@@ -216,7 +216,7 @@ int main(int argc, char** argv)
   // Create the compute kernel in the program we wish to run
   //
 	printf("create kernel \n");
-  kernel = clCreateKernel(program, "AdderAxi", &err);
+  kernel = clCreateKernel(program, "SDAChiselWrapper", &err);
   if (!kernel || err != CL_SUCCESS)
   {
     printf("Error: Failed to create compute kernel!\n");
