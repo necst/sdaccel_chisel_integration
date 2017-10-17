@@ -14,21 +14,21 @@
 module AXILiteControl(
   input         ap_clk,
   input         ap_rst_n,
-  output        S_AXI_CONTROL_AWREADY,
-  input         S_AXI_CONTROL_AWVALID,
-  input  [63:0] S_AXI_CONTROL_AWADDR,
-  output        S_AXI_CONTROL_WREADY,
-  input         S_AXI_CONTROL_WVALID,
-  input  [31:0] S_AXI_CONTROL_WDATA,
-  input  [3:0]  S_AXI_CONTROL_WSTRB,
-  input         S_AXI_CONTROL_BREADY,
-  output        S_AXI_CONTROL_BVALID,
-  output        S_AXI_CONTROL_ARREADY,
-  input         S_AXI_CONTROL_ARVALID,
-  input  [63:0] S_AXI_CONTROL_ARADDR,
-  input         S_AXI_CONTROL_RREADY,
-  output        S_AXI_CONTROL_RVALID,
-  output [31:0] S_AXI_CONTROL_RDATA,
+  output        io_slave_writeAddr_ready,
+  input         io_slave_writeAddr_valid,
+  input  [63:0] io_slave_writeAddr_bits_addr,
+  output        io_slave_writeData_ready,
+  input         io_slave_writeData_valid,
+  input  [31:0] io_slave_writeData_bits_data,
+  input  [3:0]  io_slave_writeData_bits_strb,
+  input         io_slave_writeResp_ready,
+  output        io_slave_writeResp_valid,
+  output        io_slave_readAddr_ready,
+  input         io_slave_readAddr_valid,
+  input  [63:0] io_slave_readAddr_bits_addr,
+  input         io_slave_readData_ready,
+  output        io_slave_readData_valid,
+  output [31:0] io_slave_readData_bits_data,
   output        io_ap_start,
   input         io_ap_done
 );
@@ -42,14 +42,14 @@ module AXILiteControl(
   reg [31:0] _RAND_3;
   reg  ap_start_r;
   reg [31:0] _RAND_4;
-  wire  _T_51;
+  wire  _T_48;
   wire  ap_start_pulse;
   wire  _GEN_0;
-  wire  _T_54;
-  wire  _T_55;
+  wire  _T_51;
+  wire  _T_52;
   wire  _GEN_1;
-  wire  _T_60;
-  wire  _T_61;
+  wire  _T_57;
+  wire  _T_58;
   wire  _GEN_2;
   reg [2:0] stateSlaveWrite;
   reg [31:0] _RAND_5;
@@ -59,178 +59,178 @@ module AXILiteControl(
   reg [31:0] _RAND_7;
   reg [31:0] readData;
   reg [31:0] _RAND_8;
-  wire  _T_69;
-  wire  _T_70;
-  wire  _T_71;
-  wire  _T_117;
+  wire  _T_66;
+  wire  _T_67;
+  wire  _T_68;
+  wire  _T_114;
   wire  addrwr_handshake;
   wire  write_handshake;
   wire [63:0] _GEN_3;
   wire [2:0] _GEN_4;
-  wire  _T_120;
+  wire  _T_117;
   wire [2:0] _GEN_5;
   wire [2:0] _GEN_6;
-  wire  _T_123;
-  wire  _T_124;
+  wire  _T_120;
+  wire  _T_121;
   wire [2:0] _GEN_7;
-  wire  _T_126;
+  wire  _T_123;
   wire [2:0] _GEN_8;
   wire [2:0] _GEN_9;
-  wire  _T_131;
-  wire  _T_132;
-  wire  _T_133;
+  wire  _T_128;
+  wire  _T_129;
+  wire  _T_130;
   wire [2:0] _GEN_10;
-  wire  _T_135;
+  wire  _T_132;
   wire [2:0] _GEN_11;
   wire [2:0] _GEN_12;
+  wire  _T_139;
+  wire  _T_140;
+  wire [2:0] _GEN_13;
+  wire  _T_141;
   wire  _T_142;
   wire  _T_143;
-  wire [2:0] _GEN_13;
-  wire  _T_144;
-  wire  _T_145;
-  wire  _T_146;
   wire  addrrd_handshake;
   wire [2:0] _GEN_14;
-  wire  _T_149;
+  wire  _T_146;
   wire [2:0] _GEN_15;
   wire [2:0] _GEN_16;
-  wire  _T_152;
-  wire  _T_153;
-  wire  _T_154;
+  wire  _T_149;
+  wire  _T_150;
+  wire  _T_151;
   wire [2:0] _GEN_17;
-  wire  _T_156;
+  wire  _T_153;
   wire [2:0] _GEN_18;
   wire [2:0] _GEN_19;
-  wire  _T_160;
-  wire  _T_161;
+  wire  _T_157;
+  wire  _T_158;
   wire [2:0] _GEN_20;
-  wire  _T_162;
+  wire  _T_160;
   wire [1:0] _GEN_27;
-  wire [1:0] _T_163;
+  wire [1:0] _T_161;
   wire [1:0] _GEN_28;
-  wire [1:0] _T_164;
+  wire [1:0] _T_162;
   wire [2:0] _GEN_29;
-  wire [2:0] _T_165;
+  wire [2:0] _T_163;
   wire [2:0] _GEN_30;
-  wire [2:0] _T_166;
+  wire [2:0] _T_164;
   wire [3:0] _GEN_31;
-  wire [3:0] _T_167;
+  wire [3:0] _T_165;
   wire [3:0] _GEN_32;
-  wire [3:0] _T_168;
+  wire [3:0] _T_166;
   wire [7:0] _GEN_33;
-  wire [7:0] _T_169;
+  wire [7:0] _T_167;
   wire [7:0] _GEN_34;
-  wire [7:0] _T_170;
+  wire [7:0] _T_168;
   wire [31:0] _GEN_21;
   wire [31:0] _GEN_22;
+  wire  _T_170;
   wire  _T_171;
   wire  _T_172;
   wire  _T_173;
   wire  _T_174;
   wire  _T_175;
-  wire  _T_176;
   wire  _GEN_23;
+  wire  _T_178;
   wire  _T_179;
-  wire  _T_180;
   wire  _GEN_24;
   wire  _T_182;
   wire  _GEN_25;
-  wire  _T_188;
+  wire  _T_189;
   wire  _GEN_26;
-  assign S_AXI_CONTROL_AWREADY = _T_70;
-  assign S_AXI_CONTROL_WREADY = _T_71;
-  assign S_AXI_CONTROL_BVALID = _T_117;
-  assign S_AXI_CONTROL_ARREADY = _T_145;
-  assign S_AXI_CONTROL_RVALID = _T_146;
-  assign S_AXI_CONTROL_RDATA = readData;
+  assign io_slave_writeAddr_ready = _T_67;
+  assign io_slave_writeData_ready = _T_68;
+  assign io_slave_writeResp_valid = _T_114;
+  assign io_slave_readAddr_ready = _T_142;
+  assign io_slave_readData_valid = _T_143;
+  assign io_slave_readData_bits_data = readData;
   assign io_ap_start = ap_start;
-  assign _T_51 = ap_start_r == 1'h0;
-  assign ap_start_pulse = ap_start & _T_51;
+  assign _T_48 = ap_start_r == 1'h0;
+  assign ap_start_pulse = ap_start & _T_48;
   assign _GEN_0 = ap_done ? 1'h1 : ap_idle;
-  assign _T_54 = ap_done == 1'h0;
-  assign _T_55 = _T_54 & ap_start_pulse;
-  assign _GEN_1 = _T_55 ? 1'h0 : _GEN_0;
-  assign _T_60 = ap_start_pulse == 1'h0;
-  assign _T_61 = _T_54 & _T_60;
-  assign _GEN_2 = _T_61 ? ap_idle : _GEN_1;
-  assign _T_69 = stateSlaveWrite == 3'h0;
-  assign _T_70 = ap_rst_n & _T_69;
-  assign _T_71 = stateSlaveWrite == 3'h1;
-  assign _T_117 = stateSlaveWrite == 3'h2;
-  assign addrwr_handshake = S_AXI_CONTROL_AWVALID & S_AXI_CONTROL_AWREADY;
-  assign write_handshake = S_AXI_CONTROL_WVALID & S_AXI_CONTROL_WREADY;
-  assign _GEN_3 = addrwr_handshake ? S_AXI_CONTROL_AWADDR : {{58'd0}, writeAddr};
-  assign _GEN_4 = S_AXI_CONTROL_AWVALID ? 3'h1 : stateSlaveWrite;
-  assign _T_120 = S_AXI_CONTROL_AWVALID == 1'h0;
-  assign _GEN_5 = _T_120 ? 3'h0 : _GEN_4;
-  assign _GEN_6 = _T_69 ? _GEN_5 : stateSlaveWrite;
-  assign _T_123 = _T_69 == 1'h0;
-  assign _T_124 = _T_123 & _T_71;
-  assign _GEN_7 = S_AXI_CONTROL_WVALID ? 3'h2 : _GEN_6;
-  assign _T_126 = S_AXI_CONTROL_WVALID == 1'h0;
-  assign _GEN_8 = _T_126 ? 3'h1 : _GEN_7;
-  assign _GEN_9 = _T_124 ? _GEN_8 : _GEN_6;
-  assign _T_131 = _T_71 == 1'h0;
-  assign _T_132 = _T_123 & _T_131;
-  assign _T_133 = _T_132 & _T_117;
-  assign _GEN_10 = S_AXI_CONTROL_BREADY ? 3'h0 : _GEN_9;
-  assign _T_135 = S_AXI_CONTROL_BREADY == 1'h0;
-  assign _GEN_11 = _T_135 ? 3'h2 : _GEN_10;
-  assign _GEN_12 = _T_133 ? _GEN_11 : _GEN_9;
-  assign _T_142 = _T_117 == 1'h0;
-  assign _T_143 = _T_132 & _T_142;
-  assign _GEN_13 = _T_143 ? 3'h0 : _GEN_12;
-  assign _T_144 = stateSlaveRead == 3'h0;
-  assign _T_145 = ap_rst_n & _T_144;
-  assign _T_146 = stateSlaveRead == 3'h3;
-  assign addrrd_handshake = S_AXI_CONTROL_ARVALID & S_AXI_CONTROL_ARREADY;
-  assign _GEN_14 = S_AXI_CONTROL_ARVALID ? 3'h3 : stateSlaveRead;
-  assign _T_149 = S_AXI_CONTROL_ARVALID == 1'h0;
-  assign _GEN_15 = _T_149 ? 3'h0 : _GEN_14;
-  assign _GEN_16 = _T_144 ? _GEN_15 : stateSlaveRead;
-  assign _T_152 = _T_144 == 1'h0;
-  assign _T_153 = _T_152 & _T_146;
-  assign _T_154 = S_AXI_CONTROL_RVALID & S_AXI_CONTROL_RREADY;
-  assign _GEN_17 = _T_154 ? 3'h0 : _GEN_16;
-  assign _T_156 = _T_154 == 1'h0;
-  assign _GEN_18 = _T_156 ? 3'h3 : _GEN_17;
-  assign _GEN_19 = _T_153 ? _GEN_18 : _GEN_16;
-  assign _T_160 = _T_146 == 1'h0;
-  assign _T_161 = _T_152 & _T_160;
-  assign _GEN_20 = _T_161 ? 3'h0 : _GEN_19;
-  assign _T_162 = S_AXI_CONTROL_ARADDR == 64'h0;
+  assign _T_51 = ap_done == 1'h0;
+  assign _T_52 = _T_51 & ap_start_pulse;
+  assign _GEN_1 = _T_52 ? 1'h0 : _GEN_0;
+  assign _T_57 = ap_start_pulse == 1'h0;
+  assign _T_58 = _T_51 & _T_57;
+  assign _GEN_2 = _T_58 ? ap_idle : _GEN_1;
+  assign _T_66 = stateSlaveWrite == 3'h0;
+  assign _T_67 = ap_rst_n & _T_66;
+  assign _T_68 = stateSlaveWrite == 3'h1;
+  assign _T_114 = stateSlaveWrite == 3'h2;
+  assign addrwr_handshake = io_slave_writeAddr_valid & io_slave_writeAddr_ready;
+  assign write_handshake = io_slave_writeData_valid & io_slave_writeData_ready;
+  assign _GEN_3 = addrwr_handshake ? io_slave_writeAddr_bits_addr : {{58'd0}, writeAddr};
+  assign _GEN_4 = io_slave_writeAddr_valid ? 3'h1 : stateSlaveWrite;
+  assign _T_117 = io_slave_writeAddr_valid == 1'h0;
+  assign _GEN_5 = _T_117 ? 3'h0 : _GEN_4;
+  assign _GEN_6 = _T_66 ? _GEN_5 : stateSlaveWrite;
+  assign _T_120 = _T_66 == 1'h0;
+  assign _T_121 = _T_120 & _T_68;
+  assign _GEN_7 = io_slave_writeData_valid ? 3'h2 : _GEN_6;
+  assign _T_123 = io_slave_writeData_valid == 1'h0;
+  assign _GEN_8 = _T_123 ? 3'h1 : _GEN_7;
+  assign _GEN_9 = _T_121 ? _GEN_8 : _GEN_6;
+  assign _T_128 = _T_68 == 1'h0;
+  assign _T_129 = _T_120 & _T_128;
+  assign _T_130 = _T_129 & _T_114;
+  assign _GEN_10 = io_slave_writeResp_ready ? 3'h0 : _GEN_9;
+  assign _T_132 = io_slave_writeResp_ready == 1'h0;
+  assign _GEN_11 = _T_132 ? 3'h2 : _GEN_10;
+  assign _GEN_12 = _T_130 ? _GEN_11 : _GEN_9;
+  assign _T_139 = _T_114 == 1'h0;
+  assign _T_140 = _T_129 & _T_139;
+  assign _GEN_13 = _T_140 ? 3'h0 : _GEN_12;
+  assign _T_141 = stateSlaveRead == 3'h0;
+  assign _T_142 = ap_rst_n & _T_141;
+  assign _T_143 = stateSlaveRead == 3'h3;
+  assign addrrd_handshake = io_slave_readAddr_valid & io_slave_readAddr_ready;
+  assign _GEN_14 = io_slave_readAddr_valid ? 3'h3 : stateSlaveRead;
+  assign _T_146 = io_slave_readAddr_valid == 1'h0;
+  assign _GEN_15 = _T_146 ? 3'h0 : _GEN_14;
+  assign _GEN_16 = _T_141 ? _GEN_15 : stateSlaveRead;
+  assign _T_149 = _T_141 == 1'h0;
+  assign _T_150 = _T_149 & _T_143;
+  assign _T_151 = io_slave_readData_valid & io_slave_readData_ready;
+  assign _GEN_17 = _T_151 ? 3'h0 : _GEN_16;
+  assign _T_153 = _T_151 == 1'h0;
+  assign _GEN_18 = _T_153 ? 3'h3 : _GEN_17;
+  assign _GEN_19 = _T_150 ? _GEN_18 : _GEN_16;
+  assign _T_157 = _T_143 == 1'h0;
+  assign _T_158 = _T_149 & _T_157;
+  assign _GEN_20 = _T_158 ? 3'h0 : _GEN_19;
+  assign _T_160 = io_slave_readAddr_bits_addr == 64'h0;
   assign _GEN_27 = {{1'd0}, ap_done};
-  assign _T_163 = _GEN_27 << 1;
+  assign _T_161 = _GEN_27 << 1;
   assign _GEN_28 = {{1'd0}, ap_start};
-  assign _T_164 = _GEN_28 | _T_163;
+  assign _T_162 = _GEN_28 | _T_161;
   assign _GEN_29 = {{2'd0}, ap_idle};
-  assign _T_165 = _GEN_29 << 2;
-  assign _GEN_30 = {{1'd0}, _T_164};
-  assign _T_166 = _GEN_30 | _T_165;
+  assign _T_163 = _GEN_29 << 2;
+  assign _GEN_30 = {{1'd0}, _T_162};
+  assign _T_164 = _GEN_30 | _T_163;
   assign _GEN_31 = {{3'd0}, ap_done};
-  assign _T_167 = _GEN_31 << 3;
-  assign _GEN_32 = {{1'd0}, _T_166};
-  assign _T_168 = _GEN_32 | _T_167;
+  assign _T_165 = _GEN_31 << 3;
+  assign _GEN_32 = {{1'd0}, _T_164};
+  assign _T_166 = _GEN_32 | _T_165;
   assign _GEN_33 = {{7'd0}, auto_restart};
-  assign _T_169 = _GEN_33 << 7;
-  assign _GEN_34 = {{4'd0}, _T_168};
-  assign _T_170 = _GEN_34 | _T_169;
-  assign _GEN_21 = _T_162 ? {{24'd0}, _T_170} : readData;
+  assign _T_167 = _GEN_33 << 7;
+  assign _GEN_34 = {{4'd0}, _T_166};
+  assign _T_168 = _GEN_34 | _T_167;
+  assign _GEN_21 = _T_160 ? {{24'd0}, _T_168} : readData;
   assign _GEN_22 = addrrd_handshake ? _GEN_21 : readData;
-  assign _T_171 = writeAddr == 6'h0;
-  assign _T_172 = write_handshake & _T_171;
-  assign _T_173 = S_AXI_CONTROL_WSTRB[0];
-  assign _T_174 = _T_172 & _T_173;
-  assign _T_175 = S_AXI_CONTROL_WDATA[0];
-  assign _T_176 = _T_174 & _T_175;
-  assign _GEN_23 = _T_176 ? 1'h1 : ap_start;
-  assign _T_179 = _T_176 == 1'h0;
-  assign _T_180 = _T_179 & ap_done;
-  assign _GEN_24 = _T_180 ? auto_restart : _GEN_23;
-  assign _T_182 = addrrd_handshake & _T_162;
+  assign _T_170 = writeAddr == 6'h0;
+  assign _T_171 = write_handshake & _T_170;
+  assign _T_172 = io_slave_writeData_bits_strb[0];
+  assign _T_173 = _T_171 & _T_172;
+  assign _T_174 = io_slave_writeData_bits_data[0];
+  assign _T_175 = _T_173 & _T_174;
+  assign _GEN_23 = _T_175 ? 1'h1 : ap_start;
+  assign _T_178 = _T_175 == 1'h0;
+  assign _T_179 = _T_178 & ap_done;
+  assign _GEN_24 = _T_179 ? auto_restart : _GEN_23;
+  assign _T_182 = addrrd_handshake & _T_160;
   assign _GEN_25 = _T_182 ? 1'h0 : io_ap_done;
-  assign _T_188 = S_AXI_CONTROL_WDATA[7];
-  assign _GEN_26 = _T_174 ? _T_188 : auto_restart;
+  assign _T_189 = io_slave_writeData_bits_data[7];
+  assign _GEN_26 = _T_173 ? _T_189 : auto_restart;
 `ifdef RANDOMIZE
   integer initvar;
   initial begin
@@ -279,10 +279,10 @@ module AXILiteControl(
     if (ap_rst_n) begin
       ap_start <= 1'h0;
     end else begin
-      if (_T_180) begin
+      if (_T_179) begin
         ap_start <= auto_restart;
       end else begin
-        if (_T_176) begin
+        if (_T_175) begin
           ap_start <= 1'h1;
         end
       end
@@ -290,15 +290,15 @@ module AXILiteControl(
     if (ap_rst_n) begin
       auto_restart <= 1'h0;
     end else begin
-      if (_T_174) begin
-        auto_restart <= _T_188;
+      if (_T_173) begin
+        auto_restart <= _T_189;
       end
     end
     if (ap_rst_n) begin
       ap_idle <= 1'h1;
     end else begin
-      if (!(_T_61)) begin
-        if (_T_55) begin
+      if (!(_T_58)) begin
+        if (_T_52) begin
           ap_idle <= 1'h0;
         end else begin
           if (ap_done) begin
@@ -324,28 +324,28 @@ module AXILiteControl(
     if (ap_rst_n) begin
       stateSlaveWrite <= 3'h0;
     end else begin
-      if (_T_143) begin
+      if (_T_140) begin
         stateSlaveWrite <= 3'h0;
       end else begin
-        if (_T_133) begin
-          if (_T_135) begin
+        if (_T_130) begin
+          if (_T_132) begin
             stateSlaveWrite <= 3'h2;
           end else begin
-            if (S_AXI_CONTROL_BREADY) begin
+            if (io_slave_writeResp_ready) begin
               stateSlaveWrite <= 3'h0;
             end else begin
-              if (_T_124) begin
-                if (_T_126) begin
+              if (_T_121) begin
+                if (_T_123) begin
                   stateSlaveWrite <= 3'h1;
                 end else begin
-                  if (S_AXI_CONTROL_WVALID) begin
+                  if (io_slave_writeData_valid) begin
                     stateSlaveWrite <= 3'h2;
                   end else begin
-                    if (_T_69) begin
-                      if (_T_120) begin
+                    if (_T_66) begin
+                      if (_T_117) begin
                         stateSlaveWrite <= 3'h0;
                       end else begin
-                        if (S_AXI_CONTROL_AWVALID) begin
+                        if (io_slave_writeAddr_valid) begin
                           stateSlaveWrite <= 3'h1;
                         end
                       end
@@ -353,11 +353,11 @@ module AXILiteControl(
                   end
                 end
               end else begin
-                if (_T_69) begin
-                  if (_T_120) begin
+                if (_T_66) begin
+                  if (_T_117) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
-                    if (S_AXI_CONTROL_AWVALID) begin
+                    if (io_slave_writeAddr_valid) begin
                       stateSlaveWrite <= 3'h1;
                     end
                   end
@@ -366,18 +366,18 @@ module AXILiteControl(
             end
           end
         end else begin
-          if (_T_124) begin
-            if (_T_126) begin
+          if (_T_121) begin
+            if (_T_123) begin
               stateSlaveWrite <= 3'h1;
             end else begin
-              if (S_AXI_CONTROL_WVALID) begin
+              if (io_slave_writeData_valid) begin
                 stateSlaveWrite <= 3'h2;
               end else begin
-                if (_T_69) begin
-                  if (_T_120) begin
+                if (_T_66) begin
+                  if (_T_117) begin
                     stateSlaveWrite <= 3'h0;
                   end else begin
-                    if (S_AXI_CONTROL_AWVALID) begin
+                    if (io_slave_writeAddr_valid) begin
                       stateSlaveWrite <= 3'h1;
                     end
                   end
@@ -385,11 +385,11 @@ module AXILiteControl(
               end
             end
           end else begin
-            if (_T_69) begin
-              if (_T_120) begin
+            if (_T_66) begin
+              if (_T_117) begin
                 stateSlaveWrite <= 3'h0;
               end else begin
-                if (S_AXI_CONTROL_AWVALID) begin
+                if (io_slave_writeAddr_valid) begin
                   stateSlaveWrite <= 3'h1;
                 end
               end
@@ -406,21 +406,21 @@ module AXILiteControl(
     if (ap_rst_n) begin
       stateSlaveRead <= 3'h0;
     end else begin
-      if (_T_161) begin
+      if (_T_158) begin
         stateSlaveRead <= 3'h0;
       end else begin
-        if (_T_153) begin
-          if (_T_156) begin
+        if (_T_150) begin
+          if (_T_153) begin
             stateSlaveRead <= 3'h3;
           end else begin
-            if (_T_154) begin
+            if (_T_151) begin
               stateSlaveRead <= 3'h0;
             end else begin
-              if (_T_144) begin
-                if (_T_149) begin
+              if (_T_141) begin
+                if (_T_146) begin
                   stateSlaveRead <= 3'h0;
                 end else begin
-                  if (S_AXI_CONTROL_ARVALID) begin
+                  if (io_slave_readAddr_valid) begin
                     stateSlaveRead <= 3'h3;
                   end
                 end
@@ -428,11 +428,11 @@ module AXILiteControl(
             end
           end
         end else begin
-          if (_T_144) begin
-            if (_T_149) begin
+          if (_T_141) begin
+            if (_T_146) begin
               stateSlaveRead <= 3'h0;
             end else begin
-              if (S_AXI_CONTROL_ARVALID) begin
+              if (io_slave_readAddr_valid) begin
                 stateSlaveRead <= 3'h3;
               end
             end
@@ -444,8 +444,8 @@ module AXILiteControl(
       readData <= 32'h0;
     end else begin
       if (addrrd_handshake) begin
-        if (_T_162) begin
-          readData <= {{24'd0}, _T_170};
+        if (_T_160) begin
+          readData <= {{24'd0}, _T_168};
         end
       end
     end
@@ -463,27 +463,27 @@ module MyKernel(
   reg [31:0] _RAND_1;
   reg  doneReg;
   reg [31:0] _RAND_2;
-  wire  _T_13;
-  wire  _T_14;
-  wire  _T_16;
-  wire [5:0] _T_18;
-  wire [4:0] _T_19;
+  wire  _T_18;
+  wire  _T_19;
+  wire  _T_21;
+  wire [5:0] _T_23;
+  wire [4:0] _T_24;
   wire [4:0] _GEN_0;
   wire [4:0] _GEN_1;
   wire  _GEN_2;
-  wire  _T_23;
+  wire  _T_28;
   wire  _GEN_3;
   assign io_ap_done = doneReg;
-  assign _T_13 = regFlagStart == 1'h0;
-  assign _T_14 = io_ap_start & _T_13;
-  assign _T_16 = value == 5'h1d;
-  assign _T_18 = value + 5'h1;
-  assign _T_19 = _T_18[4:0];
-  assign _GEN_0 = _T_16 ? 5'h0 : _T_19;
-  assign _GEN_1 = _T_14 ? _GEN_0 : value;
-  assign _GEN_2 = _T_14 ? 1'h1 : regFlagStart;
-  assign _T_23 = value > 5'h0;
-  assign _GEN_3 = _T_23 ? 1'h1 : doneReg;
+  assign _T_18 = regFlagStart == 1'h0;
+  assign _T_19 = io_ap_start & _T_18;
+  assign _T_21 = value == 5'h1d;
+  assign _T_23 = value + 5'h1;
+  assign _T_24 = _T_23[4:0];
+  assign _GEN_0 = _T_21 ? 5'h0 : _T_24;
+  assign _GEN_1 = _T_19 ? _GEN_0 : value;
+  assign _GEN_2 = _T_19 ? 1'h1 : regFlagStart;
+  assign _T_28 = value > 5'h0;
+  assign _GEN_3 = _T_28 ? 1'h1 : doneReg;
 `ifdef RANDOMIZE
   integer initvar;
   initial begin
@@ -508,25 +508,25 @@ module MyKernel(
     if (ap_rst_n) begin
       value <= 5'h0;
     end else begin
-      if (_T_14) begin
-        if (_T_16) begin
+      if (_T_19) begin
+        if (_T_21) begin
           value <= 5'h0;
         end else begin
-          value <= _T_19;
+          value <= _T_24;
         end
       end
     end
     if (ap_rst_n) begin
       regFlagStart <= 1'h0;
     end else begin
-      if (_T_14) begin
+      if (_T_19) begin
         regFlagStart <= 1'h1;
       end
     end
     if (ap_rst_n) begin
       doneReg <= 1'h0;
     end else begin
-      if (_T_23) begin
+      if (_T_28) begin
         doneReg <= 1'h1;
       end
     end
@@ -594,21 +594,21 @@ module SDAChiselWrapper(
 );
   wire  slave_fsm_ap_clk;
   wire  slave_fsm_ap_rst_n;
-  wire  slave_fsm_S_AXI_CONTROL_AWREADY;
-  wire  slave_fsm_S_AXI_CONTROL_AWVALID;
-  wire [63:0] slave_fsm_S_AXI_CONTROL_AWADDR;
-  wire  slave_fsm_S_AXI_CONTROL_WREADY;
-  wire  slave_fsm_S_AXI_CONTROL_WVALID;
-  wire [31:0] slave_fsm_S_AXI_CONTROL_WDATA;
-  wire [3:0] slave_fsm_S_AXI_CONTROL_WSTRB;
-  wire  slave_fsm_S_AXI_CONTROL_BREADY;
-  wire  slave_fsm_S_AXI_CONTROL_BVALID;
-  wire  slave_fsm_S_AXI_CONTROL_ARREADY;
-  wire  slave_fsm_S_AXI_CONTROL_ARVALID;
-  wire [63:0] slave_fsm_S_AXI_CONTROL_ARADDR;
-  wire  slave_fsm_S_AXI_CONTROL_RREADY;
-  wire  slave_fsm_S_AXI_CONTROL_RVALID;
-  wire [31:0] slave_fsm_S_AXI_CONTROL_RDATA;
+  wire  slave_fsm_io_slave_writeAddr_ready;
+  wire  slave_fsm_io_slave_writeAddr_valid;
+  wire [63:0] slave_fsm_io_slave_writeAddr_bits_addr;
+  wire  slave_fsm_io_slave_writeData_ready;
+  wire  slave_fsm_io_slave_writeData_valid;
+  wire [31:0] slave_fsm_io_slave_writeData_bits_data;
+  wire [3:0] slave_fsm_io_slave_writeData_bits_strb;
+  wire  slave_fsm_io_slave_writeResp_ready;
+  wire  slave_fsm_io_slave_writeResp_valid;
+  wire  slave_fsm_io_slave_readAddr_ready;
+  wire  slave_fsm_io_slave_readAddr_valid;
+  wire [63:0] slave_fsm_io_slave_readAddr_bits_addr;
+  wire  slave_fsm_io_slave_readData_ready;
+  wire  slave_fsm_io_slave_readData_valid;
+  wire [31:0] slave_fsm_io_slave_readData_bits_data;
   wire  slave_fsm_io_ap_start;
   wire  slave_fsm_io_ap_done;
   wire  RTLKernel_ap_clk;
@@ -619,21 +619,21 @@ module SDAChiselWrapper(
   AXILiteControl slave_fsm (
     .ap_clk(slave_fsm_ap_clk),
     .ap_rst_n(slave_fsm_ap_rst_n),
-    .S_AXI_CONTROL_AWREADY(slave_fsm_S_AXI_CONTROL_AWREADY),
-    .S_AXI_CONTROL_AWVALID(slave_fsm_S_AXI_CONTROL_AWVALID),
-    .S_AXI_CONTROL_AWADDR(slave_fsm_S_AXI_CONTROL_AWADDR),
-    .S_AXI_CONTROL_WREADY(slave_fsm_S_AXI_CONTROL_WREADY),
-    .S_AXI_CONTROL_WVALID(slave_fsm_S_AXI_CONTROL_WVALID),
-    .S_AXI_CONTROL_WDATA(slave_fsm_S_AXI_CONTROL_WDATA),
-    .S_AXI_CONTROL_WSTRB(slave_fsm_S_AXI_CONTROL_WSTRB),
-    .S_AXI_CONTROL_BREADY(slave_fsm_S_AXI_CONTROL_BREADY),
-    .S_AXI_CONTROL_BVALID(slave_fsm_S_AXI_CONTROL_BVALID),
-    .S_AXI_CONTROL_ARREADY(slave_fsm_S_AXI_CONTROL_ARREADY),
-    .S_AXI_CONTROL_ARVALID(slave_fsm_S_AXI_CONTROL_ARVALID),
-    .S_AXI_CONTROL_ARADDR(slave_fsm_S_AXI_CONTROL_ARADDR),
-    .S_AXI_CONTROL_RREADY(slave_fsm_S_AXI_CONTROL_RREADY),
-    .S_AXI_CONTROL_RVALID(slave_fsm_S_AXI_CONTROL_RVALID),
-    .S_AXI_CONTROL_RDATA(slave_fsm_S_AXI_CONTROL_RDATA),
+    .io_slave_writeAddr_ready(slave_fsm_io_slave_writeAddr_ready),
+    .io_slave_writeAddr_valid(slave_fsm_io_slave_writeAddr_valid),
+    .io_slave_writeAddr_bits_addr(slave_fsm_io_slave_writeAddr_bits_addr),
+    .io_slave_writeData_ready(slave_fsm_io_slave_writeData_ready),
+    .io_slave_writeData_valid(slave_fsm_io_slave_writeData_valid),
+    .io_slave_writeData_bits_data(slave_fsm_io_slave_writeData_bits_data),
+    .io_slave_writeData_bits_strb(slave_fsm_io_slave_writeData_bits_strb),
+    .io_slave_writeResp_ready(slave_fsm_io_slave_writeResp_ready),
+    .io_slave_writeResp_valid(slave_fsm_io_slave_writeResp_valid),
+    .io_slave_readAddr_ready(slave_fsm_io_slave_readAddr_ready),
+    .io_slave_readAddr_valid(slave_fsm_io_slave_readAddr_valid),
+    .io_slave_readAddr_bits_addr(slave_fsm_io_slave_readAddr_bits_addr),
+    .io_slave_readData_ready(slave_fsm_io_slave_readData_ready),
+    .io_slave_readData_valid(slave_fsm_io_slave_readData_valid),
+    .io_slave_readData_bits_data(slave_fsm_io_slave_readData_bits_data),
     .io_ap_start(slave_fsm_io_ap_start),
     .io_ap_done(slave_fsm_io_ap_done)
   );
@@ -669,28 +669,28 @@ module SDAChiselWrapper(
   assign m_axi_gmem_ARPROT = 3'h0;
   assign m_axi_gmem_ARQOS = 4'h0;
   assign m_axi_gmem_RREADY = 1'h0;
-  assign S_AXI_CONTROL_AWREADY = slave_fsm_S_AXI_CONTROL_AWREADY;
-  assign S_AXI_CONTROL_WREADY = slave_fsm_S_AXI_CONTROL_WREADY;
-  assign S_AXI_CONTROL_BVALID = slave_fsm_S_AXI_CONTROL_BVALID;
+  assign S_AXI_CONTROL_AWREADY = slave_fsm_io_slave_writeAddr_ready;
+  assign S_AXI_CONTROL_WREADY = slave_fsm_io_slave_writeData_ready;
+  assign S_AXI_CONTROL_BVALID = slave_fsm_io_slave_writeResp_valid;
   assign S_AXI_CONTROL_BRESP = 2'h0;
-  assign S_AXI_CONTROL_ARREADY = slave_fsm_S_AXI_CONTROL_ARREADY;
-  assign S_AXI_CONTROL_RVALID = slave_fsm_S_AXI_CONTROL_RVALID;
-  assign S_AXI_CONTROL_RDATA = slave_fsm_S_AXI_CONTROL_RDATA;
+  assign S_AXI_CONTROL_ARREADY = slave_fsm_io_slave_readAddr_ready;
+  assign S_AXI_CONTROL_RVALID = slave_fsm_io_slave_readData_valid;
+  assign S_AXI_CONTROL_RDATA = slave_fsm_io_slave_readData_bits_data;
   assign S_AXI_CONTROL_RRESP = 2'h0;
   assign slave_fsm_ap_clk = ap_clk;
   assign slave_fsm_ap_rst_n = _T_88;
-  assign slave_fsm_S_AXI_CONTROL_AWVALID = S_AXI_CONTROL_AWVALID;
-  assign slave_fsm_S_AXI_CONTROL_AWADDR = S_AXI_CONTROL_AWADDR;
-  assign slave_fsm_S_AXI_CONTROL_WVALID = S_AXI_CONTROL_WVALID;
-  assign slave_fsm_S_AXI_CONTROL_WDATA = S_AXI_CONTROL_WDATA;
-  assign slave_fsm_S_AXI_CONTROL_WSTRB = S_AXI_CONTROL_WSTRB;
-  assign slave_fsm_S_AXI_CONTROL_BREADY = S_AXI_CONTROL_BREADY;
-  assign slave_fsm_S_AXI_CONTROL_ARVALID = S_AXI_CONTROL_ARVALID;
-  assign slave_fsm_S_AXI_CONTROL_ARADDR = S_AXI_CONTROL_ARADDR;
-  assign slave_fsm_S_AXI_CONTROL_RREADY = slave_fsm_S_AXI_CONTROL_RREADY;
+  assign slave_fsm_io_slave_writeAddr_valid = S_AXI_CONTROL_AWVALID;
+  assign slave_fsm_io_slave_writeAddr_bits_addr = S_AXI_CONTROL_AWADDR;
+  assign slave_fsm_io_slave_writeData_valid = S_AXI_CONTROL_WVALID;
+  assign slave_fsm_io_slave_writeData_bits_data = S_AXI_CONTROL_WDATA;
+  assign slave_fsm_io_slave_writeData_bits_strb = S_AXI_CONTROL_WSTRB;
+  assign slave_fsm_io_slave_writeResp_ready = S_AXI_CONTROL_BREADY;
+  assign slave_fsm_io_slave_readAddr_valid = S_AXI_CONTROL_ARVALID;
+  assign slave_fsm_io_slave_readAddr_bits_addr = S_AXI_CONTROL_ARADDR;
+  assign slave_fsm_io_slave_readData_ready = slave_fsm_io_slave_readData_ready;
   assign slave_fsm_io_ap_done = RTLKernel_io_ap_done;
   assign RTLKernel_ap_clk = ap_clk;
   assign RTLKernel_ap_rst_n = _T_88;
   assign RTLKernel_io_ap_start = slave_fsm_io_ap_start;
-  assign _T_88 = ap_rst_n == 1'h0;
+  assign _T_88 = !ap_rst_n;
 endmodule

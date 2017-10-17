@@ -692,5 +692,5 @@ module SDAChiselWrapper(
   assign RTLKernel_clock = clock;
   assign RTLKernel_reset = _T_88;
   assign RTLKernel_io_ap_start = slave_fsm_io_ap_start;
-  assign _T_88 = reset == 1'h0;
+  assign _T_88 = !reset;
 endmodule
