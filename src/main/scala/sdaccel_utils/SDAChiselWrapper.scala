@@ -36,8 +36,8 @@ class SDAChiselWrapper(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidth
   //
 
 
-  slave_fsm.reset := !(reset.toBool())
-  RTLKernel.reset := !(reset.toBool())
+  slave_fsm.reset := (!reset.toBool()).asTypeOf(reset)
+  RTLKernel.reset := (!reset.toBool()).asTypeOf(reset)
 
   slave_fsm.io.slave.writeAddr.bits.prot := io.s0.writeAddr.bits.prot
   slave_fsm.io.slave.writeAddr.bits.addr := io.s0.writeAddr.bits.addr
