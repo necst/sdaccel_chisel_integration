@@ -1,21 +1,22 @@
 Chisel Wrapper for SDAccel RTL Flow
 =======================
 
-This project implements a wrapper in Chisel for using RTL kernels into SDAccel 2017.1+
+This project implements a wrapper in Chisel for using RTL kernels into SDAccel 2017.1+. The code implements the FSM used to manage the execution of the kernel via AXI-Lite, and allows the user to specify as many AXI4-Master ports to the memory as needed.
 
-This README file contains the following sections:
+This README is organized as follows:
 1. OVERVIEW
 2. CHISEL TO VERILOG
 3. NAMING CONVENTION
 4. IP, XML GENERATION
 5. XO GENERATION
 6. HARDAWARE EMULATION
+7. CONTRIBUTIONS
 
 
 ## 1. OVERVIEW
 This is an example on how a Chisel Core can be integrated with SDAccel.
 It is recommended to refer to the [SDAccel User Guide] on which interface requirements the Core need to met and the XML file convention.
-The example we provide is a toy one, which has only an AXI-Lite port used to start the computation and signal to the host the end of the computation. In our case the computation ends after a simple increment.
+A basic example is provided too. In the example, the core receives the start signal and ends the computation after a simple increment.
 
 ## 2. CHISEL TO VERILOG
 
@@ -46,16 +47,16 @@ Now we have to package our Core as a Vivado® IP. We recommend to follow
 [Vivado Design Suite User Guide: Creating and Packaging Custom IP].
 
 Next step is the creation of the XML file necessary for the 5th step.
-As is reported in the [SDAccel User Guide] the section 'vlnv' "must match the vendor,library,name and version attributes as in the component.xml of an IP". We provide our 'kernel.xml' example.
+As is reported in the [SDAccel User Guide] the section 'vlnv' "must match the vendor, library, name and version attributes as in the component.xml of an IP". In the repository is provided a 'kernel.xml' example.
 
 ## 5. XO  GENERATION
 
-In order to package our Core in .xo format compliant with SDAccel we run vivado in tcl mode:
+In order to package the core in .xo format, first run vivado in tcl mode:
 ```
 vivado -mode tcl
 ```
 
-And then we have to package all:
+And then package all by typing:
 ```
 package_xo -xo_path <.xo_file> -kernel_name <kernel_name> -kernel_xml <xml_file_path> -ip_directory <path_to_ip_directory>
 ```
@@ -67,12 +68,13 @@ package_xo -xo_path SDAChiselWrapper.xo -kernel_name SDAChiselWrapper -kernel_xm
 
 ## 6. HARDWARE EMULATION
 
-The Core is now finally packaged, we should copy our .xo file in the 'xo_generated' folder and then run the hardware emulation:
+The core is now finally packaged. Copy the .xo file in the 'xo_generated' folder and then run the hardware emulation:
 ```
 make emulation TARGET=hw_emu
 ```
-We can now change the 'main.cpp' host code in order to verify correctly the succesful execution of our core. 
-If it is needed the there is also a 'sdacel.ini' file in order to see the waveform graph. Copy it in the "hw_emu/<target_platform>" folder and then run:
+Now it is possible to change the 'main.cpp' host code in order to verify the correct execution of the core. 
+
+If it is needed it is provided also a 'sdacel.ini' file in order to generate the waveform graph. Copy it in the "hw_emu/<target_platform>" folder and then run:
 ```
 ./host <core_name>.xclbin
 ```
@@ -81,6 +83,16 @@ For example we run:
 ```
 ./host SDAChiselWrapper.xclbin
 ```
+
+Refer to the Makefile source code to perform the build of the system, and to the Chisel3 repository for installation and dependencies.
+
+## 7. CONTRIBUTION
+
+Contributors and pull requests are more than welcome.
+
+If you want to get in touch with us, do not hesitate to send an email:
+	Lorenzo Di Tucci : lorenzo.ditucci at polimi.it
+	Davide Conficonni : davide.conficconi at mail.polimi.it
 
 [SDAccel User Guide]: https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_1/ug1023-sdaccel-user-guide.pdf 
 
