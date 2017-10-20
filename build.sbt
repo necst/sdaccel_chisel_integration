@@ -1,4 +1,4 @@
-name := "chisel-module-template"
+name := "sdaccel_chisel_integration"
 
 version := "1.0"
 

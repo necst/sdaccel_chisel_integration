@@ -11,20 +11,20 @@ XOCC=xocc
 CC=g++
 
 #Host code
-HOST_SRC=./test-cl-2ddr.cpp
+HOST_SRC=./main.cpp
 HOST_HDRS=
 HOST_CFLAGS=-D FPGA_DEVICE -g -Wall -I${XILINX_SDX}/runtime/include/1_2 -D TARGET_DEVICE="xilinx:adm-pcie-ku3:2ddr-xpr:4.0" -O3 -Wall -D C_KERNEL
 HOST_LFLAGS=-L${XILINX_SDX}/runtime/lib/x86_64 -lxilinxopencl
 
 #name of host executable
-HOST_EXE=host_sw
+HOST_EXE=host
 
 #kernel
 KERNEL_SRC=
 KERNEL_HDRS=
 KERNEL_FLAGS=
-KERNEL_EXE=AdderAxi
-KERNEL_NAME=AdderAxi
+KERNEL_EXE=SDAChiselWrapper
+KERNEL_NAME=SDAChiselWrapper
 
 #custom flag to give to xocc
 KERNEL_LDCLFLAGS=--nk $(KERNEL_NAME):1 \
@@ -101,9 +101,7 @@ xclbin:  check_TARGET
 	$(XOCC) -g --platform $(TARGET_DEVICE) --target $(TARGET) --link --include $(KERNEL_HDRS) --save-temps $(REPORT) --kernel $(KERNEL_NAME) $(dest_dir)/$(KERNEL_EXE).xo $(KERNEL_LDCLFLAGS) $(KERNEL_FLAGS) $(KERNEL_ADDITIONAL_FLAGS) --output $(dest_dir)/$(KERNEL_EXE).xclbin
 
 emulation:  host xclbin
-	export XCL_EMULATION_MODE=$(TARGET)
-	emconfigutil --xdevice $(TARGET_DEVICE) --nd 1
-	./$(dest_dir)/$(HOST_EXE) $(dest_dir)/$(KERNEL_EXE).xclbin
+	export XCL_EMULATION_MODE=$(TARGET) && emconfigutil --xdevice $(TARGET_DEVICE) --nd 1 && ./$(dest_dir)/$(HOST_EXE) $(dest_dir)/$(KERNEL_EXE).xclbin
 	$(info Remeber to export XCL_EMULATION_MODE=$(TARGET) and run emcondigutil for emulation purposes)
 
 #sw_emu: host xclbin
@@ -119,6 +117,4 @@ build:  host xclbin
 
 run_system:  build
 	./$(dest_dir)/$(HOST_EXE) $(dest_dir)/$(KERNEL_EXE)
-
-
 
