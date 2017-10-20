@@ -80,7 +80,6 @@ dest_file = open(sys.argv[2], "w")
 
 lines = or_file.readlines()
 
-#computationally sucks
 for line in lines:
 	keys_found = []
 	for key in variables_name.keys():
