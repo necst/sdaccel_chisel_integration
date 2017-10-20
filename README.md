@@ -91,8 +91,9 @@ Refer to the Makefile source code to perform the build of the system, and to the
 Contributors and pull requests are more than welcome.
 
 If you want to get in touch with us, do not hesitate to send an email:
+
 	Lorenzo Di Tucci : lorenzo.ditucci at polimi.it
-	Davide Conficonni : davide.conficconi at mail.polimi.it
+	Davide Conficconi : davide.conficconi at mail.polimi.it
 
 [SDAccel User Guide]: https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_1/ug1023-sdaccel-user-guide.pdf 
 
