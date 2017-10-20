@@ -15,8 +15,9 @@ This README is organized as follows:
 
 ## 1. OVERVIEW
 This is an example on how a Chisel Core can be integrated with SDAccel.
-It is recommended to refer to the [SDAccel User Guide] on which interface requirements the Core need to met and the XML file convention.
+It is recommended to refer to the [SDAccel User Guide] on which interface requirements the Core need to met and the XML file convention. 
 A basic example is provided too. In the example, the core receives the start signal and ends the computation after a simple increment.
+N.B.: remember to source SDx settings before any of these step
 
 ## 2. CHISEL TO VERILOG
 
