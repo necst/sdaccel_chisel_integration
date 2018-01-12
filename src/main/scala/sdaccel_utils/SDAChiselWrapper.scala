@@ -59,7 +59,7 @@ class SDAChiselWrapper(addrWidth : Int, dataWidth : Int, idBits : Int, dataWidth
   io.s0.readAddr.ready := slave_fsm.io.slave.readAddr.ready
 
   io.s0.readData.valid := slave_fsm.io.slave.readData.valid
-  slave_fsm.io.slave.readData.ready := slave_fsm.io.slave.readData.ready
+  slave_fsm.io.slave.readData.ready := io.s0.readData.ready
 
   io.s0.readData.bits.resp := slave_fsm.io.slave.readData.bits.resp
   io.s0.readData.bits.data := slave_fsm.io.slave.readData.bits.data
